@@ -1,8 +1,8 @@
 
 import React from 'react';
-import ProfessionHeader from './ProfessionHeader';
-import ProfessionCard from './ProfessionCard';
-import professionData from './ProfessionData';
+import ProfessionHeader from '../component/ui/ProfessionHeader';
+import ProfessionCard from '../component/ui/ProfessionCard';
+import professionData from '../ProfessionData';
 
 function ProfessionSection() {
   const headerTitle = 'Our Mental Health Professionals';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
-import { cn } from '../../lib/utils';
+import { cn } from '../../utils/utils';
 import { format, addMonths, subMonths, isSameDay } from 'date-fns';
 
 const Calendar = ({ initialDate = new Date(), onDateSelect }) => {

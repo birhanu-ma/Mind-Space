@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import stars from '../../assets/Homepage/star1.png';
-import quotation from '../../assets/Homepage/quotation.svg';
-import rightArrow from '../../assets/Homepage/right.png';
-import leftArrow from '../../assets/Homepage/left.png';
+import stars from '../../../assets/Homepage/star1.png';
+import quotation from '../../../assets/Homepage/quotation.svg';
+import rightArrow from '../../../assets/Homepage/right.png';
+import leftArrow from '../../../assets/Homepage/left.png';
 
 const testimonialsData = [
   {

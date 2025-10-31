@@ -1,8 +1,8 @@
 import React from "react";
-import img8 from '../../assets/Homepage/img8.png';     // "How can I help?"
-import img7 from '../../assets/Homepage/img7.png';     // "How are you feeling?"
-import img6 from '../../assets/Homepage/img6.webp';    // Help options
-import img81 from '../../assets/Homepage/img8.webp';   // Phone background
+import img8 from '../../../assets/Homepage/img8.png';     // "How can I help?"
+import img7 from '../../../assets/Homepage/img7.png';     // "How are you feeling?"
+import img6 from '../../../assets/Homepage/img6.webp';    // Help options
+import img81 from '../../../assets/Homepage/img8.webp';   // Phone background
 
 const PhoneMockup = () => {
   return (

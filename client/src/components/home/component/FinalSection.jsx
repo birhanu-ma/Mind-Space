@@ -1,6 +1,7 @@
 import React from "react";
-import img4 from "../../assets/Homepage/img4.jpg"; 
+import img4 from "../../../assets/Homepage/img4.jpg";
 import { Link } from "react-router-dom";
+import CustomButton from "../../ui/CustomButton";
 
 const FinalSection = () => {
   const scrollToTop = () => {
@@ -22,14 +23,18 @@ const FinalSection = () => {
         <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-6 max-w-3xl">
           Because Mental Health Should Be as Accessible as Lecture Notes
         </h2>
-        <Link to ="/aboutus"
-        onClick={scrollToTop}
-        >
-        <button className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-semibold transition duration-300">
-          More about our impact
-        </button>
+
+        <Link to="/aboutus">
+          <CustomButton
+            color="#4300FF"
+            borderRadius="10px"
+            width="300px"
+            padding="20px 30px"
+            onClick={scrollToTop}
+          >
+            More about our empact
+          </CustomButton>
         </Link>
-       
       </div>
     </section>
   );

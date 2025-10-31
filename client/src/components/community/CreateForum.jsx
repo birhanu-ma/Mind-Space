@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import CustomButton from "../ui/CustomButton";
 
 const CreateForum = () => {
 
@@ -24,13 +25,17 @@ const CreateForum = () => {
           </div>
 
           <div className="flex justify-center">
-            <Link to= "/newforum"
+         <Link to="/newform">
+          <CustomButton
+            color="#132440"
+            borderRadius="10px"
+            width="300px"
+            padding="20px 30px"
             onClick={scrollToTop}
-            >
-            <button className="bg-black text-white cursor-pointer text-xl font-semibold py-3 px-10 rounded-full hover:bg-gray-800 transition-colors duration-300">
-              Create Forum
-            </button>
-            </Link>
+          >
+            Create Forum
+          </CustomButton>
+        </Link>
             
           </div>
         </div>

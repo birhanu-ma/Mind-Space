@@ -3,7 +3,7 @@ import React from "react";
 import { FaFacebookF, FaYoutube, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import newsletterImage from "../assets/image/image.svg";
+import newsletterImage from "../../assets/image/image.svg";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { FaPhone } from "react-icons/fa";

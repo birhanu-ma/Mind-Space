@@ -1,7 +1,15 @@
 import React from "react";
 import ForumCard from "./ForumCard";
+import CustomButton from "../ui/CustomButton";
+import { Link } from "react-router-dom";
 
 const ForumGrid = () => {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  };
   // Sample forum data
   const forumData = [
     {
@@ -45,18 +53,32 @@ const ForumGrid = () => {
   return (
     <section className="bg-azure-50 py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-16">Community Forum</h2>
+        <h2 className="text-4xl font-bold text-center mb-16">
+          Community Forum
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16">
           {forumData.map((forum) => (
-            <ForumCard key={forum.id} title={forum.title} description={forum.description} />
+            <ForumCard
+              key={forum.id}
+              title={forum.title}
+              description={forum.description}
+            />
           ))}
         </div>
 
         <div className="flex mt-10 justify-center">
-          <button className="bg-black text-white cursor-pointer text-xl font-semibold py-3 px-10 rounded-full hover:bg-gray-800 transition-colors duration-300">
-            See More Forum
-          </button>
+          <Link to="/#">
+            <CustomButton
+              color="#132440"
+              borderRadius="10px"
+              width="300px"
+              padding="20px 30px"
+              onClick={scrollToTop}
+            >
+              See More Forum
+            </CustomButton>
+          </Link>
         </div>
       </div>
     </section>

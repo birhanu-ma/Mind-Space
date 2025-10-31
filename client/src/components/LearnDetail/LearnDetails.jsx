@@ -1,7 +1,7 @@
 import React from 'react'
-import MessageForm from './MessageForm'
-import LearnSection from './LearnSection'
-import RelatedTopicsSection from './RelatedTopicSection'
+import MessageForm from '../LearnDetail/MessageForm'
+import LearnSection from '../LearnDetail/LearnSection'
+import RelatedTopicsSection from '../LearnDetail/RelatedTopicCard'
 
 function LearnDetails() {
   return (

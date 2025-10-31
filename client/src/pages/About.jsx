@@ -1,8 +1,8 @@
 import React from 'react'
-import Hero from '../components/About/Hero'
-import Value from '../components/About/Values'
-import ProfessionSection from '../components/About/ProfessionSection'
-import AboutUs from '../components/About/Aboutus'
+import Hero from '../components/About/component/Hero'
+import Value from '../components/About/component/Values'
+import ProfessionSection from '../components/About/component/ProfessionSection'
+import AboutUs from '../components/About/component/Aboutus'
 
 
 

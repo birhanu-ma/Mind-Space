@@ -1,8 +1,8 @@
 
 import React from 'react';
 
-import ValueCard from './ValueCard';
-import valueData from './ValueData';
+import ValueCard from '../component/ui/ValueCard';
+import valueData from '../ValueData';
 
 function Value() {
 

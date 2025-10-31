@@ -1,5 +1,11 @@
 import React from "react";
 
+
+
+
+
+
+
 const ValueCard = ({
   icon, // can be an <Icon /> component, emoji, or image URL
   paragraph,

@@ -6,16 +6,9 @@ import TopicsSection from '../components/Learn/TopicsSection';
 function Learn() {
   return (
     <div className="min-h-screen bg-white">
-
       <Hero />
-
- 
       <TopicsSection/>
-
-  
       <RelatedTopicsSection />
-
-      
     </div>
   );
 }

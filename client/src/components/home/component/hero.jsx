@@ -1,10 +1,10 @@
-import React from 'react';
-import image1 from '../../assets/Homepage/image1.jpg';
-import image2 from '../../assets/Homepage/image2.png';
-import { Link } from 'react-router-dom'; 
+import React from "react";
+import image1 from "../../../assets/Homepage/image1.jpg";
+import image2 from "../../../assets/Homepage/image2.png";
+import { Link } from "react-router-dom";
+import CustomButton from "../../ui/CustomButton";
 
 const Hero = () => {
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -14,23 +14,26 @@ const Hero = () => {
 
   return (
     <section className="bg-blue-200  px-4 sm:px-8 py-12 md:py-40 flex flex-col lg:flex-row items-center justify-between max-w-7xl mx-auto">
-      
-     
       <div className="w-full lg:w-1/2 text-center lg:text-left space-y-4 md:space-y-6 lg:ml-10">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
-          Your Safe Space for <br className="hidden sm:block" /> Mental Well-Being
+          Your Safe Space for <br className="hidden sm:block" /> Mental
+          Well-Being
         </h1>
         <p className="text-gray-700 text-base sm:text-lg max-w-md mx-auto lg:mx-0">
           MindSpace is here to help you manage stress, connect with peers, and
           access professional support — anonymously and safely.
         </p>
-        <Link to='/support'
-        onClick={scrollToTop}>
-        <button className="bg-purple-400 cursor-pointer hover:bg-purple-500 text-white font-semibold py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">
-          Find Support
-        </button>
+
+        <Link to="/support">
+          <CustomButton
+            color="#0BA6DF"
+            borderRadius="100px"
+            // width="100px"
+            onClick={scrollToTop}
+          >
+            Find Support
+          </CustomButton>
         </Link>
-      
       </div>
 
       <div className="relative w-full lg:w-1/2 flex justify-center lg:justify-between items-center mt-8 md:mt-10 lg:mt-0">
@@ -47,7 +50,6 @@ const Hero = () => {
           />
         </div>
       </div>
-
     </section>
   );
 };
