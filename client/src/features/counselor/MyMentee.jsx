@@ -4,7 +4,6 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { mentorAPI } from "../../service/client.jsx";
 
-
 import DepartmentChart from "../../components/chart/Department-chart.jsx";
 import PieChartComponent from "../../components/chart/PieChartComponent.jsx";
 import StudentsTable from "../../features/Counselor/myMenteeTable.jsx";
@@ -53,7 +52,6 @@ export default function MyMentee() {
     <div className="flex flex-col sm:flex-row overflow-y-scroll h-screen w-full bg-background text-foreground border border-border rounded-lg">
       <div className="rounded-lg px-5 w-full min-h-screen">
         {/* Stats Cards */}
-        
 
         {/* Charts */}
         <div className="flex flex-col gap-4 mb-5 sm:flex-row justify-center items-center">
