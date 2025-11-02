@@ -14,6 +14,9 @@ import MoodHistory from "./components/tools/MoodHistory";
 import Navbar from "./components/layout/Navbar";
 import Register from "./components/auth/RegisterForm/Register";
 import LoginForm from "./components/auth/Login/LoginForm";
+import AdminPage from "./pages/AdminPage";
+import MenteePage from "./pages/MenteePage";
+import CounselorPage from "./pages/CounselorPage";
 
 function App() {
   return (
@@ -32,6 +35,10 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/learn/:id" element={<LearnDetail />} />
           <Route path="/Tool/moodHistory/:id" element={<MoodHistory />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path ="/counselor" element={<CounselorPage/>}/>
+           <Route path ="/mentee" element={<MenteePage/>}/>
+
         </Routes>
         <Footer />
       </div>
