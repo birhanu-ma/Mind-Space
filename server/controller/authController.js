@@ -23,9 +23,11 @@ export const createSendToken = (user, statusCode, req, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    secure:
+      (req && req.secure) ||
+      (req && req.headers && req.headers["x-forwarded-proto"] === "https") ||
+      process.env.NODE_ENV === "production",
   };
-  if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
   res.cookie("jwt", token, cookiesOptions);
   user.password = undefined;
 
@@ -45,7 +47,7 @@ export const signUp = async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 };
 
 export const login = async (req, res, next) => {
