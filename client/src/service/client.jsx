@@ -1,6 +1,6 @@
 import axios from "axios";
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api/v1";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -54,6 +54,21 @@ const api = async (endpoint, options = {}) => {
 
 //  AUTH API
 export const authAPI = {
+  signUp: (data) => {
+    console.log("this is signup data", data);
+    const { name, email, password, passwordConfirm } = data;
+    const res = api("/auth/sign-up", {
+      method: "POST",
+      data: {
+        name,
+        email,
+        password,
+        passwordConfirm,
+      },
+    });
+
+    return res;
+  },
   login: ({ email, password }) =>
     api("/auth/login", {
       method: "POST",
