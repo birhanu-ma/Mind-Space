@@ -1,23 +1,26 @@
 import mongoose from "mongoose";
 
-const applicationSchema = mongoose.Schema({
+const applicationSchema = new mongoose.Schema({
   applicant: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
     required: [true, "Applicant is required"],
-    unique: true,
+    unique: true, // ensures one application per user
   },
   motivation: {
     type: String,
-    required: [true, "application body is required"],
+    required: [true, "Application body is required"],
   },
-  exeperience: {
+  experience: {
+    // typo: "exeperience"
     type: String,
-    require: [true, "mentor experience is required"],
+    required: [true, "Mentor experience is required"],
   },
   communication: {
     type: Number,
-    require: [true, "communication leve is required"],
+    required: [true, "Communication level is required"],
+    min: [1, "Minimum level is 1"],
+    max: [10, "Maximum level is 10"],
   },
   status: {
     type: String,
@@ -31,9 +34,9 @@ const applicationSchema = mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 
 const Application = mongoose.model("Application", applicationSchema);
-export default Application
+export default Application;

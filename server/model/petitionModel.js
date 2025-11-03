@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
 
-const petitionSchema = mongoose.Schema({
-  student: {
+const petitionSchema = new mongoose.Schema({
+  user: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
-    required: [true, "petition address is needed"],
+    required: [true, "Petition owner (student) is required"],
   },
-
   subject: {
     type: String,
-    required: [true, "subject petition is required"],
+    required: [true, "Subject of the petition is required"],
+    trim: true,
   },
   body: {
     type: String,
-    required: [true, "body or description to petition is required"],
+    required: [true, "Petition description/body is required"],
   },
   status: {
     type: String,
@@ -27,9 +27,10 @@ const petitionSchema = mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 
 const Petition = mongoose.model("Petition", petitionSchema);
+
 export default Petition;
