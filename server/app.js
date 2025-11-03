@@ -7,10 +7,12 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
+import authRoute from "./route/authRoute.js";
 import userRoute from "./route/userRoute.js";
-import petitionRoute from "./route/petitionRoute.js"
-import counsellingRoute from "./route/counsellingRoute.js"
-import applicationRoute from "./route/applicationRoute.js"
+import petitionRoute from "./route/petitionRoute.js";
+import counselingRoute from "./route/counselingRoute.js";
+import applicationRoute from "./route/applicationRoute.js";
+import articleRoute from "./route/articleRoute.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -29,10 +31,12 @@ app.use(
   })
 );
 
-
-app.use("/users", userRoute)
-app.use("/petitions",petitionRoute)
-app.use("/application",applicationRoute)
-app.use("/counselling",counsellingRoute)
+app.use("/api/v1/auth", authRoute);
+app.use("/users", userRoute);
+app.use("/users", userRoute);
+app.use("/petitions", petitionRoute);
+app.use("/application", applicationRoute);
+app.use("/counseling", counselingRoute);
+app.use("/articles", articleRoute);
 
 export default app;
