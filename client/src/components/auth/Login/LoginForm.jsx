@@ -1,120 +1,100 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate, Link } from "react-router-dom";
+import { authAPI } from "../../../service/client";
 
-const LoginForm = () => {
+function Login() {
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutate, isLoading } = useMutation({
+    mutationFn: authAPI.login,
+    onSuccess: (data) => {
+      const user = data?.data?.user;
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+      console.log("this is loged in user data", user);
 
-    try {
-      // 1. Login request
-      const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("id", user._id);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // 2. Save tokens
-        const accessToken = data.access;
-        const refreshToken = data.refresh;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-
-        // 3. Fetch user info (including role)
-        const userResponse = await fetch('http://127.0.0.1:8000/api/users/me/', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        });
-
-        const userData = await userResponse.json();
-
-        if (userResponse.ok) {
-          localStorage.setItem('userRole', userData.role);
-
-          // 4. Redirect based on role
-          if (userData.role === 'admin') {
-            navigate('/adminsection');
-          } else if (userData.role === 'counselor') {
-            navigate('/counselorsection');
-          } else if (userData.role === 'youth') {
-            navigate('/userdashboard');
-          } else {
-            navigate('/home');
-          }
-        } else {
-          setError('Failed to fetch user info.');
-        }
-      } else {
-        setError(data.detail || 'Invalid email or password.');
+      switch (user.role) {
+        case "counselor":
+          navigate("/counselor");
+          break;
+        case "mentee":
+          navigate("/mentee");
+          break;
+        case "admin":
+          navigate("/admin");
+          break;
+        default:
+          navigate("/");
       }
-    } catch (err) {
-      setError('Login failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    },
+    onError: (err) => {
+      alert(err.response?.data?.message || err.message || "Login failed");
+    },
+  });
+
+  const onSubmit = (data) => {
+    mutate(data);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="max-w-md w-full bg-white p-8 rounded shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">Login to Your Account</h2>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-background text-foreground p-8 rounded shadow-md w-full max-w-md border border-border"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
-        {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+        {/* Email */}
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Email</label>
+          <input
+            type="text"
+            placeholder="Email"
+            {...register("email", { required: true })}
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          {errors.email && (
+            <span className="text-red-500 text-sm">Email is required</span>
+          )}
+        </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="mt-1 w-full px-3 py-2 border rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            {...register("password", { required: true })}
+            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          {errors.password && (
+            <span className="text-red-500 text-sm">Password is required</span>
+          )}
+        </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="mt-1 w-full px-3 py-2 border rounded shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
+        <button
+          type="submit"
+          className="w-full cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+        >
+          {isLoading ? "Logging in..." : "Login"}
+        </button>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`w-full bg-indigo-600 cursor-pointer text-white py-2 rounded hover:bg-indigo-700 ${
-              isLoading ? 'opacity-70 cursor-not-allowed' : ''
-            }`}
-          >
-            {isLoading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-      </div>
+        <div className="text-center mt-4">
+          <Link to="/forgot" className="text-blue-500 hover:underline text-sm">
+            Forgot Password?
+          </Link>
+        </div>
+      </form>
     </div>
   );
-};
+}
 
-export default LoginForm;
+export default Login;
