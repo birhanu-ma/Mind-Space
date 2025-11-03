@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import bcrypt from "bcrypt";
 
 const userSchema = mongoose.Schema({
   name: {
@@ -14,7 +15,7 @@ const userSchema = mongoose.Schema({
     lowrcase: true,
   },
   password: {
-    type: Number,
+    type: String,
     required: [true, "password is required"],
     select: false,
   },
@@ -23,8 +24,11 @@ const userSchema = mongoose.Schema({
     required: [true, "password confirm is required"],
     select: false,
     validate: {
-      validator: (el) => el === this.password,
-      message: "password dont match",
+      validator: function (el) {
+        return el === this.password;
+      },
+
+      message: "password are not the same",
     },
   },
   passwordResetToken: {
@@ -48,6 +52,27 @@ const userSchema = mongoose.Schema({
     default: Date.now(),
   },
 });
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) next();
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+  next();
+});
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.passwordChangedAt = function (jwtTimeStamp) {
+  if (jwtTimeStamp) {
+    const changedAt = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+    return changedAt > jwtTimeStamp;
+  }
+  return false;
+};
 
 const User = mongoose.model("User", userSchema);
 
