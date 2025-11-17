@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import DepartmentChart from "../../components/chart/Department-chart.jsx";
+// import DepartmentChart from "../../components/chart/Department-chart.jsx";
 
-import PieChartComponent from "../../components/chart/PieChartComponent.jsx";
+// import PieChartComponent from "../../components/chart/PieChartComponent.jsx";
 import StudentsTable from "../../features/admin/studentTable.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { studentUnionAPI } from "../../service/client.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
 
-
 function Student() {
-  const [role, setRole] = useState("All");
+  const [role, setRole] = useState("admin");
   const [query, setQuery] = useState({
     q: "",
     sort: "name",
@@ -37,32 +36,8 @@ function Student() {
       </p>
     );
 
-  const { data: students, stats, total } = data || {};
-  const countByDepartment = stats?.countByDepartment || [];
-  const countByYear = stats?.countByYear || [];
-
- 
-
-  if (!students?.length) {
-    return (
-      <div className="flex flex-col items-center justify-center h-64 text-foreground/60">
-        <div className="mb-4">
-          <label className="mr-2 text-sm font-medium">Role:</label>
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="border rounded p-2 text-sm"
-          >
-            <option value="All">All</option>
-            <option value="mentee">Mentee</option>
-            <option value="mentor">Mentor</option>
-          
-          </select>
-        </div>
-        No students found for this role.
-      </div>
-    );
-  }
+  const { data: students, total } = data || {};
+  console.log("this is data", students);
 
   return (
     <div className="flex flex-col sm:flex-row w-full bg-background text-foreground border border-border rounded-lg">
@@ -79,16 +54,14 @@ function Student() {
               <option value="All">All</option>
               <option value="mentee">Mentee</option>
               <option value="mentor">Mentor</option>
-             
             </select>
           </div>
         </div>
 
         {/* Stats Cards */}
-    
 
         {/* Charts */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-5 bg-muted/10 p-4 rounded-lg">
+        {/* <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-5 bg-muted/10 p-4 rounded-lg">
           <DepartmentChart
             data={countByDepartment}
             title={`Students ${role}s by Department`}
@@ -96,7 +69,7 @@ function Student() {
             maxValue={10}
           />
           <PieChartComponent data={countByYear} />
-        </div>
+        </div> */}
 
         {/* Students Table */}
         <StudentsTable
