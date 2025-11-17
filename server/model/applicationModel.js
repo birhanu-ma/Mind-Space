@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 
 const applicationSchema = new mongoose.Schema({
   applicant: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: [true, "Applicant is required"],
-    unique: true, // ensures one application per user
+    type:String
+    // type: mongoose.Schema.ObjectId,
+    // ref: "User",
+    // required: [true, "Applicant is required"],
+    // unique: true, // ensures one application per user
   },
   motivation: {
     type: String,
