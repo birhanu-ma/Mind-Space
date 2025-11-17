@@ -12,7 +12,8 @@ import { Button } from "../../components/ui/button.jsx";
 import { Input } from "../../components/ui/input.jsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Spinner from "../../components/ui/Spinner.jsx";
-export default function StudentsTable({ mentorId }) {
+export default function MyMentee() {
+    const counselorId = localStorage.getItem("id");
   const [query, setQuery] = useState({
     q: "",
     sort: "name",
@@ -20,7 +21,7 @@ export default function StudentsTable({ mentorId }) {
     limit: 10,
   });
 
-  const { data, isLoading, isFetching, isError } = useMentees(mentorId, query);
+  const { data, isLoading, isFetching, isError } = useMentees(counselorId, query);
 
   if (isLoading) return <Spinner />;
   if (isError)

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar.jsx";
-import MentorDashboard from "../features/Counselor/MentorDashboard.jsx";
-import MyMentee from "../features/Counselor/MyMentee.jsx";
 import MentorApplicationForm from "../features/Counselor/Application.jsx";
+import MyMentee from "../features/counselor/myMenteeTable.jsx"
 import MentorChat from "../features/chat/MentorChat.jsx";
 import { useLocation } from "react-router-dom";
 

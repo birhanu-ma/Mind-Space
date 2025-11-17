@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { mentorAPI } from "../../service/client.jsx";
 
-export const useMentees = ( query) => {
-  const mentorId = localStorage.getItem("id");
+export const useMentees = (counselorId, query) => {
   const { data, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["students", mentorId, query, mentorId],
-    queryFn: () => mentorAPI.getMentees({ ...query, mentorId }),
+    queryKey: ["students", counselorId, query],
+    queryFn: () => mentorAPI.getMentees({ ...query, counselorId }),
     keepPreviousData: true,
-    enabled: !!mentorId,
+    enabled: !!counselorId,
   });
 
   const mentees = data?.data?.mentees || [];

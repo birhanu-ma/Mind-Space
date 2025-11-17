@@ -102,7 +102,11 @@ export const menteeAPI = {
       data,
     }),
 
-  getMentor: (menteeId) => api(`/mentorships/mentees/${menteeId}/mentor`),
+  getCounselor: async (menteeId) => {
+    const res = await api(`/counseling/mentees/${menteeId}/counselor`)
+    console.log("this is mentees data", res)
+    return res
+  },
 };
 
 //  MENTOR API
@@ -113,20 +117,21 @@ export const mentorAPI = {
       data,
     }),
   getMentees: async (params = {}) => {
-    const { mentorId } = params;
+    const { counselorId, ...rest } = params;
+    const query = new URLSearchParams(rest).toString();
     try {
-      const res = await api(`/mentorships/mentors/${mentorId}/mentees`, {
-        params,
-      });
+      const res = await api(
+        `/counseling/counselors/${counselorId}/mentees?${query}`
+      );
       return res ? res : { data: [] };
     } catch (err) {
       console.error("Error in getMentees:", err);
       throw err instanceof Error ? err : new Error(String(err));
     }
   },
-  getMenteeStats: async (mentorId) => {
+  getMenteeStats: async (counselorId) => {
     try {
-      const res = await api(`/mentorships/mentors/${mentorId}/mentees/stats`);
+      const res = await api(`/counseling/counselors/${counselorId}/mentees/stats`);
       return res?.stats ? res : { stats: {} };
     } catch (err) {
       console.error("Error in getMenteeStats:", err);
@@ -162,7 +167,6 @@ export const articleAPI = {
   },
 };
 
-
 // Forum
 export const forumAPI = {
   getAllForums: async (params) => {
@@ -190,7 +194,6 @@ export const forumAPI = {
     return res.data;
   },
 };
-
 
 // service api
 
@@ -249,7 +252,6 @@ export const professionalAPI = {
     return res.data;
   },
 };
-
 
 //  STUDENT UNION API
 export const studentUnionAPI = {

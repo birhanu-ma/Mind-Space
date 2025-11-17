@@ -10,12 +10,12 @@ export default function Petition() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["mentorInfo", menteeId],
-    queryFn: () => menteeAPI.getMentor(menteeId),
+    queryFn: () => menteeAPI.getCounselor(menteeId),
     enabled: !!menteeId,
     retry: false,
   });
 
-  const mentor = data?.data?.mentor;
+  const mentor = data?.data?.counselor;
 
   const { register, handleSubmit, reset, formState } = useForm();
   const { isSubmitting, errors } = formState;
@@ -109,7 +109,7 @@ export default function Petition() {
           <button
             type="submit"
             disabled={isSubmitting || isPending}
-            className="flex-1 bg-primary text-white rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-primary/90 disabled:opacity-50"
+            className="flex-1 bg-blue-600 text-white rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-primary/90 disabled:opacity-50"
           >
             {isPending || isSubmitting ? (
               <>
