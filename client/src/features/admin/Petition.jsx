@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { petitionAPI } from "../../service/client.jsx";
 import { toast } from "sonner";
 import PetitionItem from "./PetitionItem.jsx";
-
+import Spinner from "../../components/ui/Spinner.jsx";
 function Petition() {
   // Fetch petitions
   const { data, isLoading, isError, refetch } = useQuery({
