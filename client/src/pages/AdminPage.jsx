@@ -3,12 +3,20 @@ import Students from "../features/user/Students.jsx";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import ApplicationList from "../features/admin/ApplicationList.jsx";
 import Petition from "../features/admin/Petition.jsx";
-
-
-
+import Article from "../features/Article/article.jsx";
+import Forum from "../features/Forum/forum.jsx";
+import Service from "../features/service/service.jsx";
+import Profession from "../features/profession/profession.jsx";
 function StudentUnion() {
-  const navItems = ["Students", "Application", "Petition"];
-
+  const navItems = [
+    "Users",
+    "Article",
+    "Forum",
+    "Service",
+    "Profession",
+    "Application",
+    "Petition",
+  ];
 
   const [activePage, setActivePage] = useState("Dashboard");
   useEffect(() => {
@@ -18,9 +26,17 @@ function StudentUnion() {
   }, [location.state]);
   const renderContent = () => {
     switch (activePage) {
-      case "Students":
+      case "Users":
         return <Students />;
-      case "Application":
+      case "Article":
+        return <Article />;
+      case "Forum":
+        return <Forum />;
+      case "Service":
+        return <Service />;
+      case "Profession":
+        return <Profession />;
+          case "Application":
         return <ApplicationList />;
       case "Petition":
         return <Petition />;
@@ -40,7 +56,6 @@ function StudentUnion() {
       <div className="flex-1  py-2 px-5 overflow-y-auto bg-background text-foreground border border-border rounded-lg">
         {renderContent(activePage)}
       </div>
-    
     </div>
   );
 }
