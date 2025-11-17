@@ -3,7 +3,7 @@ import { protect, restrictTo } from "../controller/authController.js";
 import {
   createPetition,
   deletePetition,
-  getPetition,
+  getAllPetitions,
   updatePetition,
 } from "../controller/petitionController.js";
 const router = express.Router();
@@ -11,7 +11,7 @@ const router = express.Router();
 router
   .route("/")
   .post(protect, restrictTo("mentee", "counselor"), createPetition)
-  .get(protect, restrictTo("mentee", "counselor", "admin"), getPetition)
+  .get(protect, restrictTo("mentee", "counselor", "admin"), getAllPetitions)
   .patch(protect, restrictTo("admin"), updatePetition)
   .delete(protect, restrictTo("admin"), deletePetition);
 
