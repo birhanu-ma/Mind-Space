@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const petitionSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-    required: [true, "Petition owner (student) is required"],
-  },
+  // user: {
+  //   type: mongoose.Schema.ObjectId,
+  //   ref: "User",
+  //   required: [true, "Petition owner (student) is required"],
+  // },
   subject: {
     type: String,
     required: [true, "Subject of the petition is required"],

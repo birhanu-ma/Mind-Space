@@ -43,7 +43,7 @@ counselingSchema.index({ mentee: 1 }, { unique: true });
 
 counselingSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "mentor",
+    path: "counselor",
     select: "name sims_id major year",
   }).populate({
     path: "mentee",
@@ -53,10 +53,10 @@ counselingSchema.pre(/^find/, function (next) {
   next();
 });
 
-counselingSchema.statics.getMentorshipStats = async function (filter = {}) {
-  // Convert mentor ID to ObjectId if provided as string
-  if (filter.mentor && typeof filter.mentor === "string") {
-    filter.mentor = new mongoose.Types.ObjectId(filter.mentor);
+counselingSchema.statics.getCounselingStats = async function (filter = {}) {
+  // Convert counselor ID to ObjectId if provided as string
+  if (filter.counselor && typeof filter.counselor === "string") {
+    filter.counselor = new mongoose.Types.ObjectId(filter.counselor);
   }
 
   // Base pipeline to expand mentees

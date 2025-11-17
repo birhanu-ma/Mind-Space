@@ -43,6 +43,6 @@ app.use("/api/v1/articles", articleRoute);
 app.use("/api/v1/services", serviceRoute);
 app.use("/api/v1/forums", forumsRoute);
 app.use("/api/v1/professions", professionRoute);
-app.use("/api/v1/petition", petitionRoute);
+app.use("/api/v1/petitions", petitionRoute);
 
 export default app;
