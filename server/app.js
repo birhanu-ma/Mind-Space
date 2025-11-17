@@ -13,10 +13,13 @@ import petitionRoute from "./route/petitionRoute.js";
 import counselingRoute from "./route/counselingRoute.js";
 import applicationRoute from "./route/applicationRoute.js";
 import articleRoute from "./route/articleRoute.js";
+import forumsRoute from "./route/forumsRoute.js";
+import serviceRoute from "./route/serviceRoute.js";
+import professionRoute from "./route/professionRoute.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use("/img/users", express.static(path.join(__dirname, "puplic/img/users")));
+app.use("/img/users", express.static(path.join(__dirname, "public/img/users")));
 
 app.use(morgan("dev"));
 app.use(express.json({ limit: "10kb" }));
@@ -32,11 +35,14 @@ app.use(
 );
 
 app.use("/api/v1/auth", authRoute);
-app.use("/users", userRoute);
-app.use("/users", userRoute);
-app.use("/petitions", petitionRoute);
-app.use("/application", applicationRoute);
-app.use("/counseling", counselingRoute);
-app.use("/articles", articleRoute);
+app.use("/api/v1/users", userRoute);
+app.use("/api/v1/petitions", petitionRoute);
+app.use("/api/v1/applications", applicationRoute);
+app.use("/api/v1/counseling", counselingRoute);
+app.use("/api/v1/articles", articleRoute);
+app.use("/api/v1/services", serviceRoute);
+app.use("/api/v1/forums", forumsRoute);
+app.use("/api/v1/professions", professionRoute);
+app.use("/api/v1/petition", petitionRoute);
 
 export default app;
