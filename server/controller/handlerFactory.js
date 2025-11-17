@@ -67,9 +67,10 @@ export const getOne = (Model, popOptions) =>
 
 export const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
+    console.log("passed model", Model);
     // To allow for nested GET reviews on tour (hack)
     let filter = {};
-    if (req.params.tourId) filter = { tour: req.params.tourId };
+    if (req.params.id) filter = { article: req.params.id };
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
@@ -78,6 +79,7 @@ export const getAll = (Model) =>
       .paginate();
     // const doc = await features.query.explain();
     const doc = await features.query;
+    console.log("articles list", doc);
 
     // SEND RESPONSE
     res.status(200).json({
