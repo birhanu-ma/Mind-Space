@@ -1,6 +1,8 @@
 import User from "../model/userModel.js";
 import jwt from "jsonwebtoken";
 import AppError from "../utils/AppError.js";
+import { promisify } from "util";
+
 export const signToken = (user) => {
   return jwt.sign(
     {
@@ -18,25 +20,29 @@ export const signToken = (user) => {
 
 export const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user);
-  const cookiesOptions = {
+
+  const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    secure:
-      (req && req.secure) ||
-      (req && req.headers && req.headers["x-forwarded-proto"] === "https") ||
-      process.env.NODE_ENV === "production",
+    sameSite: "None", // ✅ REQUIRED for frontend on different origin (e.g. localhost:5173)
+    secure: false, // ✅ keep false on localhost, true only in production HTTPS
   };
-  res.cookie("jwt", token, cookiesOptions);
+
+  // For production (optional safety)
+  if (process.env.NODE_ENV === "production") {
+    cookieOptions.secure = true;
+  }
+
+  res.cookie("jwt", token, cookieOptions);
+
   user.password = undefined;
 
   res.status(statusCode).json({
     status: "success",
     token,
-    data: {
-      user,
-    },
+    data: { user },
   });
 };
 
@@ -53,8 +59,6 @@ export const signUp = async (req, res, next) => {
 export const login = async (req, res, next) => {
   // check if password and email exists
   const { email, password } = req.body;
-
-  console.log("this is email and password", email, password);
 
   if (!email || !password) {
     return next(new AppError("please provide email and password", 400));
@@ -75,47 +79,54 @@ export const logout = (res, req, next) => {
 };
 
 export const protect = async (req, res, next) => {
-  // getting a token and check of its there
   try {
     let token;
     if (
       req.headers.authorization &&
-      req.headers.authorization.startWith("Bearer")
+      req.headers.authorization.startsWith("Bearer")
     ) {
       token = req.headers.authorization.split(" ")[1];
     } else if (req.cookies.jwt) {
       token = req.cookies.jwt;
     }
+
     if (!token) {
       return next(
-        new AppError("you are not logged in please log in to get access", 401)
+        new AppError("You are not logged in. Please log in to get access.", 401)
       );
     }
-    // verify a token
+
+    // Verify token
+
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-    // check if a user still exists
-
+    // Check if user still exists
     const currentUser = await User.findById(decoded.id);
 
     if (!currentUser) {
-      return next(new AppError("user doesn't exist", 401));
+      return next(
+        new AppError("The user belonging to this token no longer exists.", 401)
+      );
     }
-    // check if a user changed password after token issue
 
-    if (currentUser.changedPasswordAfter(decoded.iat)) {
+    // Check if user changed password after token was issued
+    if (currentUser.changedPasswordAfter?.(decoded.iat)) {
       return next(
         new AppError(
-          "user recently changed password please logged in again",
+          "User recently changed password. Please log in again.",
           401
         )
       );
     }
+
+    // Grant access
     req.user = currentUser;
     res.locals.user = currentUser;
+
     next();
-  } catch {
-    next();
+  } catch (err) {
+    // Pass the error to global error handler
+    next(new AppError("Authentication failed. Invalid or expired token.", 401));
   }
 };
 
