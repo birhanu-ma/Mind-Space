@@ -17,6 +17,9 @@ import LoginForm from "./components/auth/Login/LoginForm";
 import AdminPage from "./pages/AdminPage";
 import MenteePage from "./pages/MenteePage";
 import CounselorPage from "./pages/CounselorPage";
+import ArticleCreateForm from "./features/Article/createArticle";
+import ForumCreateForm from "./features/Forum/createForum";
+
 
 function App() {
   return (
@@ -37,7 +40,9 @@ function App() {
           <Route path="/Tool/moodHistory/:id" element={<MoodHistory />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path ="/counselor" element={<CounselorPage/>}/>
-           <Route path ="/mentee" element={<MenteePage/>}/>
+          <Route path ="/mentee" element={<MenteePage/>}/>
+          <Route path="/admin/articles/new" element = {<ArticleCreateForm/>}/>
+          <Route path="/admin/forums/new" element ={<ForumCreateForm/>}/>
 
         </Routes>
         <Footer />
