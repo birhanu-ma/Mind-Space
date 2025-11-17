@@ -1,6 +1,5 @@
 import axios from "axios";
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api/v1";
+const API_BASE_URL = "http://localhost:3000/api/v1";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -98,7 +97,7 @@ export const authAPI = {
 //  MENTEE API
 export const menteeAPI = {
   submitPetition: (data) =>
-    api(`/mentees`, {
+    api(`/petitions`, {
       method: "POST",
       data,
     }),
@@ -109,7 +108,7 @@ export const menteeAPI = {
 //  MENTOR API
 export const mentorAPI = {
   submitApplication: (data) =>
-    api(`applications/mentors/application`, {
+    api(`/applications`, {
       method: "POST",
       data,
     }),
@@ -135,12 +134,128 @@ export const mentorAPI = {
     }
   },
 };
+// Articles
+export const articleAPI = {
+  getAllArticle: async (params) => {
+    const query = new URLSearchParams(params).toString();
+    console.log("article query", query);
+    const response = await api(`/articles?${query}`);
+    console.log("this is a data from all ", response?.data?.data);
+
+    return response?.data?.data;
+  },
+  getArticleByType: async (params) => {
+    try {
+      const query = new URLSearchParams(params).toString();
+      const response = await api(`/articles/by-type?${query}`);
+      console.log("article filetred by type", response);
+      return response;
+    } catch (err) {
+      console.error("API request failed:", err);
+      throw err;
+    }
+  },
+
+  createArticle: async (data) => {
+    const res = await apiClient.post("/articles", data);
+    return res.data;
+  },
+};
+
+
+// Forum
+export const forumAPI = {
+  getAllForums: async (params) => {
+    const query = new URLSearchParams(params).toString();
+    console.log("forum query", query);
+    const response = await api(`/forums?${query}`);
+    console.log("this is a data from all ", response?.data?.data);
+
+    return response?.data?.data;
+  },
+  getForumsByType: async (params) => {
+    try {
+      const query = new URLSearchParams(params).toString();
+      const response = await api(`/forums/by-type?${query}`);
+      console.log("article filetred by type", response);
+      return response;
+    } catch (err) {
+      console.error("API request failed:", err);
+      throw err;
+    }
+  },
+
+  createForums: async (data) => {
+    const res = await apiClient.post("/forums", data);
+    return res.data;
+  },
+};
+
+
+// service api
+
+export const serviceAPI = {
+  getAllServices: async (params) => {
+    const query = new URLSearchParams(params).toString();
+    console.log("forum query", query);
+    const response = await api(`/services?${query}`);
+    console.log("this is a data from all ", response?.data?.data);
+
+    return response?.data?.data;
+  },
+  getServicesByType: async (params) => {
+    try {
+      const query = new URLSearchParams(params).toString();
+      const response = await api(`/services/by-type?${query}`);
+      console.log("service filetred by type", response);
+      return response;
+    } catch (err) {
+      console.error("API request failed:", err);
+      throw err;
+    }
+  },
+
+  createService: async (data) => {
+    const res = await apiClient.post("/services", data);
+    return res.data;
+  },
+};
+
+//  profession api
+
+export const professionalAPI = {
+  getAllProfessionals: async (params) => {
+    const query = new URLSearchParams(params).toString();
+    console.log("profession query", query);
+    const response = await api(`/professions?${query}`);
+    console.log("this is a data from all ", response?.data?.data);
+
+    return response?.data?.data;
+  },
+  getProfessionalsByType: async (params) => {
+    try {
+      const query = new URLSearchParams(params).toString();
+      const response = await api(`/professions/by-type?${query}`);
+      console.log("profession filetred by type", response);
+      return response;
+    } catch (err) {
+      console.error("API request failed:", err);
+      throw err;
+    }
+  },
+
+  createProfessional: async (data) => {
+    const res = await apiClient.post("/professions", data);
+    return res.data;
+  },
+};
+
 
 //  STUDENT UNION API
 export const studentUnionAPI = {
   getAllStudents: async (params) => {
     const query = new URLSearchParams(params).toString();
-    const response = await api(`/students?${query}`);
+    const response = await api(`/users?${query}`);
     console.log("this is a data from all ", response);
     return response;
   },
@@ -148,7 +263,7 @@ export const studentUnionAPI = {
   getStudentsByRole: async (params) => {
     try {
       const query = new URLSearchParams(params).toString();
-      const response = await api(`/students/by-role?${query}`);
+      const response = await api(`/users/by-role?${query}`);
       console.log("this is a data from by role", response);
       return response;
     } catch (err) {
@@ -240,15 +355,20 @@ export const profileAPI = {
 
 //  PETITION API
 export const petitionAPI = {
-  getAllPetitions: () => api("/mentees"),
+  submitPetition: (data) =>
+    api(`/petitions`, {
+      method: "POST",
+      data,
+    }),
+  getAllPetitions: () => api("/petitions"),
   getPetitionDetails: async (id) => {
     console.log("this is petition id ", id);
-    const res = api(`/mentees/petition-detail/${id}/details`);
+    const res = api(`/petitions/petition-detail/${id}/details`);
     return res;
   },
   reviewPetition: async ({ status, id, reviewedBy }) => {
     console.log(status, id, reviewedBy);
-    return api(`/mentees/petition-detail/${id}/status`, {
+    return api(`/petitions/petition-detail/${id}/status`, {
       method: "PATCH",
       data: {
         status,
