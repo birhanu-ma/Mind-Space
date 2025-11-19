@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const ForumCard = ({ title, description }) => {
+const ForumCard = ({ title, description, content }) => {
   const [isHovered, setIsHovered] = useState(false);
   const scrollToTop = () => {
     window.scrollTo({
@@ -18,6 +18,7 @@ const ForumCard = ({ title, description }) => {
     >
       <h3 className="text-2xl font-semibold text-gray-900 mb-4">{title}</h3>
       <p className="text-gray-700 mb-8">{description}</p>
+       <p className="text-gray-700 mb-8">{content}</p>
 
       <div className="flex justify-center md:justify-end">
         <Link

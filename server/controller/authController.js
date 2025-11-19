@@ -120,7 +120,8 @@ export const protect = async (req, res, next) => {
     }
 
     // Grant access
-    console.log("this is a logged in user ", currentUser)
+  
+
     req.user = currentUser;
     res.locals.user = currentUser;
 
@@ -161,9 +162,7 @@ export const isLoggedIn = async (req, res, next) => {
 
 export const restrictTo = (...roles) => {
   return (req, res, next) => {
-    // roles ['admin', 'lead-guide']. role='user'
-    console.log("this is a user role", roles)
-    console.log("this is a user role too", req.user.role)
+  
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError("You do not have permission to perform this action", 403)

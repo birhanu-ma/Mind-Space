@@ -147,6 +147,19 @@ function CreateProfessionForm() {
               placeholder="Years of experience"
             />
           </div>
+{/* about your self */}
+            <div>
+            <label className="block text-sm font-semibold text-foreground mb-2">
+              about you
+            </label>
+            <input
+              type="text"
+              {...register("aboutYou")}
+              className="w-full border border-border bg-background text-foreground px-4 py-3 rounded-lg"
+              placeholder="about yourself"
+            />
+          </div>
+
 
           {/* Profile Image */}
           <div>

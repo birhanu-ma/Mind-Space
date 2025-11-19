@@ -2,17 +2,22 @@ import mongoose from "mongoose";
 
 const professionalSchema = new mongoose.Schema(
   {
-    user: {
-      type: String,
-    //   ref: "User",
-      required: true, 
+    // user: {
+    //   type: String,
+    // //   ref: "User",
+    //   required: true, 
+    // },
+    user:{
+      type:String
     },
 
     profession: {
       type: String,
       required: [true, "Profession is required"], 
     },
-
+    aboutYou:{
+      type:String
+    },
     specialization: {
       type: [String],
       default: [], 

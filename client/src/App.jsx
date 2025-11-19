@@ -19,6 +19,8 @@ import MenteePage from "./pages/MenteePage";
 import CounselorPage from "./pages/CounselorPage";
 import ArticleCreateForm from "./features/Article/createArticle";
 import ForumCreateForm from "./features/Forum/createForum";
+import ServiceCreateForm from "./features/service/createService";
+import CreateProfessionForm from "./features/profession/createProfession";
 
 
 function App() {
@@ -43,6 +45,8 @@ function App() {
           <Route path ="/mentee" element={<MenteePage/>}/>
           <Route path="/admin/articles/new" element = {<ArticleCreateForm/>}/>
           <Route path="/admin/forums/new" element ={<ForumCreateForm/>}/>
+          <Route path="/admin/services/new" element ={<ServiceCreateForm/>}/>
+          <Route path="/admin/professions/new" element ={<CreateProfessionForm/>}/>
 
         </Routes>
         <Footer />
