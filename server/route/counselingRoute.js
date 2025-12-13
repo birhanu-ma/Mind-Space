@@ -6,7 +6,8 @@ import {
   getCounseling,
   getCounselorForMentee,
   getMenteesForCounselor,
-  getCounselingStatsForCounselor
+  getCounselingStatsForCounselor,
+  matchMentee,
 } from "..//controller/counselingController.js";
 const router = express.Router();
 
@@ -27,5 +28,9 @@ router
 router
   .route("/counselors/:counselorId/mentees/stats")
   .get(protect, restrictTo("counselor"), getCounselingStatsForCounselor);
+
+router
+  .route("/match/:counselorId")
+  .get(protect, restrictTo("admin"), matchMentee);
 
 export default router;

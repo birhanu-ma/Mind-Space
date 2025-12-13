@@ -8,7 +8,7 @@ function Value() {
 
 
   return (
-    <section className='shadow-lg bg-[#FAF7F0] '>
+    <section className='shadow-lg'>
      
       <div className="flex flex-col sm:flex-row justify-around items-center p-5">
         {valueData.map((value) => (

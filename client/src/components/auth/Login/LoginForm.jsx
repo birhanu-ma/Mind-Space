@@ -1,10 +1,14 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { authAPI } from "../../../service/client";
+import { login } from "../../../store/userSlice"; // Redux action
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -15,13 +19,17 @@ function Login() {
     mutationFn: authAPI.login,
     onSuccess: (data) => {
       const user = data?.data?.user;
+      console.log("Logged in user:", user);
 
-      console.log("this is loged in user data", user);
+      // Dispatch login action to Redux
+      dispatch(login(user));
 
-      localStorage.setItem("role", user.role);
+      // Optionally still save in localStorage if you want persistence
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("role", user.role);
       localStorage.setItem("id", user._id);
 
+      // Navigate based on role
       switch (user.role) {
         case "counselor":
           navigate("/counselor");
@@ -67,6 +75,7 @@ function Login() {
           )}
         </div>
 
+        {/* Password */}
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">Password</label>
           <input

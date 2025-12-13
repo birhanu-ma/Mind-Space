@@ -3,6 +3,8 @@ import * as factory from "./handlerFactory.js";
 import APIFeatures from "../utils/apiFeatures.js";
 
 export const getAllUsers = factory.getAll(User);
+export const getUserDetails =  factory.getOne(User)
+export const reviewUser = factory.updateOne(User)
 
 export const getUsersByRole = async (req, res, next) => {
   try {

@@ -7,8 +7,6 @@ function NewForum() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // In a real application, you would handle the form submission here,
-    // for example, by sending the data to an API.
     console.log({ header, paragraph });
     alert(`Post Created!\nHeader: ${header}\nParagraph: ${paragraph}`);
     setHeader('');
@@ -16,17 +14,20 @@ function NewForum() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-[80%] mt-20 mb-10  mx-auto p-6 border rounded shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Create New forum</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="w-[80%] mt-20 mb-10 mx-auto p-8 border border-gray-200 rounded-xl shadow-lg bg-white"
+    >
+      <h2 className="text-2xl font-semibold mb-6 text-gray-900">Create New Forum</h2>
 
-      <div className="mb-4">
-        <label htmlFor="postHeader" className="block text-gray-700 text-sm font-bold mb-2">
+      <div className="mb-6">
+        <label htmlFor="postHeader" className="block text-gray-700 font-medium mb-2">
           Header:
         </label>
         <input
           type="text"
           id="postHeader"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
           value={header}
           onChange={(e) => setHeader(e.target.value)}
           placeholder="Enter post header"
@@ -35,12 +36,12 @@ function NewForum() {
       </div>
 
       <div className="mb-6">
-        <label htmlFor="postParagraph" className="block text-gray-700 text-sm font-bold mb-2">
-          write your forum body 
+        <label htmlFor="postParagraph" className="block text-gray-700 font-medium mb-2">
+          Write your forum body:
         </label>
         <textarea
           id="postParagraph"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
           value={paragraph}
           onChange={(e) => setParagraph(e.target.value)}
           placeholder="Write your post content here..."
@@ -48,17 +49,13 @@ function NewForum() {
           required
         />
       </div>
-      <Link to = {`/community/newform`}>
+
       <button
         type="submit"
-        className="bg-blue-500 hover:bg-blue-700 cursor-pointer text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        className="bg-black text-white font-semibold py-3 px-6 rounded-full hover:bg-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-700"
       >
         Submit Post
       </button>
-
-      </Link>
-
-      
     </form>
   );
 }

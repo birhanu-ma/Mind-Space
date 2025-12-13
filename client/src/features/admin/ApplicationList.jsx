@@ -11,8 +11,8 @@ function ApplicationList() {
 
   const applications = data?.data?.data || [];
 
-  // const countByStatus = (status) =>
-  //   applicatio ns.filter((a) => a.status === status).length;
+  const countByStatus = (status) =>
+    applications.filter((a) => a.status === status).length;
 
   if (isLoading)
     return (

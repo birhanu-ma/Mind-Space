@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ServiceTable from "./forumTable.jsx";
+import ServiceTable from "./serviceTabel.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { serviceAPI } from "../../service/client.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";

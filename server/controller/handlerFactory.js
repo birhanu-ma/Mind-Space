@@ -37,7 +37,24 @@ export const updateOne = (Model) =>
 
 export const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.create(req.body);
+    // Ensure req.user exists (user must be logged in)
+    if (!req.user || !req.user._id) {
+      return next(new AppError("You must be logged in to create an application", 401));
+    }
+
+    // Optional: prevent duplicate application for same user
+    const existing = await Model.findOne({ user: req.user._id });
+    if (existing) {
+      return next(new AppError("You already have an application", 400));
+    }
+
+    // Ignore any user field from frontend for security
+    const doc = await Model.create({
+      ...req.body,
+      user: req.user._id, // always use logged-in user
+    });
+
+    console.log("this is counselor data", doc);
 
     res.status(201).json({
       status: "success",
@@ -46,6 +63,7 @@ export const createOne = (Model) =>
       },
     });
   });
+
 
 export const getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {

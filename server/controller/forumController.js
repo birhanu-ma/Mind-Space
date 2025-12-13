@@ -9,6 +9,8 @@ export const getForum = factory.getOne(Forum, {
 export const getAllForums = factory.getAll(Forum);
 export const updateForum = factory.updateOne(Forum);
 export const deleteForum = factory.deleteOne(Forum);
+export const getForumDetails = factory.getOne(Forum);
+export const reviewForums = factory.updateOne(Forum);
 
 export const getForumsByType = async (req, res, next) => {
   try {

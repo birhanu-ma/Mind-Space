@@ -1,65 +1,67 @@
 import { NavLink } from "react-router-dom";
 
 function ApplicationItem({ item }) {
-  console.log(item);
   const getStatusBadge = (status) => {
     const styles = {
-      pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      approved: "bg-green-500 text-white border-green-200",
-      rejected: "bg-red-500 text-white border-red-200",
+      pending: "bg-yellow-100 text-yellow-800",
+      approved: "bg-green-100 text-green-600",
+      rejected: "bg-red-100 text-red-600",
     };
+
     const current = status?.toLowerCase() || "pending";
     const style = styles[current] || styles.pending;
 
     return (
       <span
-        className={`px-3 py-1 rounded-full text-xs font-medium border ${style}`}
+        className={`capitalize px-3 py-1 rounded-full text-xs font-medium ${style}`}
       >
-        {current.charAt(0).toUpperCase() + current.slice(1)}
+        {current}
       </span>
     );
   };
 
   return (
-    <li className="flex flex-col sm:flex-row w-full items-start sm:items-center px-4 sm:px-6 py-4 hover:bg-background text-foreground border border-border transition-colors gap-2 sm:gap-0">
+    <li className="flex flex-col sm:flex-row items-start sm:items-center w-full border-b border-[#f3f2f7] hover:bg-muted/30 transition-colors">
       {/* Applicant */}
-      <div className="w-full sm:w-1/6 flex flex-col sm:block">
-        <div className="text-sm font-medium text-foreground mb-1 sm:mb-0">
-          {item.Mentor?.Student?.name || "N/A"}
-        </div>
+      <div className="w-full sm:w-1/6 py-4 px-4 text-sm font-medium text-foreground">
+        <div>{item.Mentor?.Student?.name || "—"}</div>
         <NavLink
           to={`/application-detail/${item._id}/details`}
-          className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
+          className="text-xs text-blue-600 hover:underline"
         >
-          <p>mentorId</p>
+          mentorId
         </NavLink>
       </div>
 
       {/* Motivation */}
       <div
-        className="w-full sm:w-1/4 text-foreground font-medium truncate"
+        className="w-full sm:w-1/4 py-4 px-4 text-sm text-foreground truncate"
         title={item.motivation}
       >
-        {item.motivation ? `${item.motivation.substring(0, 30)}...` : "N/A"}
+        {item.motivation
+          ? `${item.motivation.substring(0, 30)}...`
+          : "—"}
       </div>
 
       {/* Experience */}
       <div
-        className="w-full sm:w-1/4 text-foreground font-medium truncate"
+        className="w-full sm:w-1/4 py-4 px-4 text-sm text-foreground truncate"
         title={item.experience}
       >
-        {item.experience ? `${item.experience.substring(0, 30)}...` : "N/A"}
+        {item.experience
+          ? `${item.experience.substring(0, 30)}...`
+          : "—"}
       </div>
 
       {/* Status */}
-      <div className="w-full sm:w-1/6 flex justify-start sm:justify-end">
+      <div className="w-full sm:w-1/6 py-4 px-4 flex sm:justify-end">
         {getStatusBadge(item.status)}
       </div>
 
       {/* Action */}
-      <div className="w-full sm:w-1/6 flex justify-start sm:justify-end">
+      <div className="w-full sm:w-1/6 py-4 px-4 flex sm:justify-end">
         <NavLink
-          to={`/application-detail/${item._id}/details`}
+          to={`/application-detail/${item._id}`}
           className="text-xs font-semibold px-3 py-1 rounded-md border bg-blue-500 hover:bg-blue-600 text-white transition-colors"
         >
           View Details

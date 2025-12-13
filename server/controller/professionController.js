@@ -9,6 +9,8 @@ export const getProfession = factory.getOne(Profession, {
 export const getAllProfessions = factory.getAll(Profession);
 export const updateProfession = factory.updateOne(Profession);
 export const deleteProfession = factory.deleteOne(Profession);
+export const getProfessionDetails = factory.getOne(Profession);
+export const reviewProfessions = factory.updateOne(Profession);
 
 export const getProfessionsByType = async (req, res, next) => {
   try {

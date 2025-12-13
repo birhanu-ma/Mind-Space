@@ -9,3 +9,5 @@ export const getPetition = factory.getOne(Petition, {
 });
 export const updatePetition = factory.updateOne(Petition);
 export const deletePetition = factory.deleteOne(Petition);
+export const getPetitionDetails = factory.getOne(Petition);
+export const reviewPetitions = factory.updateOne(Petition);

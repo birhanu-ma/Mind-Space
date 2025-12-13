@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { Card, CardContent, CardHeader } from "../../components/ui/card.jsx";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card.jsx";
 import { Input } from "../../components/ui/input.jsx";
 import { Badge } from "../../components/ui/badge.jsx";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-
-export default function ServiceTable({ Services = [], query, setQuery }) {
+export default function UsersTable({
+  users = [],
+  role,
+  setRole,
+  title,
+  total = 0,
+  subtitle,
+  query,
+  setQuery,
+}) {
   const [searchTerm, setSearchTerm] = useState(query.q || "");
 
+  // Debounce search input
   useEffect(() => {
     const timeout = setTimeout(() => {
       setQuery((prev) => ({ ...prev, q: searchTerm, page: 1 }));
@@ -16,15 +31,37 @@ export default function ServiceTable({ Services = [], query, setQuery }) {
   }, [searchTerm]);
 
   return (
-    <div className="flex flex-col  w-full bg-background px-5">
+    <div className="flex flex-col sm:flex-row w-full bg-background px-5">
       <div className="w-full flex flex-col gap-5">
         <Card className="bg-background text-foreground border border-border rounded-xl">
           <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <div>
+              <CardTitle className="text-2xl font-bold text-[#464255]">
+                {title}
+              </CardTitle>
+              <p className="text-sm text-[#00b087] mt-1">{subtitle}</p>
+            </div>
+
             {/* Controls */}
             <div className="flex flex-wrap gap-2 mt-4 sm:mt-0">
+              {/* Role Filter */}
+              <select
+                value={role}
+                onChange={(e) => {
+                  setRole(e.target.value);
+                  setQuery((prev) => ({ ...prev, page: 1 }));
+                }}
+                className="w-[160px] p-2 border rounded"
+              >
+                <option value="All">All</option>
+                <option value="mentee">Mentee</option>
+                <option value="mentor">Mentor</option>
+                <option value="user-union">user Union</option>
+              </select>
+
               {/* Search */}
               <Input
-                placeholder="Search by header"
+                placeholder="Search by name or ID"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-[200px]"
@@ -42,32 +79,37 @@ export default function ServiceTable({ Services = [], query, setQuery }) {
                 }
                 className="w-[120px] p-2 border rounded"
               >
-                <option value="internal">internal</option>
-                <option value="external">external</option>
+                <option value="name">Name</option>
+                <option value="sims_id">ID</option>
+                <option value="major">Department</option>
               </select>
             </div>
           </CardHeader>
 
           <CardContent className="overflow-x-auto">
             <div className="max-h-[500px] overflow-y-auto">
-              {Services.length === 0 ? (
+              {users.length === 0 ? (
                 <div className="py-10 text-center text-gray-500">
-                  No articles found.
+                  No users found.
                 </div>
               ) : (
                 <table className="w-full min-w-[800px] border-collapse">
                   <thead>
                     <tr className="border-b border-foreground/20">
                       <th className="text-left py-3 px-4 text-sm font-medium text-foreground/60">
-                        Header
+                        user Name
                       </th>
-
                       <th className="text-left py-3 px-4 text-sm font-medium text-foreground/60">
-                        Sub-header
+                        ID
                       </th>
-
                       <th className="text-left py-3 px-4 text-sm font-medium text-foreground/60">
-                        serviceType
+                        Department
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-foreground/60">
+                        Email
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-foreground/60">
+                        Role
                       </th>
                       <th className="text-left py-3 px-4 text-sm font-medium text-foreground/60">
                         Action
@@ -76,33 +118,42 @@ export default function ServiceTable({ Services = [], query, setQuery }) {
                   </thead>
 
                   <tbody>
-                    {Services.map((service) => (
+                    {users.map((user) => (
                       <tr
-                        key={service._id}
+                        key={user._id || user.sims_id}
                         className="border-b border-[#f3f2f7] hover:bg-muted/30 transition-colors"
                       >
                         <td className="py-4 text-left px-4 text-sm font-medium">
-                          {service.header}
+                          {user.name}
                         </td>
                         <td className="py-4 text-left px-4 text-sm">
-                          {service.subHeader}
+                          {user.sims_id}
                         </td>
-
+                        <td className="py-4 text-left px-4 text-sm">
+                          {user.major}
+                        </td>
+                        <td className="py-4 text-left px-4 text-sm">
+                          {user.email || "—"}
+                        </td>
                         <td className="py-4 px-4 text-sm">
                           <Badge
                             className={`capitalize ${
-                              service.serviceType === "main"
+                              user.role === "mentor"
                                 ? "bg-blue-100 text-blue-600"
-                                : service.serviceType === "related"
+                                : user.role === "mentee"
+                                ? "bg-green-100 text-green-600"
+                                : user.role === "user-union"
+                                ? "bg-purple-100 text-purple-600"
+                                : "bg-gray-100 text-gray-600"
                             }`}
                           >
-                            {service.serviceType}
+                            {user.role}
                           </Badge>
                         </td>
 
                         <td className="py-4 px-4 text-right">
                           <NavLink
-                            to={`/student-detail/${service._id}/details`}
+                            to={`/user-detail/${user._id}`}
                             className="text-xs font-semibold px-3 py-1 rounded-md border bg-blue-500 hover:bg-blue-600 text-white transition-colors"
                           >
                             View Details
@@ -116,12 +167,11 @@ export default function ServiceTable({ Services = [], query, setQuery }) {
             </div>
 
             {/* Pagination */}
-            {Services.results > 0 && (
+            {total > 0 && (
               <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
                 <span>
                   Showing {(query.page - 1) * query.limit + 1}–
-                  {Math.min(query.page * query.limit, Services.results)} of{" "}
-                  {Services.results}
+                  {Math.min(query.page * query.limit, total)} of {total}
                 </span>
                 <div className="flex items-center gap-2">
                   <button
@@ -134,7 +184,7 @@ export default function ServiceTable({ Services = [], query, setQuery }) {
                   </button>
                   <span>Page {query.page}</span>
                   <button
-                    disabled={Services.length < query.limit}
+                    disabled={users.length < query.limit}
                     onClick={() =>
                       setQuery((prev) => ({ ...prev, page: prev.page + 1 }))
                     }
@@ -147,12 +197,6 @@ export default function ServiceTable({ Services = [], query, setQuery }) {
           </CardContent>
         </Card>
       </div>
-      <NavLink to="/admin/services/new">
-
-        <button className="p-2 bg-blue-500 rounded-lg w-50 my-4 cursor-pointer">
-          Add Service
-        </button>
-      </NavLink>
     </div>
   );
 }

@@ -6,6 +6,8 @@ import {
   getAllArticles,
   getArticlesByType,
   updateArticle,
+  getArticleDetails,
+  reviewArticles
 } from "../controller/articleController.js";
 const router = express.Router();
 
@@ -17,5 +19,9 @@ router
   .delete(protect, restrictTo("admin"), deleteArticle);
 
 router.route("/by-type").get(protect, getArticlesByType);
+router
+  .route("/:id")
+  .get(protect, restrictTo("admin"), getArticleDetails)
+  .patch(protect, restrictTo("admin"), reviewArticles);
 
 export default router;

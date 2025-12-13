@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_BASE_URL = "http://localhost:3000/api/v1";
+const API_BASE_URL = "http://localhost:5000/api/v1";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -92,6 +92,10 @@ export const authAPI = {
       data: { password, passwordConfirm, passwordCurrent },
     });
   },
+  logout: () =>
+    api("/auth/logout", {
+      method: "POST",
+    }),
 };
 
 //  MENTEE API
@@ -101,21 +105,36 @@ export const menteeAPI = {
       method: "POST",
       data,
     }),
+  getMenteeDetail: async (menteeId) => {
+    console.log("this is from api", menteeId)
+    const res = await api(`/applications/mentees/${menteeId}`);
+    console.log("Mentee detail response:", res);
+    return res;
+  },
+  submitCounselorApplication: (data) => {
+    console.log("this is application data", data);
+    return api(`/applications/mentee`, {
+      method: "POST",
+      data: data, // send the payload
+    });
+  },
 
   getCounselor: async (menteeId) => {
-    const res = await api(`/counseling/mentees/${menteeId}/counselor`)
-    console.log("this is mentees data", res)
-    return res
+    const res = await api(`/counseling/mentees/${menteeId}/counselor`);
+    console.log("this is mentees data", res);
+    return res;
   },
 };
 
 //  MENTOR API
 export const mentorAPI = {
-  submitApplication: (data) =>
-    api(`/applications`, {
+  submitApplication: (data) => {
+    console.log("this is application data", data);
+    return api(`/applications/counselor`, {
       method: "POST",
-      data,
-    }),
+      data: data, // send the payload
+    });
+  },
   getMentees: async (params = {}) => {
     const { counselorId, ...rest } = params;
     const query = new URLSearchParams(rest).toString();
@@ -131,7 +150,9 @@ export const mentorAPI = {
   },
   getMenteeStats: async (counselorId) => {
     try {
-      const res = await api(`/counseling/counselors/${counselorId}/mentees/stats`);
+      const res = await api(
+        `/counseling/counselors/${counselorId}/mentees/stats`
+      );
       return res?.stats ? res : { stats: {} };
     } catch (err) {
       console.error("Error in getMenteeStats:", err);
@@ -165,6 +186,24 @@ export const articleAPI = {
     const res = await apiClient.post("/articles", data);
     return res.data;
   },
+
+  getArticleDetails: async (id) => {
+    console.log("this is user id ", id);
+    const res = api(`/articles/${id}`);
+    return res;
+  },
+  reviewArticle: async ({ role, id, reviewedBy }) => {
+    console.log(role, id, reviewedBy);
+
+    return api(`/articles/${id}`, {
+      method: "PATCH",
+
+      data: {
+        role,
+        reviewedBy,
+      },
+    });
+  },
 };
 
 // Forum
@@ -192,6 +231,24 @@ export const forumAPI = {
   createForums: async (data) => {
     const res = await apiClient.post("/forums", data);
     return res.data;
+  },
+
+  getForumDetails: async (id) => {
+    console.log("this is user id ", id);
+    const res = api(`/forums/${id}`);
+    return res;
+  },
+  reviewForums: async ({ role, id, reviewedBy }) => {
+    console.log(role, id, reviewedBy);
+
+    return api(`/forums/${id}`, {
+      method: "PATCH",
+
+      data: {
+        role,
+        reviewedBy,
+      },
+    });
   },
 };
 
@@ -222,6 +279,24 @@ export const serviceAPI = {
     const res = await apiClient.post("/services", data);
     return res.data;
   },
+
+  getServiceDetails: async (id) => {
+    console.log("this is user id ", id);
+    const res = api(`/services/${id}`);
+    return res;
+  },
+  reviewServices: async ({ role, id, reviewedBy }) => {
+    console.log(role, id, reviewedBy);
+
+    return api(`/services/${id}`, {
+      method: "PATCH",
+
+      data: {
+        role,
+        reviewedBy,
+      },
+    });
+  },
 };
 
 //  profession api
@@ -251,6 +326,43 @@ export const professionalAPI = {
     const res = await apiClient.post("/professions", data);
     return res.data;
   },
+  getProfessionDetails: async (id) => {
+    console.log("this is user id ", id);
+    const res = api(`/professions/${id}`);
+    return res;
+  },
+  reviewProfession: async ({ role, id, reviewedBy }) => {
+    console.log(role, id, reviewedBy);
+
+    return api(`/professions/${id}`, {
+      method: "PATCH",
+
+      data: {
+        role,
+        reviewedBy,
+      },
+    });
+  },
+};
+
+export const userAPI = {
+  getUserDetails: async (id) => {
+    console.log("this is user id ", id);
+    const res = api(`/users/${id}`);
+    return res;
+  },
+  reviewUsers: async ({ role, id, reviewedBy }) => {
+    console.log(role, id, reviewedBy);
+
+    return api(`/users/${id}`, {
+      method: "PATCH",
+
+      data: {
+        role,
+        reviewedBy,
+      },
+    });
+  },
 };
 
 //  STUDENT UNION API
@@ -274,7 +386,7 @@ export const studentUnionAPI = {
     }
   },
 
-  getMentorApplications: () => api("/application"),
+  getMentorApplications: () => api("/application/counselor"),
 };
 
 //  STUDENT  API
@@ -306,20 +418,20 @@ export const studentAPI = {
 //  APPLICATION API
 export const applicationAPI = {
   submitApplication: (data) =>
-    api("/applications", {
+    api("/applications/counselor", {
       method: "POST",
       data,
     }),
-  getAllApplications: () => api("/applications"),
+  getAllApplications: () => api("/applications/counselor"),
   getApplicationDetails: async (id) => {
     console.log("this is application id ", id);
-    const res = api(`/applications/${id}`);
+    const res = api(`/applications/counselor/${id}`);
     return res;
   },
   reviewApplication: async ({ status, id, reviewedBy }) => {
     console.log(status, id, reviewedBy);
 
-    return api(`/applications/${id}`, {
+    return api(`/applications/counselor/${id}`, {
       method: "PATCH",
 
       data: {
@@ -365,12 +477,12 @@ export const petitionAPI = {
   getAllPetitions: () => api("/petitions"),
   getPetitionDetails: async (id) => {
     console.log("this is petition id ", id);
-    const res = api(`/petitions/petition-detail/${id}/details`);
+    const res = api(`/petitions/${id}`);
     return res;
   },
   reviewPetition: async ({ status, id, reviewedBy }) => {
     console.log(status, id, reviewedBy);
-    return api(`/petitions/petition-detail/${id}/status`, {
+    return api(`/petitions/${id}`, {
       method: "PATCH",
       data: {
         status,
@@ -393,6 +505,51 @@ export const chatBotAPI = {
       method: "POST",
       data: {
         message,
+      },
+    });
+  },
+};
+export const adminAssignmentAPI = {
+  /**
+   * Get all counselors (mentors)
+   * Used to populate the counselor dropdown
+   */
+  getCounselors: async () => {
+    return api(`/applications/counselor`);
+  },
+
+  /**
+   * Get details of a single counselor by ID
+   */
+  getCounselorDetails: async (counselorId) => {
+    if (!counselorId) throw new Error("Counselor ID is required");
+    return api(`/applications/counselor/${counselorId}`);
+  },
+
+  /**
+   * Get ranked mentees for a counselor
+   * Uses your matching algorithm endpoint
+   */
+  getRankedMentees: async (counselorId) => {
+    if (!counselorId) throw new Error("Counselor ID is required");
+
+    return api(`/counseling/match/${counselorId}`);
+  },
+
+  /**
+   * Assign a mentee to a counselor
+   * Creates a counseling record
+   */
+  assignMentee: async ({ counselorId, menteeId }) => {
+    if (!counselorId || !menteeId) {
+      throw new Error("Counselor ID and Mentee ID are required");
+    }
+
+    return api("/counseling", {
+      method: "POST",
+      data: {
+        counselor: counselorId,
+        mentee: menteeId,
       },
     });
   },

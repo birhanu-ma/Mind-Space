@@ -102,7 +102,7 @@ export default function ProfessionTable({ professions = [], query, setQuery }) {
 
                         <td className="py-4 px-4 text-right">
                           <NavLink
-                            to={`/student-detail/${profession._id}/details`}
+                            to={`/profession-detail/${profession._id}`}
                             className="text-xs font-semibold px-3 py-1 rounded-md border bg-blue-500 hover:bg-blue-600 text-white transition-colors"
                           >
                             View Details

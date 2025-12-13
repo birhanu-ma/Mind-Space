@@ -9,6 +9,8 @@ export const getService = factory.getOne(Service, {
 export const getAllServices = factory.getAll(Service);
 export const updateService = factory.updateOne(Service);
 export const deleteService = factory.deleteOne(Service);
+export const getServiceDetails = factory.getOne(Service);
+export const reviewServices = factory.updateOne(Service);
 
 export const getServicesByType = async (req, res, next) => {
   try {

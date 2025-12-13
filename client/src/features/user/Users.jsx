@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import DepartmentChart from "../../components/chart/Department-chart.jsx";
 
 // import PieChartComponent from "../../components/chart/PieChartComponent.jsx";
-import StudentsTable from "../../features/admin/studentTable.jsx";
+import UsersTable from "../admin/usersTable.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { studentUnionAPI } from "../../service/client.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
@@ -72,8 +72,8 @@ function Student() {
         </div> */}
 
         {/* Students Table */}
-        <StudentsTable
-          students={students}
+        <UsersTable
+          users={students}
           role={role}
           setRole={setRole}
           title={`Students ${role}s List`}

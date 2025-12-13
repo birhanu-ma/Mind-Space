@@ -164,6 +164,7 @@ function ApplicationDetail() {
           />
           <SkillDots label="Communication" score={Number(communication) || 0} />
         </div>
+       
       </div>
     </div>
   );

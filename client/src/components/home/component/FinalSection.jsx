@@ -1,5 +1,4 @@
 import React from "react";
-import img4 from "../../../assets/Homepage/img4.jpg";
 import { Link } from "react-router-dom";
 import CustomButton from "../../ui/CustomButton";
 
@@ -10,29 +9,25 @@ const FinalSection = () => {
       behavior: "instant",
     });
   };
+
   return (
-    <section
-      className="relative h-[400px] md:h-[500px] bg-cover bg-center mt-6 flex items-center justify-center text-center"
-      style={{ backgroundImage: `url(${img4})` }}
-    >
-      {/* Pink Transparent Overlay */}
-      <div className="absolute inset-0 bg-blue-400 bg-opacity-60"></div>
-
-      {/* Content */}
-      <div className="relative z-10 px-4 sm:px-8">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-6 max-w-3xl">
-          Because Mental Health Should Be as Accessible as Lecture Notes
+    <section className="bg-blue-50 py-20 px-4 sm:px-8 text-center">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-snug">
+          Because Mental Health Should Be Accessible to Everyone
         </h2>
+        <p className="text-gray-700 text-lg sm:text-xl mb-8">
+          We provide tools, guidance, and support so that everyone can take care of their mental wellbeing—anytime, anywhere.
+        </p>
 
+       
         <Link to="/aboutus">
           <CustomButton
-            color="#4300FF"
-            borderRadius="10px"
-            width="300px"
-            padding="20px 30px"
+            color="#1F2937"
+            borderRadius="12px"
             onClick={scrollToTop}
           >
-            More about our empact
+            Explore More
           </CustomButton>
         </Link>
       </div>

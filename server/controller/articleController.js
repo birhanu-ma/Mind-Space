@@ -9,6 +9,8 @@ export const getArticle = factory.getOne(Article, {
 export const getAllArticles = factory.getAll(Article);
 export const updateArticle = factory.updateOne(Article);
 export const deleteArticle = factory.deleteOne(Article);
+export const getArticleDetails = factory.getOne(Article);
+export const reviewArticles = factory.updateOne(Article);
 
 export const getArticlesByType = async (req, res, next) => {
   try {

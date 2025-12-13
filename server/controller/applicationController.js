@@ -1,4 +1,5 @@
-import Application from "../model/ApplicationModel.js";
+import Application from "../model/counselorFormModel.js";
+import Mentee from "../model/menteeFormModel.js";
 import * as factory from "./handlerFactory.js";
 import APIFeatures from "../utils/apiFeatures.js";
 export const createApplication = factory.createOne(Application);
@@ -9,6 +10,15 @@ export const getApplication = factory.getOne(Application, {
 export const getAllApplications = factory.getAll(Application);
 export const updateApplication = factory.updateOne(Application);
 export const deleteApplication = factory.deleteOne(Application);
+export const getApplicationDetails = factory.getOne(Application);
+export const reviewApplications = factory.updateOne(Application);
+
+export const createMenteeApplication = factory.createOne(Mentee);
+export const updateMenteeApplication = factory.updateOne(Mentee);
+export const deleteMenteeApplication = factory.deleteOne(Mentee);
+export const getMenteeDetail = factory.getOne(Mentee);
+
+
 
 export const getApplicationsByType = async (req, res, next) => {
   try {

@@ -71,12 +71,15 @@ export const login = async (req, res, next) => {
   createSendToken(user, 200, req, res);
 };
 
-export const logout = (res, req, next) => {
+export const logout = (req, res, next) => {
   res.cookie("jwt", "loggedout", {
-    expires: new Date(Date.now() + 10 * 1000),
+    expires: new Date(Date.now() + 10 * 1000), // 10 seconds
     httpOnly: true,
   });
+
+  res.status(200).json({ status: "success", message: "Logged out successfully" });
 };
+
 
 export const protect = async (req, res, next) => {
   try {

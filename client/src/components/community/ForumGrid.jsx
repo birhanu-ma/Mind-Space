@@ -7,44 +7,6 @@ import { forumAPI } from "../../service/client";
 import { useState } from "react";
 import Spinner from "../ui/Spinner";
 
- // const forumData = [
-  //   {
-  //     id: 1,
-  //     title: "Discussion about stress....",
-  //     description:
-  //       "For me, stress often feels like this constant underlying pressure, a mental juggling act where I'm trying to keep too many balls in the air – deadlines, responsibilities, personal stuff. Sometimes it manifests physically",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Discussion about Anxiety....",
-  //     description:
-  //       "I'm trying to keep too many balls in the air – deadlines, responsibilities, personal stuff. Sometimes it manifests physically",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Discussion about depression....",
-  //     description:
-  //       "What about you? What does stress feel like for you, and what are some of the common things that trigger it in your life? It could be anything from work or school pressures to relationship issues or even just the everyday hustle and bustle",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Discussion about accadamic pressure....",
-  //     description:
-  //       "So, what's been going on with you lately? Anything interesting, challenging, exciting, or even just a little bit different from the usual? It",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "Discussion about financial stress....",
-  //     description:
-  //       "So, what's been going on with you lately? Anything interesting, challenging, exciting, or even just a little bit different from the usual? Itm has been the industry",
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "Discussion about stress....",
-  //     description:
-  //       "So, what's been going on with you lately? Anything interesting, challenging, exciting, or even just a little bit different from the usual? It",
-  //   },
-  // ];
 
 
 const ForumGrid = () => {
@@ -107,13 +69,13 @@ const ForumGrid = () => {
           ))}
         </div>
 
-        <div className="flex mt-10 justify-center">
+        <div className="flex mt-10 px-15">
           <Link to="/#">
             <CustomButton
               color="#132440"
               borderRadius="10px"
-              width="300px"
-              padding="20px 30px"
+              width="250px"
+              padding="10px 20px"
               onClick={scrollToTop}
             >
               See More Forum

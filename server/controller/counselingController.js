@@ -3,12 +3,18 @@ import mongoose from "mongoose";
 import AppError from "../../server/utils/AppError.js";
 import * as factory from "./handlerFactory.js";
 import APIFeatures from "../utils/apiFeatures.js";
+import User from "../model/userModel.js";
+import CounselorFormModel from "../model/counselorFormModel.js"
+import menteeFormModel from "../model/menteeFormModel.js"
+import matchMenteesToCounselor from "../utils/match.js";
+
 
 // Standard CRUD using factory handlers
 export const createCounseling = factory.createOne(Counseling);
 export const getAllCounseling = factory.getAll(Counseling);
 export const getCounseling = factory.getOne(Counseling);
 export const deleteCounseling = factory.deleteOne(Counseling);
+
 
 // Get counseling for a given mentee
 export const getCounselorForMentee = async (req, res, next) => {
@@ -113,6 +119,34 @@ export const getCounselingStatsForCounselor = async (req, res, next) => {
     });
   } catch (err) {
     console.error("Error fetching mentee stats:", err);
+    next(err);
+  }
+};
+
+
+
+
+
+
+// GET ranked mentees for admin
+export const matchMentee = async (req, res, next) => {
+  try {
+    const counselor = await CounselorFormModel.findById(req.params.counselorId);
+    if (!counselor) {
+      return res.status(404).json({ message: "Counselor not found" });
+    }
+
+    const mentees = await menteeFormModel.find({ });
+
+    const rankedMentees = matchMenteesToCounselor(counselor, mentees);
+
+    res.status(200).json({
+      status: "success",
+      counselorId: counselor._id,
+      totalMentees: rankedMentees.length,
+      rankedMentees
+    });
+  } catch (err) {
     next(err);
   }
 };

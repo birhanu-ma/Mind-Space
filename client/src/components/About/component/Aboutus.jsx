@@ -5,7 +5,7 @@ import aboutUsData from '../AboutUsData';
 
 function AboutUs() {
   return (
-    <section className='bg-[#FAF7F0]'>
+    <section className=''>
       {aboutUsData.map((item) => (
         <AboutUsCard key={item.id} header={item.header} paragraph={item.paragraph} />
       ))}

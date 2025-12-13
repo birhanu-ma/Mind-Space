@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar.jsx";
-import MentorApplicationForm from "../features/Counselor/Application.jsx";
+import CounselorForms from "../features/counselor/counselorForms.jsx"
 import MyMentee from "../features/counselor/myMenteeTable.jsx"
 import MentorChat from "../features/chat/MentorChat.jsx";
 import { useLocation } from "react-router-dom";
@@ -22,7 +22,7 @@ function MentorPage() {
       case "My Mentee":
         return <MyMentee />;
       case "Application":
-        return <MentorApplicationForm />;
+        return <CounselorForms />;
       case "Message":
         return <MentorChat />;
       default:

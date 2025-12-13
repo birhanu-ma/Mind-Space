@@ -5,6 +5,8 @@ import {
   deletePetition,
   getAllPetitions,
   updatePetition,
+  getPetitionDetails,
+  reviewPetitions
 } from "../controller/petitionController.js";
 const router = express.Router();
 
@@ -14,5 +16,12 @@ router
   .get(protect, restrictTo("mentee", "counselor", "admin"), getAllPetitions)
   .patch(protect, restrictTo("admin"), updatePetition)
   .delete(protect, restrictTo("admin"), deletePetition);
+
+  router
+  .route("/:id")
+  .get(protect, restrictTo("admin"), getPetitionDetails)
+  .patch(protect, restrictTo("admin"), reviewPetitions);
+
+
 
 export default router;

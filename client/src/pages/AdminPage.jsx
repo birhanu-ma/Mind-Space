@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Students from "../features/user/Students.jsx";
+import Users from "../features/user/Users.jsx"
 import Sidebar from "../components/layout/Sidebar.jsx";
 import ApplicationList from "../features/admin/ApplicationList.jsx";
 import Petition from "../features/admin/Petition.jsx";
@@ -7,6 +7,7 @@ import Article from "../features/Article/article.jsx";
 import Forum from "../features/Forum/forum.jsx";
 import Service from "../features/service/service.jsx";
 import Profession from "../features/profession/profession.jsx";
+import CounselorList from "../features/counselor/counselorList.jsx";
 function StudentUnion() {
   const navItems = [
     "Users",
@@ -16,6 +17,7 @@ function StudentUnion() {
     "Profession",
     "Application",
     "Petition",
+    "Assignment"
   ];
 
   const [activePage, setActivePage] = useState("Dashboard");
@@ -27,7 +29,7 @@ function StudentUnion() {
   const renderContent = () => {
     switch (activePage) {
       case "Users":
-        return <Students />;
+        return <Users />;
       case "Article":
         return <Article />;
       case "Forum":
@@ -40,8 +42,10 @@ function StudentUnion() {
         return <ApplicationList />;
       case "Petition":
         return <Petition />;
+      case "Assignment":
+        return <CounselorList/>
       default:
-        return <Students />;
+        return <Users />;
     }
   };
   return (
