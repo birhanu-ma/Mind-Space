@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authAPI } from "../../../service/client";
-import { login } from "../../../store/userSlice"; // Redux action
+import { login } from "../../../store/userSlice";
 
 function Login() {
   const navigate = useNavigate();
@@ -19,17 +19,11 @@ function Login() {
     mutationFn: authAPI.login,
     onSuccess: (data) => {
       const user = data?.data?.user;
-      console.log("Logged in user:", user);
-
-      // Dispatch login action to Redux
       dispatch(login(user));
-
-      // Optionally still save in localStorage if you want persistence
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("role", user.role);
       localStorage.setItem("id", user._id);
 
-      // Navigate based on role
       switch (user.role) {
         case "counselor":
           navigate("/counselor");
@@ -54,12 +48,14 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-background text-foreground p-8 rounded shadow-md w-full max-w-md border border-border"
+        className="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full transition-transform duration-300 hover:scale-[1.02]"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-900">
+          Login
+        </h2>
 
         {/* Email */}
         <div className="mb-4">
@@ -68,7 +64,7 @@ function Login() {
             type="text"
             placeholder="Email"
             {...register("email", { required: true })}
-            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           {errors.email && (
             <span className="text-red-500 text-sm">Email is required</span>
@@ -82,22 +78,26 @@ function Login() {
             type="password"
             placeholder="Password"
             {...register("password", { required: true })}
-            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           {errors.password && (
             <span className="text-red-500 text-sm">Password is required</span>
           )}
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
-          className="w-full cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+          className="w-full bg-black text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors"
         >
           {isLoading ? "Logging in..." : "Login"}
         </button>
 
         <div className="text-center mt-4">
-          <Link to="/forgot" className="text-blue-500 hover:underline text-sm">
+          <Link
+            to="/forgot"
+            className="text-indigo-600 hover:text-indigo-500 text-sm"
+          >
             Forgot Password?
           </Link>
         </div>
