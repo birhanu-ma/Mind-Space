@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { authAPI } from "../../../service/client";
 
 const RegisterForm = () => {
@@ -10,7 +10,6 @@ const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // ✅ Setup React Hook Form
   const {
     register,
     handleSubmit,
@@ -18,7 +17,6 @@ const RegisterForm = () => {
     formState: { errors },
   } = useForm();
 
-  // ✅ Define React Query mutation for registration
   const mutation = useMutation({
     mutationFn: async (formData) => authAPI.signUp(formData),
     onSuccess: () => {
@@ -26,9 +24,7 @@ const RegisterForm = () => {
     },
   });
 
-  // ✅ Handle form submit
   const onSubmit = (data) => {
-    console.log("this is data for sign up",data)
     mutation.mutate({
       name: data.name,
       email: data.email,
@@ -37,19 +33,20 @@ const RegisterForm = () => {
     });
   };
 
-  // Watch password for matching confirm password
   const password = watch("password");
 
   return (
-    <div className="flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 h-[95vh]">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden mt-10">
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-center">
-          <h2 className="text-3xl font-bold text-white">Create Account</h2>
-          <p className="text-indigo-100">Sign up to get started!</p>
-        </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
+      <div className="w-full max-w-md bg-white rounded-xl border border-gray-200 p-8 shadow-lg">
+        <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">
+          Create Account
+        </h2>
+        <p className="text-gray-600 text-center mb-6 text-sm">
+          Sign up to get started
+        </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-4">
-          {/* Error Message */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Error */}
           {mutation.isError && (
             <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
               <p className="text-red-700">{mutation.error.message}</p>
@@ -58,25 +55,19 @@ const RegisterForm = () => {
 
           {/* Name */}
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaUser className="text-gray-400" />
-            </div>
             <input
               type="text"
               {...register("name", { required: "Name is required" })}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Full Name"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             {errors.name && (
-              <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>
+              <p className="text-red-600 text-sm mt-1">{errors.name.message}</p>
             )}
           </div>
 
           {/* Email */}
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaUser className="text-gray-400" />
-            </div>
             <input
               type="email"
               {...register("email", {
@@ -86,11 +77,11 @@ const RegisterForm = () => {
                   message: "Invalid email address",
                 },
               })}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Email"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             {errors.email && (
-              <p className="text-sm text-red-600 mt-1">
+              <p className="text-red-600 text-sm mt-1">
                 {errors.email.message}
               </p>
             )}
@@ -98,9 +89,6 @@ const RegisterForm = () => {
 
           {/* Password */}
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaLock className="text-gray-400" />
-            </div>
             <input
               type={showPassword ? "text" : "password"}
               {...register("password", {
@@ -110,23 +98,18 @@ const RegisterForm = () => {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="w-full pl-10 pr-12 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
             />
             <button
               type="button"
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              className="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
               onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? (
-                <FaEyeSlash className="text-gray-400 hover:text-gray-600" />
-              ) : (
-                <FaEye className="text-gray-400 hover:text-gray-600" />
-              )}
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
             {errors.password && (
-              <p className="text-sm text-red-600 mt-1">
+              <p className="text-red-600 text-sm mt-1">
                 {errors.password.message}
               </p>
             )}
@@ -134,35 +117,25 @@ const RegisterForm = () => {
 
           {/* Confirm Password */}
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaLock className="text-gray-400" />
-            </div>
             <input
               type={showConfirmPassword ? "text" : "password"}
               {...register("confirmPassword", {
-                required: "Please confirm your password",
+                required: "Confirm password is required",
                 validate: (value) =>
                   value === password || "Passwords do not match",
               })}
-              className="w-full pl-10 pr-12 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Confirm Password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
             />
             <button
               type="button"
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              className="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              aria-label={
-                showConfirmPassword ? "Hide password" : "Show password"
-              }
             >
-              {showConfirmPassword ? (
-                <FaEyeSlash className="text-gray-400 hover:text-gray-600" />
-              ) : (
-                <FaEye className="text-gray-400 hover:text-gray-600" />
-              )}
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
             {errors.confirmPassword && (
-              <p className="text-sm text-red-600 mt-1">
+              <p className="text-red-600 text-sm mt-1">
                 {errors.confirmPassword.message}
               </p>
             )}
@@ -172,7 +145,7 @@ const RegisterForm = () => {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className={`w-full mt-4 py-2 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none ${
+            className={`w-full py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
               mutation.isPending ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
@@ -180,18 +153,15 @@ const RegisterForm = () => {
           </button>
         </form>
 
-        {/* Footer */}
-        <div className="text-center px-8 mb-6">
-          <p className="text-sm text-gray-600">
-            Already have an account?{" "}
-            <Link
-              to="/loginForm"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              Log in
-            </Link>
-          </p>
-        </div>
+        <p className="text-center text-gray-600 text-sm mt-4">
+          Already have an account?{" "}
+          <Link
+            to="/loginForm"
+            className="text-indigo-600 hover:text-indigo-500 font-medium"
+          >
+            Log in
+          </Link>
+        </p>
       </div>
     </div>
   );
