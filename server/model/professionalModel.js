@@ -2,61 +2,48 @@ import mongoose from "mongoose";
 
 const professionalSchema = new mongoose.Schema(
   {
-    // user: {
-    //   type: String,
-    // //   ref: "User",
-    //   required: true, 
-    // },
-    user:{
-      type:String
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true, // link to the User who is a professional
+      unique: true,   // one professional record per user
     },
-
-    profession: {
+    degreeLevel: { type: String, default: "" },
+    certifications: [{ type: String }],
+    supportAreas: { type: [String], default: [] },
+    mentalHealthSpecialties: { type: [String], default: [] },
+    personalityStyle: { type: [String], default: [] },
+    communicationStyles: { type: [String], default: [] },
+    availability: { type: String, default: "" },
+    timezone: { type: String, default: "" },
+    preferredMenteeGoals: { type: [String], default: [] },
+    menteeAgePreference: { type: String, default: "Any" },
+    maxMentees: { type: String, default: "2" },
+    avoidTopics: { type: [String], default: [] },
+    canHandleCrisis: { type: String, enum: ["yes", "no"], default: "no" },
+    comfortLevels: { type: Map, of: Number, default: {} },
+    priorityFactor: {
       type: String,
-      required: [true, "Profession is required"], 
+      enum: ["personality", "supportArea", "communication", "availability", "experience"],
+      default: "supportArea",
     },
-    aboutYou:{
-      type:String
-    },
-    specialization: {
-      type: [String],
-      default: [], 
-    },
-
-    experienceYears: {
-      type: Number,
-      default: 0,
-    },
-
-    servicesOffered: {
-      type: [String],
-      default: [],
-    },
-
-    profileImage: {
-      type: String, 
-      default: "",
-    },
-
-    rating: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 5,
-    },
-
-    verified: {
-      type: Boolean,
-      default: false,
-    },
-
-    active: {
-      type: Boolean,
-      default: true,
+    backgroundCheckStatus: {
+      type: String,
+      enum: ["pending", "verified", "rejected"],
+      default: "pending",
     },
   },
   { timestamps: true }
 );
+
+// Auto-populate User info
+professionalSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    select: "name email role",
+  });
+  next();
+});
 
 const Professional = mongoose.model("Professional", professionalSchema);
 export default Professional;
