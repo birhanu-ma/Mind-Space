@@ -1,16 +1,17 @@
-import React from 'react'
-import MessageForm from '../LearnDetail/MessageForm'
-import LearnSection from '../LearnDetail/LearnSection'
-import RelatedTopicsSection from '../LearnDetail/RelatedTopicCard'
+// LearnDetails.jsx
+import React from "react";
+import MessageForm from "./MessageForm";
+import LearnSection from "./LearnSection";
+import RelatedTopicsSection from "./RelatedTopicSection";
 
 function LearnDetails() {
   return (
-    <div>
-      <LearnSection/>
-      <MessageForm/>
-      <RelatedTopicsSection/>
+    <div className="py-10">
+      <LearnSection />
+      <MessageForm />
+      <RelatedTopicsSection />
     </div>
-  )
+  );
 }
 
-export default LearnDetails
+export default LearnDetails;

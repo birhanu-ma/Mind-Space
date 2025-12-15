@@ -14,9 +14,11 @@ export const reviewArticles = factory.updateOne(Article);
 
 export const getArticlesByType = async (req, res, next) => {
   try {
-    console.log("article query", req.query);
     const { articleType, q, ...restQuery } = req.query;
+
+    // Only fetch articles with articleType
     const baseQuery = articleType ? Article.find({ articleType }) : Article.find();
+
 
     const features = new APIFeatures(baseQuery, restQuery)
       .filter()
@@ -24,10 +26,11 @@ export const getArticlesByType = async (req, res, next) => {
       .limitFields()
       .paginate();
 
+    // Optional search by header or subHeader
     if (q) {
       const regex = new RegExp(q, "i");
       features.query = features.query.find({
-        $or: [{ name: regex }, { sims_id: regex }],
+        $or: [{ header: regex }, { subHeader: regex }],
       });
     }
 
@@ -42,3 +45,4 @@ export const getArticlesByType = async (req, res, next) => {
     next(err);
   }
 };
+

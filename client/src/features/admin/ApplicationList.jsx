@@ -1,27 +1,41 @@
+import React, { useState } from "react";
 import ApplicationItem from "./ApplicationItem";
 import { useQuery } from "@tanstack/react-query";
 import { applicationAPI } from "../../service/client";
-
+import Spinner from "../../components/ui/Spinner";
 
 function ApplicationList() {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["applications"],
-    queryFn: applicationAPI.getAllApplications,
+  const [query, setQuery] = useState({
+    q: "",
+    status: "all",
+    sort: "name",
+    page: 1,
+    limit: 10,
   });
 
-  const applications = data?.data?.data || [];
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["applications", query],
+    queryFn: () => applicationAPI.getAllApplications(query),
+    keepPreviousData: true,
+  });
+
+  const applicationsData = data?.data || { data: [], results: 0 };
+  const applications = applicationsData.data || [];
+  const results = applicationsData.results || 0;
+  const totalPages = Math.ceil(results / query.limit);
+
+  const handlePrevPage = () => {
+    if (query.page > 1) setQuery((prev) => ({ ...prev, page: prev.page - 1 }));
+  };
+
+  const handleNextPage = () => {
+    if (query.page < totalPages) setQuery((prev) => ({ ...prev, page: prev.page + 1 }));
+  };
 
   const countByStatus = (status) =>
     applications.filter((a) => a.status === status).length;
 
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center h-64">
-       <p>Loading.....</p>
-        <span className="ml-2">Loading applications...</span>
-      </div>
-    );
-
+  if (isLoading) return <Spinner />;
   if (error)
     return (
       <div className="flex items-center justify-center h-64 text-red-500">
@@ -32,13 +46,6 @@ function ApplicationList() {
         >
           Retry
         </button>
-      </div>
-    );
-
-  if (applications.length === 0)
-    return (
-      <div className="flex items-center justify-center h-full p-8 text-xl text-gray-500">
-        There are no applications yet.
       </div>
     );
 
@@ -74,21 +81,75 @@ function ApplicationList() {
         </div>
       </div>
 
-      {/* Applications List */}
+      {/* Search, Filter, Sort */}
+      <div className="flex flex-wrap gap-2 justify-between mb-4">
+        <input
+          type="text"
+          placeholder="Search by applicant name"
+          value={query.q}
+          onChange={(e) => setQuery((prev) => ({ ...prev, q: e.target.value, page: 1 }))}
+          className="w-[200px] p-2 border rounded"
+        />
+
+        <select
+          value={query.status}
+          onChange={(e) => setQuery((prev) => ({ ...prev, status: e.target.value, page: 1 }))}
+          className="p-2 border rounded"
+        >
+          <option value="all">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+
+        <select
+          value={query.sort}
+          onChange={(e) => setQuery((prev) => ({ ...prev, sort: e.target.value, page: 1 }))}
+          className="p-2 border rounded"
+        >
+          <option value="name">Sort by Name</option>
+          <option value="profession">Sort by Profession</option>
+        </select>
+      </div>
+
+      {/* Applications Table */}
       <div className="bg-background rounded-lg overflow-hidden border border-border">
         <ul className="divide-y divide-gray-200">
           <li className="flex items-center px-6 py-3 bg-background text-foreground font-medium uppercase tracking-wider">
             <div className="w-1/6">Applicant</div>
-            <div className="w-1/4">Motivation</div>
-            <div className="w-1/4">Experience</div>
+            <div className="w-1/4">Profession</div>
+            <div className="w-1/4">Experience (Years)</div>
             <div className="w-1/6 text-right">Status</div>
             <div className="w-1/6 text-right">Action</div>
           </li>
           {applications.map((item) => (
-            <ApplicationItem item={item} key={item.id} />
+            <ApplicationItem item={item} key={item._id} />
           ))}
         </ul>
       </div>
+
+      {/* Pagination */}
+      {results > 0 && (
+        <div className="flex justify-end items-center gap-4 mt-4">
+          <button
+            disabled={query.page <= 1}
+            onClick={handlePrevPage}
+            className="p-2 border rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span>
+            Page {query.page} of {totalPages}
+          </span>
+          <button
+            disabled={query.page >= totalPages}
+            onClick={handleNextPage}
+            className="p-2 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -106,7 +106,7 @@ export const menteeAPI = {
       data,
     }),
   getMenteeDetail: async (menteeId) => {
-    console.log("this is from api", menteeId)
+    console.log("this is from api", menteeId);
     const res = await api(`/applications/mentees/${menteeId}`);
     console.log("Mentee detail response:", res);
     return res;
@@ -351,7 +351,7 @@ export const userAPI = {
     const res = api(`/users/${id}`);
     return res;
   },
-  reviewUsers: async ({ role, id, reviewedBy }) => {
+  reviewUser: async ({ role, id, reviewedBy }) => {
     console.log(role, id, reviewedBy);
 
     return api(`/users/${id}`, {
@@ -363,18 +363,15 @@ export const userAPI = {
       },
     });
   },
-};
 
-//  STUDENT UNION API
-export const studentUnionAPI = {
-  getAllStudents: async (params) => {
+  getAllUsers: async (params) => {
     const query = new URLSearchParams(params).toString();
     const response = await api(`/users?${query}`);
     console.log("this is a data from all ", response);
     return response;
   },
 
-  getStudentsByRole: async (params) => {
+  getUserByRole: async (params) => {
     try {
       const query = new URLSearchParams(params).toString();
       const response = await api(`/users/by-role?${query}`);
@@ -393,18 +390,18 @@ export const studentUnionAPI = {
 export const studentAPI = {
   getStudentDetails: async (id) => {
     console.log("this is student id ", id);
-    const res = api(`/students/${id}`);
+    const res = api(`/User/${id}`);
     return res;
   },
-  getStudentStats: async () => {
-    const res = await api("/students/stats");
+  getUsertats: async () => {
+    const res = await api("/User/stats");
     console.log("this is respose", res.data);
     return res.data;
   },
   reviewStudent: async ({ role, id, reviewedBy }) => {
     console.log(role, id, reviewedBy);
 
-    return api(`/students/${id}`, {
+    return api(`/User/${id}`, {
       method: "PATCH",
 
       data: {

@@ -8,9 +8,8 @@ import { toast } from "sonner";
 function ApplicationDetail() {
   const { id } = useParams();
   const queryClient = useQueryClient();
-  const reviewedBy = localStorage.getItem("id"); // ✅ logged-in admin/user ID
+  const reviewedBy = localStorage.getItem("id");
 
-  // Fetch application details
   const { data, isLoading, error } = useQuery({
     queryKey: ["applications", id],
     queryFn: () => applicationAPI.getApplicationDetails(id),
@@ -18,11 +17,9 @@ function ApplicationDetail() {
 
   const application = data?.data?.data;
 
-  // Mutation for approve/reject
   const updateStatusMutation = useMutation({
     mutationFn: async ({ status, id, reviewedBy }) =>
       applicationAPI.reviewApplication({ status, id, reviewedBy }),
-
     onSuccess: (res) => {
       toast.success(`Application ${res?.data?.data?.status} successfully!`);
       queryClient.invalidateQueries(["applications", id]);
@@ -33,49 +30,14 @@ function ApplicationDetail() {
   });
 
   const handleAction = (newStatus) => {
-    updateStatusMutation.mutate({
-      status: newStatus,
-      id,
-      reviewedBy,
-    });
+    updateStatusMutation.mutate({ status: newStatus, id, reviewedBy });
   };
 
   if (isLoading) return <Spinner />;
   if (error) return <p>Failed to load application details</p>;
   if (!application) return <p>No application details found.</p>;
 
-  const { motivation, communication, createdAt, status, student } = application;
-
-  const ProgressBar = ({ value, minLabel, maxLabel }) => (
-    <div className="mb-4">
-      <div className="flex justify-between text-sm text-foreground/60 mb-1">
-        <span>{minLabel}</span>
-        <span>{maxLabel}</span>
-      </div>
-      <div className="relative h-2 bg-foreground/20 rounded-full overflow-hidden">
-        <div
-          className="absolute h-full bg-purple-600 rounded-full"
-          style={{ width: `${(value / 10) * 100}%` }}
-        />
-      </div>
-    </div>
-  );
-
-  const SkillDots = ({ label, score }) => (
-    <div className="flex items-center mb-2">
-      <span className="w-1/3 text-foreground/60">{label}</span>
-      <div className="flex-1 flex space-x-1">
-        {[...Array(10)].map((_, i) => (
-          <div
-            key={i}
-            className={`w-3 h-3 rounded-full ${
-              i < score ? "bg-purple-600" : "bg-foreground/20"
-            }`}
-          />
-        ))}
-      </div>
-    </div>
-  );
+  const { profession, experienceYears, user, status, createdAt } = application;
 
   return (
     <div className="p-8 pt-30 bg-background text-foreground border border-border max-w-7xl mx-auto rounded-lg shadow-xl font-sans">
@@ -85,16 +47,17 @@ function ApplicationDetail() {
           <div className="text-center md:text-left mb-6">
             <div className="relative w-36 h-36 rounded-full mx-auto md:mx-0 overflow-hidden mb-4 bg-gray-200" />
             <h2 className="text-3xl font-semibold text-foreground/60">
-              Applicant
+              {user?.name}
             </h2>
-            <p className="text-foreground/60 text-sm">Student ID: {student}</p>
+            <p className="text-foreground/60 text-sm">Profession: {profession}</p>
+            <p className="text-foreground/60 text-sm">
+              Experience: {experienceYears} years
+            </p>
             <p className="text-foreground/60 text-sm">
               Submitted: {new Date(createdAt).toLocaleDateString()}
             </p>
             {reviewedBy && (
-              <p className="text-foreground/60 text-sm">
-                Reviewed By: {reviewedBy}
-              </p>
+              <p className="text-foreground/60 text-sm">Reviewed By: {reviewedBy}</p>
             )}
             <span
               className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold capitalize ${
@@ -141,30 +104,26 @@ function ApplicationDetail() {
           </div>
         </div>
 
-        {/* Middle Column */}
-        <div className="col-span-1 border-l border-foreground/20 pl-8">
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-3">Motivation</h3>
-            <p className="text-foreground/60 mb-6">{motivation || "N/A"}</p>
-          </div>
-
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-3">Communication</h3>
-            <p className="text-foreground/60 mb-6">{communication || "N/A"}</p>
-          </div>
-        </div>
-
         {/* Right Column */}
-        <div className="col-span-1 border-l border-foreground/20 pl-8">
-          <h3 className="text-xl font-semibold mb-3">Communication Skill</h3>
-          <ProgressBar
-            value={Number(communication) || 0}
-            minLabel="Low"
-            maxLabel="High"
-          />
-          <SkillDots label="Communication" score={Number(communication) || 0} />
+        <div className="col-span-2 border-l border-foreground/20 pl-8">
+          <h3 className="text-xl font-semibold mb-3">Details</h3>
+          <p className="text-foreground/60 mb-2">
+            <strong>Profession:</strong> {profession}
+          </p>
+          <p className="text-foreground/60 mb-2">
+            <strong>Experience:</strong> {experienceYears} years
+          </p>
+          <p className="text-foreground/60 mb-2">
+            <strong>Email:</strong> {user?.email}
+          </p>
+          <p className="text-foreground/60 mb-2">
+            <strong>Availability:</strong> {application?.availability || "N/A"}
+          </p>
+          <p className="text-foreground/60 mb-2">
+            <strong>Certifications:</strong>{" "}
+            {(application?.certifications || []).join(", ")}
+          </p>
         </div>
-       
       </div>
     </div>
   );
