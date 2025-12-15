@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { adminAssignmentAPI } from "../../service/client";
-import RankedMenteeList from "../mentee/RankedMenteeList";
+import RankedMenteeList from "../admin/mentee/rankedMenteeList.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
 
 export default function CounselorDetail() {

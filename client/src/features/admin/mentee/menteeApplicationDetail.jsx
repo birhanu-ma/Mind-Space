@@ -1,11 +1,11 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { menteeAPI } from "../../service/client.jsx";
-import Spinner from "../../components/ui/Spinner.jsx";
+import { menteeAPI } from "../../../service/client.jsx";
+import Spinner from "../../../components/ui/Spinner.jsx";
 import { toast } from "sonner";
 
-function ApplicationDetail() {
+function MenteeApplicationDetail() {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const reviewedBy = localStorage.getItem("id");
@@ -129,4 +129,4 @@ function ApplicationDetail() {
   );
 }
 
-export default ApplicationDetail;
+export default MenteeApplicationDetail;

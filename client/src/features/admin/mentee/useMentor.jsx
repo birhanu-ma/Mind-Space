@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { menteeAPI } from "../../service/client";
+import { menteeAPI } from "../../../service/client";
 export function useMentor() {
   const menteeId = localStorage.getItem("id");
 

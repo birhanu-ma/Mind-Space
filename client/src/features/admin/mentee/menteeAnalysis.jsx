@@ -1,6 +1,6 @@
 import React from 'react'
-import LineChart from '../../components/chart/LineChart'
-import DonutChart from '../../components/chart/DonutChart'
+import LineChart from '../../../components/chart/LineChart'
+import DonutChart from '../../../components/chart/DonutChart'
 function Analysis() {
     const progressData = [
         { label: "February", value: 72, date: "Feb 14th, 2020" },

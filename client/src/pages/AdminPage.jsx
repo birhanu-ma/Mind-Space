@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import Users from "../features/user/Users.jsx"
+import Users from "../features/user/Users.jsx";
 import Sidebar from "../components/layout/Sidebar.jsx";
-import ApplicationList from "../features/admin/ApplicationList.jsx";
+import ApplicationList from "../features/admin/counselor/ApplicationList.jsx";
 import Petition from "../features/admin/Petition.jsx";
 import Article from "../features/Article/article.jsx";
 import Forum from "../features/Forum/forum.jsx";
 import Service from "../features/service/service.jsx";
 import Profession from "../features/profession/profession.jsx";
 import CounselorList from "../features/counselor/counselorList.jsx";
+import MenteeApplicationList from "../features/admin/mentee/menteeApplicationList.jsx";
 function StudentUnion() {
   const navItems = [
     "Users",
@@ -15,9 +16,10 @@ function StudentUnion() {
     "Forum",
     "Service",
     "Profession",
-    "Application",
+    "CounselorApp",
+    "MenteeApp",
     "Petition",
-    "Assignment"
+    "Assignment",
   ];
 
   const [activePage, setActivePage] = useState("Dashboard");
@@ -38,12 +40,14 @@ function StudentUnion() {
         return <Service />;
       case "Profession":
         return <Profession />;
-          case "Application":
+      case "CounselorApp":
         return <ApplicationList />;
+      case "MenteeApp":
+        return <MenteeApplicationList />;
       case "Petition":
         return <Petition />;
       case "Assignment":
-        return <CounselorList/>
+        return <CounselorList />;
       default:
         return <Users />;
     }

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { adminAssignmentAPI } from "../../service/client";
+import { adminAssignmentAPI } from "../../../service/client";
 
 export default function RankedMenteeItem({ item, counselorId }) {
   const queryClient = useQueryClient();
@@ -36,7 +36,7 @@ export default function RankedMenteeItem({ item, counselorId }) {
       {/* Actions */}
       <div className="w-1/4 py-4 px-4 flex justify-end gap-2">
         <NavLink
-          to={`/mentees/${_id}`}
+          to={`/mentee-app-detail/${_id}`}
           className="text-xs font-semibold px-3 py-1 rounded-md border hover:bg-muted transition-colors"
         >
           View

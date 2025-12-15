@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import ApplicationItem from "./ApplicationItem";
+import MenteeApplicationItem from "./menteeApplicationItem";
 import { useQuery } from "@tanstack/react-query";
-import { counselorAPI } from "../../service/client";
-import Spinner from "../../components/ui/Spinner";
+import { menteeAPI } from "../../../service/client";
+import Spinner from "../../../components/ui/Spinner";
 
-function ApplicationList() {
+function MenteeApplicationList() {
   const [query, setQuery] = useState({
     q: "",
     status: "all",
@@ -15,7 +15,7 @@ function ApplicationList() {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["applications", query],
-    queryFn: () => counselorAPI.getAllApplications(query),
+    queryFn: () => menteeAPI.getAllApplications(query),
     keepPreviousData: true,
   });
 
@@ -123,7 +123,7 @@ function ApplicationList() {
             <div className="w-1/6 text-right">Action</div>
           </li>
           {applications.map((item) => (
-            <ApplicationItem item={item} key={item._id} />
+            <MenteeApplicationItem item={item} key={item._id} />
           ))}
         </ul>
       </div>
@@ -154,4 +154,4 @@ function ApplicationList() {
   );
 }
 
-export default ApplicationList;
+export default MenteeApplicationList;

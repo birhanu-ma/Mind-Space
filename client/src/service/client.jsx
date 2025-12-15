@@ -193,6 +193,24 @@ export const counselorAPI = {
 
 //  MENTEE API
 export const menteeAPI = {
+  getAllApplications: () => api("/mentee"),
+  getApplication: async (id) => {
+    console.log("this is application id ", id);
+    const res = api(`/mentee/${id}`);
+    return res;
+  },
+  reviewApplication: async ({ status, id, reviewedBy }) => {
+    console.log(status, id, reviewedBy);
+
+    return api(`/mentee/${id}`, {
+      method: "PATCH",
+
+      data: {
+        status,
+        reviewedBy,
+      },
+    });
+  },
   submitPetition: (data) =>
     api(`/petitions`, {
       method: "POST",

@@ -1,8 +1,8 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { counselorAPI } from "../../service/client.jsx";
-import Spinner from "../../components/ui/Spinner.jsx";
+import { counselorAPI } from "../../../service/client.jsx";
+import Spinner from "../../../components/ui/Spinner.jsx";
 import { toast } from "sonner";
 
 function ApplicationDetail() {

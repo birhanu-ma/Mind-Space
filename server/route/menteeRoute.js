@@ -4,7 +4,8 @@ import {
   createMenteeApplication,
   updateMenteeApplication,
   deleteMenteeApplication,
-  getMenteeDetail,
+  getMentee,
+  getAllApplications,
   reviewMenteeApplication
 } from "../controller/menteeController.js";
 
@@ -13,14 +14,15 @@ const router = express.Router();
 // CRUD for mentee applications
 router
   .route("/")
-  .post(protect, restrictTo("admin", "mentee"), createMenteeApplication)
+   .get(protect, restrictTo("admin"), getAllApplications)
+  .post(protect, restrictTo("user"), createMenteeApplication)
   .patch(protect, restrictTo("admin"), updateMenteeApplication)
   .delete(protect, restrictTo("admin"), deleteMenteeApplication);
 
 // Get & review individual mentee application
 router
   .route("/:id")
-  .get(protect, restrictTo("admin"), getMenteeDetail)
+  .get(protect, restrictTo("admin"), getMentee)
   .patch(protect, restrictTo("admin"), reviewMenteeApplication);
 
 export default router;

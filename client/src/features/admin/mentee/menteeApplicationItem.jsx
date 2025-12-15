@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-function ApplicationItem({ item }) {
+function MenteeApplicationItem({ item }) {
   const getStatusBadge = (status) => {
     const styles = {
       pending: "bg-yellow-100 text-yellow-800",
@@ -51,7 +51,7 @@ function ApplicationItem({ item }) {
       {/* Action */}
       <div className="w-full sm:w-1/6 py-4 px-4 flex sm:justify-end">
         <NavLink
-          to={`/application-detail/${item._id}`}
+          to={`/mentee-app-detail/${item._id}`}
           className="text-xs font-semibold px-3 py-1 rounded-md border bg-blue-500 hover:bg-blue-600 text-white transition-colors"
         >
           View Details
@@ -61,4 +61,4 @@ function ApplicationItem({ item }) {
   );
 }
 
-export default ApplicationItem;
+export default MenteeApplicationItem;

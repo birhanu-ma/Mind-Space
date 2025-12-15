@@ -15,7 +15,8 @@ export const reviewPetitions = factory.updateOne(Petition);
 
 // Standard CRUD using factory
 export const createMenteeApplication = factory.createOne(Mentee);
-export const getMenteeDetail = factory.getOne(Mentee);
+export const getAllApplications = factory.getAll(Mentee);
+export const getMentee = factory.getOne(Mentee);
 export const updateMenteeApplication = factory.updateOne(Mentee);
 export const deleteMenteeApplication = factory.deleteOne(Mentee);
 
@@ -40,17 +41,17 @@ export const reviewMenteeApplication = async (req, res, next) => {
       });
     }
 
+    // Update application status
     menteeApp.status = status;
     await menteeApp.save();
 
-    // Update user role to mentee if approved
-    if (status === "approved" && menteeApp.user.role !== "mentee") {
+    // ✅ ROLE MANAGEMENT (EXPLICIT & SAFE)
+    if (status === "approved") {
       menteeApp.user.role = "mentee";
       await menteeApp.user.save();
     }
 
-    // Revert role if rejected
-    if (status === "rejected" && menteeApp.user.role === "mentee") {
+    if (status === "rejected") {
       menteeApp.user.role = "user";
       await menteeApp.user.save();
     }
