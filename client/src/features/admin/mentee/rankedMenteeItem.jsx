@@ -17,40 +17,42 @@ export default function RankedMenteeItem({ item, counselorId }) {
   });
 
   return (
-    <li className="flex items-center w-full border-b border-[#f3f2f7] hover:bg-muted/30 transition-colors">
-      {/* Name */}
-      <div className="w-1/4 py-4 px-4 text-sm font-medium text-foreground">
-        {user.name || "—"}
-      </div>
+    <li className="border-b border-border hover:bg-muted/30 transition">
+      <div className="flex items-center w-full min-w-[800px]">
+        {/* Name */}
+        <div className="w-1/4 py-4 px-4 text-sm font-medium text-foreground">
+          {user.name || "—"}
+        </div>
 
-      {/* Support Areas */}
-      <div className="w-1/4 py-4 px-4 text-sm text-foreground/60">
-        {supportAreas?.join(", ") || "—"}
-      </div>
+        {/* Support Areas */}
+        <div className="w-1/4 py-4 px-4 text-sm text-foreground/60">
+          {supportAreas?.length ? supportAreas.join(", ") : "—"}
+        </div>
 
-      {/* Match Score */}
-      <div className="w-1/4 py-4 px-4 text-sm font-semibold text-blue-600">
-        {Math.round((finalScore || 0) * 100)}%
-      </div>
+        {/* Match Score */}
+        <div className="w-1/4 py-4 px-4 text-sm font-semibold text-blue-600">
+          {Math.round((finalScore || 0) * 100)}%
+        </div>
 
-      {/* Actions */}
-      <div className="w-1/4 py-4 px-4 flex justify-end gap-2">
-        <NavLink
-          to={`/mentee-app-detail/${_id}`}
-          className="text-xs font-semibold px-3 py-1 rounded-md border hover:bg-muted transition-colors"
-        >
-          View
-        </NavLink>
+        {/* Actions */}
+        <div className="w-1/4 py-4 px-4 flex justify-end gap-2">
+          <NavLink
+            to={`/mentee-app-detail/${_id}`}
+            className="text-xs font-semibold px-3 py-1 rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors"
+          >
+            View Details
+          </NavLink>
 
-        <button
-          onClick={() =>
-            assignMutation.mutate({ counselorId, menteeId: user._id })
-          }
-          disabled={assignMutation.isLoading}
-          className="text-xs font-semibold px-3 py-1 rounded-md border bg-blue-500 hover:bg-blue-600 text-white transition-colors disabled:opacity-50"
-        >
-          {assignMutation.isLoading ? "Assigning..." : "Assign"}
-        </button>
+          <button
+            onClick={() =>
+              assignMutation.mutate({ counselorId, menteeId: user._id })
+            }
+            disabled={assignMutation.isLoading}
+            className="text-xs font-semibold px-3 py-1 rounded-md bg-green-500 hover:bg-green-600 text-white transition-colors disabled:opacity-50"
+          >
+            {assignMutation.isLoading ? "Assigning..." : "Assign"}
+          </button>
+        </div>
       </div>
     </li>
   );
