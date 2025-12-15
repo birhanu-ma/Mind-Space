@@ -3,9 +3,8 @@ import mongoose from "mongoose";
 import AppError from "../../server/utils/AppError.js";
 import * as factory from "./handlerFactory.js";
 import APIFeatures from "../utils/apiFeatures.js";
-import User from "../model/userModel.js";
-import CounselorFormModel from "../model/counselorFormModel.js"
-import menteeFormModel from "../model/menteeFormModel.js"
+import CounselorFormModel from "../model/counselorModel.js"
+import menteeFormModel from "../model/menteeModel.js"
 import matchMenteesToCounselor from "../utils/match.js";
 
 

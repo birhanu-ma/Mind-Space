@@ -103,6 +103,15 @@ function App() {
             path="/mentees/:menteeId"
             element={<MenteeDetail />}
           />
+          <Route
+            path="/apply-for-profession"
+            element={<CounselorForm />}
+          />
+            <Route
+            path="/apply-for-mentee"
+            element={<MenteeForm />}
+          />
+
         
         
           

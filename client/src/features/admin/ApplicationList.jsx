@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ApplicationItem from "./ApplicationItem";
 import { useQuery } from "@tanstack/react-query";
-import { applicationAPI } from "../../service/client";
+import { counselorAPI } from "../../service/client";
 import Spinner from "../../components/ui/Spinner";
 
 function ApplicationList() {
@@ -15,7 +15,7 @@ function ApplicationList() {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["applications", query],
-    queryFn: () => applicationAPI.getAllApplications(query),
+    queryFn: () => counselorAPI.getAllApplications(query),
     keepPreviousData: true,
   });
 

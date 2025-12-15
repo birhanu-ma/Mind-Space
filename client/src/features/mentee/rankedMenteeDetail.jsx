@@ -10,7 +10,7 @@ export default function MenteeDetail() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["mentee", menteeId],
-    queryFn: () => menteeAPI.getMenteeDetail(menteeId),
+    queryFn: () => menteeAPI.getMentee(menteeId),
     onError: () => toast.error("Failed to load mentee details"),
     enabled: !!menteeId,
   });

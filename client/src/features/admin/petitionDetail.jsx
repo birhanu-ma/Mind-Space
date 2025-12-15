@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { petitionAPI } from "../../service/client.jsx";
+import { menteeAPI } from "../../service/client.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
 import { toast } from "sonner";
 
@@ -13,7 +13,7 @@ function PetitionDetail() {
   // Fetch petition details
   const { data, isLoading, error } = useQuery({
     queryKey: ["petitions", id],
-    queryFn: () => petitionAPI.getPetitionDetails(id),
+    queryFn: () => menteeAPI.getPetition(id),
   });
 
   const petition = data?.data?.data;
@@ -21,7 +21,7 @@ function PetitionDetail() {
   // Mutation for approve/reject
   const updateStatusMutation = useMutation({
     mutationFn: async ({ status, id, reviewedBy }) =>
-      petitionAPI.reviewPetition({ status, id, reviewedBy }),
+      menteeAPI.reviewPetition({ status, id, reviewedBy }),
 
     onSuccess: (res) => {
       toast.success(`Petition ${res?.data?.data?.status} successfully!`);

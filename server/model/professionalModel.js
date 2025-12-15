@@ -1,49 +1,37 @@
 import mongoose from "mongoose";
 
-const professionalSchema = new mongoose.Schema(
+const professionSchema = new mongoose.Schema(
   {
-    user: {
+    application: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Application",
+      required: true,
+      unique: true, // one profession per application
+    },
+    approvedBy: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: true, // link to the User who is a professional
-      unique: true,   // one professional record per user
+      required: true,
     },
-    degreeLevel: { type: String, default: "" },
-    certifications: [{ type: String }],
-    supportAreas: { type: [String], default: [] },
-    mentalHealthSpecialties: { type: [String], default: [] },
-    personalityStyle: { type: [String], default: [] },
-    communicationStyles: { type: [String], default: [] },
-    availability: { type: String, default: "" },
-    timezone: { type: String, default: "" },
-    preferredMenteeGoals: { type: [String], default: [] },
-    menteeAgePreference: { type: String, default: "Any" },
-    maxMentees: { type: String, default: "2" },
-    avoidTopics: { type: [String], default: [] },
-    canHandleCrisis: { type: String, enum: ["yes", "no"], default: "no" },
-    comfortLevels: { type: Map, of: Number, default: {} },
-    priorityFactor: {
-      type: String,
-      enum: ["personality", "supportArea", "communication", "availability", "experience"],
-      default: "supportArea",
-    },
-    backgroundCheckStatus: {
-      type: String,
-      enum: ["pending", "verified", "rejected"],
-      default: "pending",
+    active: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }
 );
 
-// Auto-populate User info
-professionalSchema.pre(/^find/, function (next) {
+// Auto-populate application + user
+professionSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "user",
-    select: "name email role",
+    path: "application",
+    populate: {
+      path: "user",
+      select: "name email role",
+    },
   });
   next();
 });
 
-const Professional = mongoose.model("Professional", professionalSchema);
-export default Professional;
+const Profession = mongoose.model("Profession", professionSchema);
+export default Profession;

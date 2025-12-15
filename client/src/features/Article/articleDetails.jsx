@@ -13,7 +13,7 @@ function ArticleDetail() {
   // 🔹 Fetch user details
   const { data, isLoading, error } = useQuery({
     queryKey: ["user", id],
-    queryFn: () => articleAPI.getArticleDetails(id),
+    queryFn: () => articleAPI.getArticle(id),
     onError: () => toast.error("Failed to load user details"),
   });
 

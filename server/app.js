@@ -9,9 +9,9 @@ import path from "path";
 import cors from "cors";
 import authRoute from "./route/authRoute.js";
 import userRoute from "./route/userRoute.js";
-import petitionRoute from "./route/petitionRoute.js";
+import menteeRoute from "./route/menteeRoute.js"
 import counselingRoute from "./route/counselingRoute.js";
-import applicationRoute from "./route/applicationRoute.js";
+import counselorRoute  from "./route/counselorRoute.js"
 import articleRoute from "./route/articleRoute.js";
 import forumsRoute from "./route/forumsRoute.js";
 import serviceRoute from "./route/serviceRoute.js";
@@ -36,13 +36,13 @@ app.use(
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", userRoute);
-app.use("/api/v1/petitions", petitionRoute);
-app.use("/api/v1/applications", applicationRoute);
+app.use("/api/v1/mentee", menteeRoute);
+app.use("/api/v1/counselor", counselorRoute);
 app.use("/api/v1/counseling", counselingRoute);
 app.use("/api/v1/articles", articleRoute);
 app.use("/api/v1/services", serviceRoute);
 app.use("/api/v1/forums", forumsRoute);
 app.use("/api/v1/professions", professionRoute);
-app.use("/api/v1/petitions", petitionRoute);
+
 
 export default app;

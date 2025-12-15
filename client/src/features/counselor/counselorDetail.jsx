@@ -11,7 +11,7 @@ export default function CounselorDetail() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["counselor", counselorId],
-    queryFn: () => adminAssignmentAPI.getCounselorDetails(counselorId),
+    queryFn: () => adminAssignmentAPI.getCounselor(counselorId),
   });
 
   if (isLoading) return <Spinner />;

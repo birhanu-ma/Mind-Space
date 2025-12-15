@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { counselorAPI } from "../../service/client.jsx";
+import { menteeAPI } from "../../service/client.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
 import { toast } from "sonner";
 
@@ -12,14 +12,14 @@ function ApplicationDetail() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["applications", id],
-    queryFn: () => counselorAPI.getApplication(id),
+    queryFn: () => menteeAPI.getApplication(id),
   });
 
   const application = data?.data?.data;
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ status, id, reviewedBy }) =>
-      counselorAPI.reviewApplication({ status, id, reviewedBy }),
+      menteeAPI.reviewApplication({ status, id, reviewedBy }),
     onSuccess: (res) => {
       toast.success(`Application ${res?.data?.data?.status} successfully!`);
       queryClient.invalidateQueries(["applications", id]);

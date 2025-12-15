@@ -11,7 +11,7 @@ function LearnSection() {
   // React Query hook
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["article", id],
-    queryFn: () => articleAPI.getArticleDetails(id),
+    queryFn: () => articleAPI.getArticle(id),
     enabled: !!id, // only fetch if id exists
     staleTime: 1000 * 60 * 5, // cache for 5 minutes
   });

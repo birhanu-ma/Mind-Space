@@ -3,7 +3,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { mentorAPI } from "../../service/client";
+import { counselorAPI } from "../../service/client";
 
 // ------------------ Constant Options ------------------
 
@@ -118,7 +118,7 @@ export default function MentorForm() {
   });
 
   const mutation = useMutation({
-    mutationFn: (payload) => mentorAPI.submitApplication(payload),
+    mutationFn: (payload) => counselorAPI.submitApplication(payload),
     onSuccess: () => {
       alert("Mentor profile saved successfully.");
       reset();
@@ -188,7 +188,7 @@ const onSubmit = (data) => {
   return (
     <div className="max-w-3xl mx-auto p-6 my-10 bg-white rounded-xl shadow-md">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <h1 className="text-2xl font-bold mb-4">Mentor Profile</h1>
+        <h1 className="text-2xl font-bold mb-4">Profession Profile</h1>
 
         {/* Mentor Age + Profession + Degree + Experience */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
