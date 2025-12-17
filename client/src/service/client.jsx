@@ -506,3 +506,39 @@ export const adminAssignmentAPI = {
     });
   },
 };
+
+export const contactAPI = {
+  submitMessage: (data) => {
+    return api("/contact", {
+      method: "POST",
+      data: data,
+    });
+  },
+  getAllMessage: () => api("/contact"),
+  getMessage: async (id) => {
+    console.log("this is application id ", id);
+    const res = api(`/contact/${id}`);
+    return res;
+  },
+  deleteMessage: async (id) => {
+    return api(`/contact/${id}`);
+  },
+};
+
+export const moodEntryAPI = {
+  submitMoodEntry: (data) => {
+    return api("/mood-entry", {
+      method: "POST",
+      data: data,
+    });
+  },
+  getAllMoodEntry: () => api("/mood-entry"),
+  getMoodEntry: async (id) => {
+    console.log("this is application id ", id);
+    const res = api(`/mood-entry/${id}`);
+    return res;
+  },
+  deleteMoodEntry: async (id) => {
+    return api(`/mood-entry/${id}`);
+  },
+};
