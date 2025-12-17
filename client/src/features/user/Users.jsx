@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { userAPI } from "../../service/client.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
-import UsersTable from "../admin/UsersTable.jsx";
+import UsersTable from "../admin/usersTable.jsx";
 import { NavLink } from "react-router-dom";
 
 export default function User() {
