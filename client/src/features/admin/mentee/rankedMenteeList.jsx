@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminAssignmentAPI } from "../../../service/client";
-import RankedMenteeItem from "./RankedMenteeItem";
+import RankedMenteeItem from "./rankedMenteeItem";
 import Spinner from "../../../components/ui/Spinner.jsx";
 
 export default function RankedMenteeList({ counselorId }) {
@@ -9,7 +9,6 @@ export default function RankedMenteeList({ counselorId }) {
     queryFn: () => adminAssignmentAPI.getRankedMentees(counselorId),
   });
 
-  // Safely extract rankedMentees from API response
   const mentees = data?.rankedMentees || [];
 
   if (isLoading) return <Spinner />;
