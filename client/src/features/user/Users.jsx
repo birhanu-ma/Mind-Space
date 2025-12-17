@@ -74,11 +74,7 @@ export default function User() {
           </label>
         </div>
       </div>
-
-      {/* Table */}
       <UsersTable users={users} query={query} setQuery={setQuery} total={results} />
-
-      {/* Footer: Add User + Pagination Inline */}
       <div className="flex justify-between items-center mt-4 flex-wrap gap-2 text-sm text-muted-foreground">
         <NavLink
           to="/admin/users/new"
