@@ -33,6 +33,8 @@ import CounselorForm from "./features/counselor/counselorForms";
 import CounselorDetail from "./features/counselor/counselorDetail";
 import MenteeDetail from "./features/admin/mentee/rankedMenteeDetail";
 import MenteeApplicationDetail from "./features/admin/mentee/menteeApplicationDetail";
+import Profile from "./components/profile/profile"
+import Settings from "./pages/SettingsPage";
 
 function App() {
   return (
@@ -57,6 +59,9 @@ function App() {
           <Route path="/admin/articles/new" element={<ArticleCreateForm />} />
           <Route path="/admin/forums/new" element={<ForumCreateForm />} />
           <Route path="/admin/services/new" element={<ServiceCreateForm />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          
           <Route
             path="/admin/professions/new"
             element={<CreateProfessionForm />}
