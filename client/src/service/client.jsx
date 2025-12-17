@@ -436,31 +436,31 @@ export const professionalAPI = {
     });
   },
 };
-
 export const profileAPI = {
-  getProfile: (id) => {
-    console.log("this profile integration works");
-    const res = api(`/users/me/${id}`);
+  getProfile: async () => {
+    const res = await api("/profile/me");
     return res;
   },
-  updateProfile: (params) => {
-    console.log("this is params", params);
-    const { id, ...data } = params;
-    const res = api(`/users/me/${id}`, {
+
+  updateProfile: async (data) => {
+    // 🔒 no ID needed, backend uses req.user.id
+    return api("/profile/me", {
       method: "PATCH",
       data,
     });
-    return res;
   },
-  updateProfilePhoto: (formData) => {
-    console.log("this is photo and is", formData);
-    const res = api(`/users/me/photo`, {
+
+  updateProfilePhoto: async (formData) => {
+    return api("/profile/me/photo", {
       method: "PATCH",
       data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
-    return res;
   },
 };
+
 
 export const conversationAPI = {
   getConversation: async (room) => {
@@ -504,5 +504,41 @@ export const adminAssignmentAPI = {
         mentee: menteeId,
       },
     });
+  },
+};
+
+export const contactAPI = {
+  submitMessage: (data) => {
+    return api("/contact", {
+      method: "POST",
+      data: data,
+    });
+  },
+  getAllMessage: () => api("/contact"),
+  getMessage: async (id) => {
+    console.log("this is application id ", id);
+    const res = api(`/contact/${id}`);
+    return res;
+  },
+  deleteMessage: async (id) => {
+    return api(`/contact/${id}`);
+  },
+};
+
+export const moodEntryAPI = {
+  submitMoodEntry: (data) => {
+    return api("/mood-entry", {
+      method: "POST",
+      data: data,
+    });
+  },
+  getAllMoodEntry: () => api("/mood-entry"),
+  getMoodEntry: async (id) => {
+    console.log("this is application id ", id);
+    const res = api(`/mood-entry/${id}`);
+    return res;
+  },
+  deleteMoodEntry: async (id) => {
+    return api(`/mood-entry/${id}`);
   },
 };

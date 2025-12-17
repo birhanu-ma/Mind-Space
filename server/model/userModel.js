@@ -2,55 +2,59 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 
-const userSchema = mongoose.Schema({
+
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "name is required"],
+    required: [true, "Name is required"],
+    trim: true,
   },
+
   email: {
     type: String,
-    required: [true, "email is required"],
+    required: [true, "Email is required"],
     unique: true,
-    validate: [validator.isEmail, "invalid email"],
     lowercase: true,
+    validate: [validator.isEmail, "Invalid email"],
   },
-  password: {
-    type: String,
-    required: [true, "password is required"],
-    select: false,
-  },
-  passwordConfirm: {
-    type: String,
-    required: [true, "password confirm is required"],
-    select: false,
-    validate: {
-      validator: function (el) {
-        return el === this.password;
-      },
-      message: "passwords are not the same",
-    },
-  },
-  passwordResetToken: {
-    type: String,
-    select: false,
-  },
-  passwordChangedAt: Date,
-  passwordExpires: Date,
+
   role: {
     type: String,
     enum: ["user", "mentee", "counselor", "admin"],
     default: "user",
   },
+
+  photo: {
+    type: String,
+    default: "default.jpeg",
+  },
+
+  password: {
+    type: String,
+    required: true,
+    select: false,
+  },
+
+  passwordConfirm: {
+    type: String,
+    required: true,
+    select: false,
+  },
+
   active: {
     type: Boolean,
-    select: false,
     default: true,
+    select: false,
   },
+
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
+
+
+
 
 // Hash password before save
 userSchema.pre("save", async function (next) {
@@ -61,10 +65,7 @@ userSchema.pre("save", async function (next) {
 });
 
 // Compare passwords
-userSchema.methods.correctPassword = async function (
-  candidatePassword,
-  userPassword
-) {
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
