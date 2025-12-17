@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const professionSchema = new mongoose.Schema(
   {
-    application: {
+    profession: {
       type: mongoose.Schema.ObjectId,
       ref: "Application",
       required: true,
@@ -24,7 +24,7 @@ const professionSchema = new mongoose.Schema(
 // Auto-populate application + user
 professionSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "application",
+    path: "profession", // ✅ correct
     populate: {
       path: "user",
       select: "name email role",
@@ -32,6 +32,7 @@ professionSchema.pre(/^find/, function (next) {
   });
   next();
 });
+
 
 const Profession = mongoose.model("Profession", professionSchema);
 export default Profession;
