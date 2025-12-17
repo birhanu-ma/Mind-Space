@@ -17,18 +17,16 @@ const FinalSection = () => {
           Because Mental Health Should Be Accessible to Everyone
         </h2>
         <p className="text-gray-700 text-lg sm:text-xl mb-8">
-          We provide tools, guidance, and support so that everyone can take care of their mental wellbeing—anytime, anywhere.
+          We provide tools, guidance, and support so that everyone can take care
+          of their mental wellbeing anytime, anywhere.
         </p>
 
-       
-        <Link to="/aboutus">
-          <CustomButton
-            color="#1F2937"
-            borderRadius="12px"
-            onClick={scrollToTop}
+        <Link to="/apply-for-profession">
+          <button
+            className="bg-black p-2 rounded-md text-white"
           >
-            Explore More
-          </CustomButton>
+            Apply for Profession
+          </button>
         </Link>
       </div>
     </section>
