@@ -18,7 +18,7 @@ const Hero = () => {
           Your Safe Space for <br className="hidden sm:block" /> Mental Well-Being
         </h1>
         <p className="text-gray-700 text-base sm:text-lg max-w-md mx-auto lg:mx-0">
-          MindSpace helps you manage stress, connect with peers, and access professional support — safely and anonymously.
+          MindSpace helps you manage stress, connect with peers, and access professional support safely and anonymously.
         </p>
 
         <Link to="/support">
@@ -30,24 +30,8 @@ const Hero = () => {
             Find Support
           </CustomButton>
         </Link>
-        <Link to="/apply-for-profession">
-          <CustomButton
-            color="#1F2937"
-            borderRadius="12px"
-            onClick={scrollToTop}
-          >
-            Apply for Profession
-          </CustomButton>
-        </Link>
-        <Link to="/apply-for-mentee">
-          <CustomButton
-            color="#1F2937"
-            borderRadius="12px"
-            onClick={scrollToTop}
-          >
-            Get Counselor
-          </CustomButton>
-        </Link>
+      
+     
       </div>
 
       {/* Images */}
