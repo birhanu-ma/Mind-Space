@@ -1,8 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "../../components/ui/Spinner.jsx";
-import { menteeAPI } from "../../service/client.jsx";
+import Spinner from "../../../components/ui/Spinner.jsx";
+import { menteeAPI } from "../../../service/client.jsx";
 import { toast } from "sonner";
 
 export default function MenteeDetail() {
@@ -10,7 +10,7 @@ export default function MenteeDetail() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["mentee", menteeId],
-    queryFn: () => menteeAPI.getMenteeDetail(menteeId),
+    queryFn: () => menteeAPI.getMentee(menteeId),
     onError: () => toast.error("Failed to load mentee details"),
     enabled: !!menteeId,
   });

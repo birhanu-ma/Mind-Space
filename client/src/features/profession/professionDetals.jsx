@@ -13,7 +13,7 @@ function ProfessionDetail() {
   // 🔹 Fetch user details
   const { data, isLoading, error } = useQuery({
     queryKey: ["user", id],
-    queryFn: () => professionalAPI.getProfessionDetails(id),
+    queryFn: () => professionalAPI.getProfession(id),
     onError: () => toast.error("Failed to load user details"),
   });
 

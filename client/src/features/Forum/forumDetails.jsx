@@ -13,7 +13,7 @@ function ForumDetail() {
   // 🔹 Fetch user details
   const { data, isLoading, error } = useQuery({
     queryKey: ["user", id],
-    queryFn: () => forumAPI.getForumDetails(id),
+    queryFn: () => forumAPI.getForum(id),
     onError: () => toast.error("Failed to load user details"),
   });
 

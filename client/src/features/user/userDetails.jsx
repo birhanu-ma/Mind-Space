@@ -13,7 +13,7 @@ function UserDetail() {
   // 🔹 Fetch user details
   const { data, isLoading, error } = useQuery({
     queryKey: ["user", id],
-    queryFn: () => userAPI.getUserDetails(id),
+    queryFn: () => userAPI.getUser(id),
     onError: () => toast.error("Failed to load user details"),
   });
 
@@ -43,7 +43,6 @@ function UserDetail() {
   if (!user) return <p>No user details found.</p>;
 
   const {
-    sims_id,
     name,
     email,
     enrolment_date,
@@ -78,7 +77,6 @@ function UserDetail() {
             <h2 className="text-3xl font-semibold text-foreground/80">
               {name}
             </h2>
-            <p className="text-sm text-foreground/60">SIMS ID: {sims_id}</p>
             <p className="text-sm text-foreground/60">{email}</p>
             <p className="text-sm text-foreground/60">
               Enrolled: {new Date(enrolment_date).toLocaleDateString()}
@@ -115,8 +113,8 @@ function UserDetail() {
               >
                 <option value="">Select role</option>
                 <option value="mentee">Mentee</option>
-                <option value="mentor">Mentor</option>
-                <option value="user-union">user Union</option>
+                <option value="counselor">counselor</option>
+            
                 <option value="admin">Admin</option>
               </select>
               {mutation.isPending && (

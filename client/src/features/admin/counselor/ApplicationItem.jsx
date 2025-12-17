@@ -24,33 +24,23 @@ function ApplicationItem({ item }) {
     <li className="flex flex-col sm:flex-row items-start sm:items-center w-full border-b border-[#f3f2f7] hover:bg-muted/30 transition-colors">
       {/* Applicant */}
       <div className="w-full sm:w-1/6 py-4 px-4 text-sm font-medium text-foreground">
-        <div>{item.Mentor?.Student?.name || "—"}</div>
-        <NavLink
-          to={`/application-detail/${item._id}/details`}
-          className="text-xs text-blue-600 hover:underline"
-        >
-          mentorId
-        </NavLink>
+        {item.user?.name || "—"}
       </div>
 
-      {/* Motivation */}
+      {/* Profession */}
       <div
         className="w-full sm:w-1/4 py-4 px-4 text-sm text-foreground truncate"
-        title={item.motivation}
+        title={item.profession}
       >
-        {item.motivation
-          ? `${item.motivation.substring(0, 30)}...`
-          : "—"}
+        {item.profession || "—"}
       </div>
 
       {/* Experience */}
       <div
         className="w-full sm:w-1/4 py-4 px-4 text-sm text-foreground truncate"
-        title={item.experience}
+        title={item.experienceYears?.toString()}
       >
-        {item.experience
-          ? `${item.experience.substring(0, 30)}...`
-          : "—"}
+        {item.experienceYears ?? "—"}
       </div>
 
       {/* Status */}

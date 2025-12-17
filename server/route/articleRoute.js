@@ -21,7 +21,7 @@ router
 router.route("/by-type").get(protect, getArticlesByType);
 router
   .route("/:id")
-  .get(protect, restrictTo("admin"), getArticleDetails)
+  .get(protect, restrictTo("admin","mentee","counselor"), getArticleDetails)
   .patch(protect, restrictTo("admin"), reviewArticles);
 
 export default router;

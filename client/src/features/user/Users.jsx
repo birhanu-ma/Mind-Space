@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-// import DepartmentChart from "../../components/chart/Department-chart.jsx";
-
-// import PieChartComponent from "../../components/chart/PieChartComponent.jsx";
-import UsersTable from "../admin/usersTable.jsx";
 import { useQuery } from "@tanstack/react-query";
-import { studentUnionAPI } from "../../service/client.jsx";
+import { userAPI } from "../../service/client.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
+import UsersTable from "../admin/UsersTable.jsx";
+import { NavLink } from "react-router-dom";
 
-function Student() {
+export default function User() {
   const [role, setRole] = useState("admin");
   const [query, setQuery] = useState({
     q: "",
@@ -15,13 +13,14 @@ function Student() {
     page: 1,
     limit: 10,
   });
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["student", role, query],
+    queryKey: ["user", role, query],
     queryFn: async () => {
       if (role === "All") {
-        return await studentUnionAPI.getAllStudents(query);
+        return await userAPI.getAllUsers(query);
       } else {
-        return await studentUnionAPI.getStudentsByRole({ role, ...query });
+        return await userAPI.getUserByRole({ role, ...query });
       }
     },
     keepPreviousData: true,
@@ -32,59 +31,91 @@ function Student() {
   if (error)
     return (
       <p className="text-red-500 text-center mt-10">
-        Failed to load student information.
+        Failed to load users.
       </p>
     );
 
-  const { data: students, total } = data || {};
-  console.log("this is data", students);
+  const users = data?.data || [];
+  const results = data?.results || 0;
+  const totalPages = Math.ceil(results / query.limit);
 
   return (
-    <div className="flex flex-col sm:flex-row w-full bg-background text-foreground border border-border rounded-lg">
-      <div className="rounded-lg px-5 w-full">
-        {/* Role Filter */}
-        <div className="flex justify-end mb-4">
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium">Filter by Role:</label>
+    <div className="flex flex-col w-full bg-background text-foreground border border-border rounded-lg px-5 py-5">
+      {/* Header + Search + Filter */}
+      <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <h2 className="text-2xl font-bold text-foreground">User Management</h2>
+
+        <div className="flex gap-2 flex-wrap items-center">
+          <input
+            type="text"
+            placeholder="Search by name"
+            value={query.q}
+            onChange={(e) =>
+              setQuery((prev) => ({ ...prev, q: e.target.value, page: 1 }))
+            }
+            className="border rounded-md p-2 w-[200px]"
+          />
+
+          <label className="text-sm font-medium flex items-center gap-2">
+            Filter by Role:
             <select
               value={role}
-              onChange={(e) => setRole(e.target.value)}
+              onChange={(e) => {
+                setRole(e.target.value);
+                setQuery((prev) => ({ ...prev, page: 1 }));
+              }}
               className="border rounded-md p-2 text-sm bg-background"
             >
               <option value="All">All</option>
+              <option value="admin">Admin</option>
               <option value="mentee">Mentee</option>
-              <option value="mentor">Mentor</option>
+              <option value="counselor">Counselor</option>
             </select>
-          </div>
+          </label>
         </div>
+      </div>
 
-        {/* Stats Cards */}
+      {/* Table */}
+      <UsersTable users={users} query={query} setQuery={setQuery} total={results} />
 
-        {/* Charts */}
-        {/* <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-5 bg-muted/10 p-4 rounded-lg">
-          <DepartmentChart
-            data={countByDepartment}
-            title={`Students ${role}s by Department`}
-            totalValue={students.length}
-            maxValue={10}
-          />
-          <PieChartComponent data={countByYear} />
-        </div> */}
+      {/* Footer: Add User + Pagination Inline */}
+      <div className="flex justify-between items-center mt-4 flex-wrap gap-2 text-sm text-muted-foreground">
+        <NavLink
+          to="/admin/users/new"
+          className="px-4 py-2 bg-blue-500 rounded-lg text-white font-semibold hover:bg-blue-600"
+        >
+          Add User
+        </NavLink>
 
-        {/* Students Table */}
-        <UsersTable
-          users={students}
-          role={role}
-          setRole={setRole}
-          title={`Students ${role}s List`}
-          subtitle={`Active ${role}s`}
-          query={query}
-          setQuery={setQuery}
-          total={total}
-        />
+        {results > 0 && (
+          <div className="flex items-center gap-3">
+            <span>
+              Showing {(query.page - 1) * query.limit + 1}–
+              {Math.min(query.page * query.limit, results)} of {results}
+            </span>
+
+            <button
+              disabled={query.page <= 1}
+              onClick={() => setQuery((prev) => ({ ...prev, page: prev.page - 1 }))}
+              className="p-1 disabled:opacity-50"
+            >
+              Previous
+            </button>
+
+            <span>
+              Page {query.page} of {totalPages}
+            </span>
+
+            <button
+              disabled={query.page >= totalPages}
+              onClick={() => setQuery((prev) => ({ ...prev, page: prev.page + 1 }))}
+              className="p-1 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
-export default Student;

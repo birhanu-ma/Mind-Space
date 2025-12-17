@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { menteeAPI } from "../../service/client";
+import { menteeAPI } from "../../../service/client";
 import { toast } from "sonner";
 import { FileText, Send, AlertCircle } from "lucide-react";
 

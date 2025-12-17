@@ -1,9 +1,20 @@
 import { jaccardSimilarity, comfortSimilarity, timezoneSimilarity } from "./similarity.js";
-export default function matchMenteesToCounselor(counselor, mentees) {
+import Counseling from "../model/counselingModel.js";
+
+export default async function matchMenteesToCounselor(counselor, mentees) {
+  // Get all assigned mentee IDs from Counseling collection
+  const assignedMentees = await Counseling.find({ active: true }).select("mentee -_id");
+  const assignedIds = assignedMentees.map(a => String(a.mentee));
+
   return (mentees || [])
     .filter(mentee => {
+      // skip already assigned mentees
+      if (assignedIds.includes(String(mentee._id))) return false;
+
+      // skip if crisis but counselor can't handle
       if (mentee.isCrisis && counselor.canHandleCrisis === "no") return false;
 
+      // skip if mentee has issues counselor avoids
       const menteeIssues = Array.isArray(mentee.issues) ? mentee.issues : [];
       const avoidTopics = Array.isArray(counselor.avoidTopics) ? counselor.avoidTopics : [];
       if (menteeIssues.some(i => avoidTopics.includes(i))) return false;
@@ -32,8 +43,8 @@ export default function matchMenteesToCounselor(counselor, mentees) {
         0.05 * timezoneSimilarity(counselor.timezone, mentee.timezone);
 
       return {
-        ...mentee.toObject(), // ✅ FULL mentee data
-        finalScore: Number(finalScore.toFixed(4))
+        ...mentee.toObject(),
+        finalScore: Number(finalScore.toFixed(4)),
       };
     })
     .sort((a, b) => b.finalScore - a.finalScore);

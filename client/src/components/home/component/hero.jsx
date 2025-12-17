@@ -21,13 +21,31 @@ const Hero = () => {
           MindSpace helps you manage stress, connect with peers, and access professional support — safely and anonymously.
         </p>
 
-        <Link to="/register-as-mentee">
+        <Link to="/support">
           <CustomButton
             color="#1F2937"
             borderRadius="12px"
             onClick={scrollToTop}
           >
             Find Support
+          </CustomButton>
+        </Link>
+        <Link to="/apply-for-profession">
+          <CustomButton
+            color="#1F2937"
+            borderRadius="12px"
+            onClick={scrollToTop}
+          >
+            Apply for Profession
+          </CustomButton>
+        </Link>
+        <Link to="/apply-for-mentee">
+          <CustomButton
+            color="#1F2937"
+            borderRadius="12px"
+            onClick={scrollToTop}
+          >
+            Get Counselor
           </CustomButton>
         </Link>
       </div>

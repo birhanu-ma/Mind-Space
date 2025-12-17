@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar.jsx";
 
-import Analysis from "../features/mentee/menteeAnalysis.jsx";
-import MentorSidebar from "../features/mentee/mentee-info.jsx";
-import Petition from "../features/mentee/petition.jsx";
+import Analysis from "../features/admin/mentee/menteeAnalysis.jsx";
+import MentorSidebar from "../features/admin/mentee/mentee-info.jsx";
+import Petition from "../features/admin/mentee/petition.jsx";
 import { useLocation } from "react-router-dom";
 
 import MenteeChat from "../features/chat/MenteeChat.jsx";
-import MenteeForm from "../features/mentee/menteeForm.jsx";
+import MenteeForm from "../features/admin/mentee/menteeForm.jsx";
 
 const Mentee = () => {
   const location = useLocation();

@@ -27,13 +27,12 @@ import ForumDetail from "./features/Forum/forumDetails";
 import ServiceDetail from "./features/service/serviceDetails";
 import ProfessionDetail from "./features/profession/professionDetals";
 import PetitionDetail from "./features/admin/petitionDetail";
-import ApplicationDetail from "./features/admin/ApplicationDetail";
-import MenteeForm from "./features/mentee/menteeForm";
-import CounselorForm from "./features/counselor/counselorForms"
+import ApplicationDetail from "./features/admin/counselor/ApplicationDetail";
+import MenteeForm from "./features/admin/mentee/menteeForm";
+import CounselorForm from "./features/counselor/counselorForms";
 import CounselorDetail from "./features/counselor/counselorDetail";
-import MenteeDetail from "./features/mentee/rankedMenteeDetail";
-
-
+import MenteeDetail from "./features/admin/mentee/rankedMenteeDetail";
+import MenteeApplicationDetail from "./features/admin/mentee/menteeApplicationDetail";
 
 function App() {
   return (
@@ -53,59 +52,38 @@ function App() {
           <Route path="/learn/:id" element={<LearnDetail />} />
           <Route path="/Tool/moodHistory/:id" element={<MoodHistory />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path ="/counselor" element={<CounselorPage/>}/>
-          <Route path ="/mentee" element={<MenteePage/>}/>
-          <Route path="/admin/articles/new" element = {<ArticleCreateForm/>}/>
-          <Route path="/admin/forums/new" element ={<ForumCreateForm/>}/>
-          <Route path="/admin/services/new" element ={<ServiceCreateForm/>}/>
-          <Route path="/admin/professions/new" element ={<CreateProfessionForm/>}/>
+          <Route path="/counselor" element={<CounselorPage />} />
+          <Route path="/mentee" element={<MenteePage />} />
+          <Route path="/admin/articles/new" element={<ArticleCreateForm />} />
+          <Route path="/admin/forums/new" element={<ForumCreateForm />} />
+          <Route path="/admin/services/new" element={<ServiceCreateForm />} />
           <Route
-            path="/user-detail/:id"
-            element={<UserDetail />}
+            path="/admin/professions/new"
+            element={<CreateProfessionForm />}
           />
-           <Route
-            path="/article-detail/:id"
-            element={<ArticleDetail />}
-          />
-      <Route
-            path="/forum-detail/:id"
-            element={<ForumDetail />}
-          />
-             <Route
-            path="/service-detail/:id"
-            element={<ServiceDetail />}
-          />
-             <Route
-            path="/profession-detail/:id"
-            element={<ProfessionDetail />}
-          />
-               <Route
-            path="/petition-detail/:id"
-            element={<PetitionDetail />}
-          />
-                   <Route
+          <Route path="/user-detail/:id" element={<UserDetail />} />
+          <Route path="/article-detail/:id" element={<ArticleDetail />} />
+          <Route path="/forum-detail/:id" element={<ForumDetail />} />
+          <Route path="/service-detail/:id" element={<ServiceDetail />} />
+          <Route path="/profession-detail/:id" element={<ProfessionDetail />} />
+          <Route path="/petition-detail/:id" element={<PetitionDetail />} />
+          <Route
             path="/application-detail/:id"
             element={<ApplicationDetail />}
           />
-           <Route
-            path="/register-as-mentee"
-            element={<MenteeForm />}
+          <Route
+            path="/mentee-app-detail/:id"
+            element={<MenteeApplicationDetail />}
           />
-           <Route
-            path="/register-as-counselor"
-            element={<CounselorForm />}
-          />
-               <Route
+          <Route path="/register-as-mentee" element={<MenteeForm />} />
+          <Route path="/register-as-counselor" element={<CounselorForm />} />
+          <Route
             path="/counselors/:counselorId"
             element={<CounselorDetail />}
           />
-               <Route
-            path="/mentees/:menteeId"
-            element={<MenteeDetail />}
-          />
-        
-        
-          
+          <Route path="/mentees/:menteeId" element={<MenteeDetail />} />
+          <Route path="/apply-for-profession" element={<CounselorForm />} />
+          <Route path="/apply-for-mentee" element={<MenteeForm />} />
         </Routes>
         <Footer />
       </div>

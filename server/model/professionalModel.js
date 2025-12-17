@@ -1,55 +1,18 @@
 import mongoose from "mongoose";
 
-const professionalSchema = new mongoose.Schema(
+const professionSchema = new mongoose.Schema(
   {
-    // user: {
-    //   type: String,
-    // //   ref: "User",
-    //   required: true, 
-    // },
-    user:{
-      type:String
-    },
-
     profession: {
-      type: String,
-      required: [true, "Profession is required"], 
+      type: mongoose.Schema.ObjectId,
+      ref: "Application",
+      required: true,
+      unique: true, // one profession per application
     },
-    aboutYou:{
-      type:String
+    approvedBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true,
     },
-    specialization: {
-      type: [String],
-      default: [], 
-    },
-
-    experienceYears: {
-      type: Number,
-      default: 0,
-    },
-
-    servicesOffered: {
-      type: [String],
-      default: [],
-    },
-
-    profileImage: {
-      type: String, 
-      default: "",
-    },
-
-    rating: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 5,
-    },
-
-    verified: {
-      type: Boolean,
-      default: false,
-    },
-
     active: {
       type: Boolean,
       default: true,
@@ -58,5 +21,18 @@ const professionalSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Professional = mongoose.model("Professional", professionalSchema);
-export default Professional;
+// Auto-populate application + user
+professionSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "profession", // ✅ correct
+    populate: {
+      path: "user",
+      select: "name email role",
+    },
+  });
+  next();
+});
+
+
+const Profession = mongoose.model("Profession", professionSchema);
+export default Profession;

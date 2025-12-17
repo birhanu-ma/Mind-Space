@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { useMentor } from "../mentee/useMentor.jsx";
+import { useMentor } from "../admin/mentee/useMentor.jsx";
 import ChatRoom from "../../components/ui/chatRoom.jsx";
 
 export default function MenteeChat() {

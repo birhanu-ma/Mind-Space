@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { adminAssignmentAPI } from "../../service/client";
+import { adminAssignmentAPI } from "../../../service/client";
 import RankedMenteeItem from "./RankedMenteeItem";
-import Spinner from "../../components/ui/Spinner.jsx";
+import Spinner from "../../../components/ui/Spinner.jsx";
 
 export default function RankedMenteeList({ counselorId }) {
   const { data, isLoading, error } = useQuery({

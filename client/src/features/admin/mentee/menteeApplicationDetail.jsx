@@ -1,31 +1,28 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { menteeAPI } from "../../service/client.jsx";
-import Spinner from "../../components/ui/Spinner.jsx";
+import { menteeAPI } from "../../../service/client.jsx";
+import Spinner from "../../../components/ui/Spinner.jsx";
 import { toast } from "sonner";
 
-function PetitionDetail() {
+function MenteeApplicationDetail() {
   const { id } = useParams();
   const queryClient = useQueryClient();
-  const reviewedBy = localStorage.getItem("id"); // logged-in user/admin ID
+  const reviewedBy = localStorage.getItem("id");
 
-  // Fetch petition details
   const { data, isLoading, error } = useQuery({
-    queryKey: ["petitions", id],
-    queryFn: () => menteeAPI.getPetition(id),
+    queryKey: ["applications", id],
+    queryFn: () => menteeAPI.getApplication(id),
   });
 
-  const petition = data?.data?.data;
+  const application = data?.data?.data;
 
-  // Mutation for approve/reject
   const updateStatusMutation = useMutation({
     mutationFn: async ({ status, id, reviewedBy }) =>
-      menteeAPI.reviewPetition({ status, id, reviewedBy }),
-
+      menteeAPI.reviewApplication({ status, id, reviewedBy }),
     onSuccess: (res) => {
-      toast.success(`Petition ${res?.data?.data?.status} successfully!`);
-      queryClient.invalidateQueries(["petitions", id]);
+      toast.success(`Application ${res?.data?.data?.status} successfully!`);
+      queryClient.invalidateQueries(["applications", id]);
     },
     onError: (err) => {
       toast.error(err.response?.data?.message || "Failed to update status");
@@ -33,25 +30,14 @@ function PetitionDetail() {
   });
 
   const handleAction = (newStatus) => {
-    updateStatusMutation.mutate({
-      status: newStatus,
-      id,
-      reviewedBy,
-    });
+    updateStatusMutation.mutate({ status: newStatus, id, reviewedBy });
   };
 
   if (isLoading) return <Spinner />;
-  if (error) return <p>Failed to load petition details</p>;
-  if (!petition) return <p>No petition details found.</p>;
+  if (error) return <p>Failed to load application details</p>;
+  if (!application) return <p>No application details found.</p>;
 
-  const {
-    student,
-    subject,
-    body,
-    status,
-    createdAt,
-    reviewedBy: reviewer,
-  } = petition;
+  const { profession, experienceYears, user, status, createdAt } = application;
 
   return (
     <div className="p-8 pt-30 bg-background text-foreground border border-border max-w-7xl mx-auto rounded-lg shadow-xl font-sans">
@@ -61,16 +47,17 @@ function PetitionDetail() {
           <div className="text-center md:text-left mb-6">
             <div className="relative w-36 h-36 rounded-full mx-auto md:mx-0 overflow-hidden mb-4 bg-gray-200" />
             <h2 className="text-3xl font-semibold text-foreground/60">
-              Mentee
+              {user?.name}
             </h2>
-            <p className="text-foreground/60 text-sm">Student ID: {student}</p>
+            <p className="text-foreground/60 text-sm">Profession: {profession}</p>
+            <p className="text-foreground/60 text-sm">
+              Experience: {experienceYears} years
+            </p>
             <p className="text-foreground/60 text-sm">
               Submitted: {new Date(createdAt).toLocaleDateString()}
             </p>
-            {reviewer && (
-              <p className="text-foreground/60 text-sm">
-                Reviewed By: {reviewer}
-              </p>
+            {reviewedBy && (
+              <p className="text-foreground/60 text-sm">Reviewed By: {reviewedBy}</p>
             )}
             <span
               className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold capitalize ${
@@ -117,28 +104,24 @@ function PetitionDetail() {
           </div>
         </div>
 
-        {/* Middle Column */}
-        <div className="col-span-1 border-l border-foreground/20 pl-8">
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-3">Subject</h3>
-            <p className="text-foreground/60 mb-6">{subject || "N/A"}</p>
-          </div>
-
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-3">Description</h3>
-            <p className="text-foreground/60 mb-6">{body || "N/A"}</p>
-          </div>
-        </div>
-
         {/* Right Column */}
-        <div className="col-span-1 border-l border-foreground/20 pl-8">
-          <h3 className="text-xl font-semibold mb-3">Status Info</h3>
-          <p className="text-foreground/60 mb-2">Current Status: {status}</p>
+        <div className="col-span-2 border-l border-foreground/20 pl-8">
+          <h3 className="text-xl font-semibold mb-3">Details</h3>
           <p className="text-foreground/60 mb-2">
-            Reviewed By: {reviewer || "Not reviewed yet"}
+            <strong>Profession:</strong> {profession}
           </p>
           <p className="text-foreground/60 mb-2">
-            Submitted On: {new Date(createdAt).toLocaleString()}
+            <strong>Experience:</strong> {experienceYears} years
+          </p>
+          <p className="text-foreground/60 mb-2">
+            <strong>Email:</strong> {user?.email}
+          </p>
+          <p className="text-foreground/60 mb-2">
+            <strong>Availability:</strong> {application?.availability || "N/A"}
+          </p>
+          <p className="text-foreground/60 mb-2">
+            <strong>Certifications:</strong>{" "}
+            {(application?.certifications || []).join(", ")}
           </p>
         </div>
       </div>
@@ -146,4 +129,4 @@ function PetitionDetail() {
   );
 }
 
-export default PetitionDetail;
+export default MenteeApplicationDetail;

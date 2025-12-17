@@ -3,7 +3,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { menteeAPI } from "../../service/client";
+import { menteeAPI } from "../../../service/client";
 
 // ------------------ Options ------------------
 
@@ -120,10 +120,12 @@ export default function MenteeForm() {
   };
 
   return (
+    <div className="flex justify-center my-15">
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-8 bg-white shadow-lg rounded-xl  border"
+      className="space-y-6 p-8 bg-white flex justify-center max-w-250 shadow-lg rounded-xl   border-border"
     >
+      <div>
       <h2 className="text-3xl font-bold mb-4 text-gray-800">Mentee Profile</h2>
 
       {/* Support Areas */}
@@ -303,11 +305,13 @@ export default function MenteeForm() {
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition"
+        className="bg-blue-600 text-white px-6 mt-5 py-3 rounded-lg shadow hover:bg-blue-700 transition"
         disabled={mutation.isLoading}
       >
         {mutation.isLoading ? "Saving..." : "Save Profile"}
       </button>
+       </div>
     </form>
+   </div>
   );
 }

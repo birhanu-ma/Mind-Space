@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     required: [true, "email is required"],
     unique: true,
     validate: [validator.isEmail, "invalid email"],
-    lowrcase: true,
+    lowercase: true,
   },
   password: {
     type: String,
@@ -27,8 +27,7 @@ const userSchema = mongoose.Schema({
       validator: function (el) {
         return el === this.password;
       },
-
-      message: "password are not the same",
+      message: "passwords are not the same",
     },
   },
   passwordResetToken: {
@@ -53,12 +52,15 @@ const userSchema = mongoose.Schema({
   },
 });
 
+// Hash password before save
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) next();
+  if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
   next();
 });
+
+// Compare passwords
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
@@ -66,14 +68,14 @@ userSchema.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+// Check if password changed after JWT issued
 userSchema.methods.changedPasswordAfter = function (jwtTimeStamp) {
   if (this.passwordChangedAt) {
     const changedAt = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
     return changedAt > jwtTimeStamp;
   }
-  return false; // no password change
+  return false;
 };
 
 const User = mongoose.model("User", userSchema);
-
 export default User;
