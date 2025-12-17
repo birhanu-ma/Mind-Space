@@ -10,10 +10,6 @@ export const getPetition = factory.getOne(Petition, {
   path: "user reviewedBy",
   select: "name role",
 });
-export const updatePetition = factory.updateOne(Petition);
-export const deletePetition = factory.deleteOne(Petition);
-export const getPetitionDetails = factory.getOne(Petition);
-export const reviewPetitions = factory.updateOne(Petition);
 
 // Standard CRUD using factory
 export const createApplication = factory.createOne(Application);
@@ -22,11 +18,13 @@ export const getAllApplications = factory.getAll(Application);
 export const updateApplication = factory.updateOne(Application);
 export const deleteApplication = factory.deleteOne(Application);
 
-// Review application (custom logic)
+
+
 export const reviewApplications = async (req, res, next) => {
   try {
     const { status } = req.body; // pending | approved | rejected
 
+    // validate status
     if (!["pending", "approved", "rejected"].includes(status)) {
       return res.status(400).json({
         status: "fail",
@@ -34,8 +32,8 @@ export const reviewApplications = async (req, res, next) => {
       });
     }
 
+    // find application
     const application = await Application.findById(req.params.id).populate("user");
-
     if (!application) {
       return res.status(404).json({
         status: "fail",
@@ -43,34 +41,45 @@ export const reviewApplications = async (req, res, next) => {
       });
     }
 
+    const user = application.user;
+
+    // update application status
     application.status = status;
     await application.save();
 
+    /* ===================== APPROVED ===================== */
     if (status === "approved") {
-      // Create Profession if not exists
-      const existingProfession = await Profession.findOne({ professional: application._id });
+      // check if profession already exists for this application
+      const existingProfession = await Profession.findOne({
+        profession: application._id,
+      });
+
       if (!existingProfession) {
         await Profession.create({
-          professional: application._id,
-          approvedBy: req.user.id,
+          profession: application._id, // 👈 matches schema
+          approvedBy: req.user.id,      // admin
+          active: true,
         });
       }
 
-      // Update user role to counselor
-      if (application.user.role !== "counselor") {
-        application.user.role = "counselor";
-        await application.user.save();
+      // update user role
+      if (user.role !== "counselor") {
+        user.role = "counselor";
+        await user.save();
       }
     }
 
+    /* ===================== REJECTED ===================== */
     if (status === "rejected") {
-      // Remove Profession if exists
-      await Profession.findOneAndDelete({ professional: application._id });
+      // delete profession linked to this application
+      await Profession.findOneAndDelete({
+        profession: application._id,
+      });
 
-      // Revert user role to "user"
-      if (application.user.role === "counselor") {
-        application.user.role = "user";
-        await application.user.save();
+      // revert role if needed
+      if (user.role === "counselor") {
+        user.role = "user";
+        await user.save();
       }
     }
 
@@ -82,6 +91,7 @@ export const reviewApplications = async (req, res, next) => {
     next(err);
   }
 };
+
 // Get applications by type / query
 export const getApplicationsByType = async (req, res, next) => {
   try {
