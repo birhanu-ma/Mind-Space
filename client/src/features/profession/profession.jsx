@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { professionalAPI } from "../../service/client.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
-import ProfessionTable from "./ProfessionTable.jsx";
-
+import ProfessionTable from "./professionTable.jsx";
 export default function Profession() {
   const [profession, setProfession] = useState("therapist");
   const [query, setQuery] = useState({
