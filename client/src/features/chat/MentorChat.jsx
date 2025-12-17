@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useMentees } from "../Counselor/useMentee.jsx";
+import { useMentees } from "../counselor/useMentee.jsx";
 import ChatRoom from "../../components/ui/chatRoom.jsx";
 
 export default function MentorChat() {
@@ -34,12 +34,10 @@ export default function MentorChat() {
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <div className="w-64 border-r border-gray-300 p-4">
         <h4 className="text-lg font-semibold mb-4">Chats</h4>
 
         <div className="flex flex-col space-y-2">
-          {/* Group chat */}
           <div
             className={`p-2 rounded cursor-pointer hover:bg-gray-100 ${
               chatType === "group" ? "bg-gray-200 font-medium" : "bg-white"
