@@ -3,152 +3,189 @@ import mongoose from "mongoose";
 import AppError from "../../server/utils/AppError.js";
 import * as factory from "./handlerFactory.js";
 import APIFeatures from "../utils/apiFeatures.js";
-import CounselorModel from "../model/counselorModel.js"
-import menteeModel from "../model/menteeModel.js"
+import CounselorModel from "../model/counselorModel.js";
+import menteeModel from "../model/menteeModel.js";
 import matchMenteesToCounselor from "../utils/match.js";
+import catchAsync from "../utils/catchAsync.js";
+import Profession from "../model/professionalModel.js";
+import Mentee from "../model/menteeModel.js";
+// controllers/counselingController.js
 
 
-// Standard CRUD using factory handlers
-export const createCounseling = factory.createOne(Counseling);
+// ========== Standard CRUD ==========
 export const getAllCounseling = factory.getAll(Counseling);
 export const getCounseling = factory.getOne(Counseling);
 export const deleteCounseling = factory.deleteOne(Counseling);
 
+// ========== Create Counseling Session ==========
+export const createCounseling = catchAsync(async (req, res, next) => {
+  const { counselor: applicationId, mentee } = req.body; // mentee = User ID
 
-// Get counseling for a given mentee
-export const getCounselorForMentee = async (req, res, next) => {
-  try {
- 
-    const { menteeId } = req.params;
-       console.log("this is mentee id", menteeId)
-    if (!menteeId) {
-      return next(
-        new AppError(
-          "Mentee ID is missing or invalid; this mentee may not have a counseling assigned",
-          400
-        )
-      );
-    }
+  if (!applicationId || !mentee) {
+    return next(new AppError("Counselor application ID and mentee ID are required", 400));
+  }
 
-    const counseling = await Counseling.findOne({ mentee: menteeId });
-    console.log("this is a counseling data", counseling)
-    if (!counseling) {
-      return next(
-        new AppError("No counseling assigned to this mentee yet", 404)
-      );
-    }
+  // Find active profession
+  const profession = await Profession.findOne({
+    application: applicationId,
+    active: true,
+  });
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        counselor: counseling.counselor,
+  if (!profession) {
+    return next(new AppError("No active approved profession found for this counselor", 400));
+  }
+
+  // Prevent duplicate active session
+  const existing = await Counseling.findOne({ mentee, active: true });
+  if (existing) {
+    return next(new AppError("This mentee already has an active counseling session", 400));
+  }
+
+  // Create new counseling
+  const counseling = await Counseling.create({
+    counselorUser: profession.user,
+    counselorApplication: applicationId,
+    mentee, // Direct User ID
+    status: "scheduled",
+    active: true,
+    startDate: new Date(),
+  });
+
+  // Fetch populated version (pre(/^find/) hook runs)
+  const populatedCounseling = await Counseling.findById(counseling._id);
+
+  res.status(201).json({
+    status: "success",
+    message: "Counseling session created successfully",
+    data: { counseling: populatedCounseling },
+  });
+});
+
+// ========== Get Counselor for a Mentee ==========
+export const getCounselorForMentee = catchAsync(async (req, res, next) => {
+  const { menteeId } = req.params; // mentee's User ID
+
+  if (!menteeId || !mongoose.Types.ObjectId.isValid(menteeId)) {
+    return next(new AppError("Valid mentee ID is required", 400));
+  }
+
+  const counseling = await Counseling.findOne({
+    mentee: menteeId,
+    active: true,
+  });
+
+  if (!counseling) {
+    return next(new AppError("No active counseling session found for this mentee", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      counseling: {
+        _id: counseling._id,
+        counselor: counseling.counselorUser,           // Populated User (name, photo, etc.)
+        application: counseling.counselorApplication,  // Populated Application details
+        status: counseling.status,
+        startDate: counseling.startDate,
       },
-    });
-  } catch (err) {
-    next(err);
+    },
+  });
+});
+
+// ========== Get All Mentees for a Counselor ==========
+export const getMenteesForCounselor = catchAsync(async (req, res, next) => {
+  const { counselorId } = req.params; // counselor's User ID
+  const { q, ...queryParams } = req.query;
+
+  if (!counselorId || !mongoose.Types.ObjectId.isValid(counselorId)) {
+    return next(new AppError("Invalid counselor ID", 400));
   }
-};
 
-// Get mentees assigned to a counseling with optional search/filter
-export const getMenteesForCounselor = async (req, res, next) => {
+  let query = Counseling.find({
+    counselorUser: counselorId,
+    active: true,
+  });
 
-  try {
-    const {counselorId} = req.params;
-    const { q, ...restQuery } = req.query;
+  const features = new APIFeatures(query, queryParams)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-    if (!counselorId) {
-      return res.status(400).json({ message: "Invalid counseling ID" });
-    }
+  const counselings = await features.query;
 
-    const counselingObjectId = new mongoose.Types.ObjectId(counselorId);
+  // mentee is directly populated User object
+  let mentees = counselings.map((c) => c.mentee).filter(Boolean);
 
-    // Base query
-    let baseQuery = Counseling.find({
-      counselor: counselingObjectId,
-    }).populate("mentee");
-
-    // Apply filtering, sorting, field limiting, pagination
-    const features = new APIFeatures(baseQuery, restQuery)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    let Counselings = await features.query;
-
-    let mentees = Counselings.flatMap((m) => m.mentee).filter(Boolean);
-    console.log("this is mentee list", mentees)
-
-    if (q) {
-      const searchRegex = new RegExp(q, "i");
-      mentees = mentees.filter(
-        (s) => searchRegex.test(s.name) || searchRegex.test(s.sims_id)
-      );
-    }
-
-    res.status(200).json({
-      status: "success",
-      results: mentees.length,
-      data: { mentees },
-    });
-  } catch (err) {
-    console.error("Fetch mentee error:", err);
-    res.status(400).json({ status: "fail", message: err.message });
+  // Search by name or email
+  if (q) {
+    const regex = new RegExp(q.trim(), "i");
+    mentees = mentees.filter(
+      (mentee) =>
+        regex.test(mentee.name || "") ||
+        regex.test(mentee.email || "")
+    );
   }
-};
 
-export const getCounselingStatsForCounselor = async (req, res, next) => {
-  try {
-    const counselorId = req.params?.counselorId;
-    if (!counselorId) {
-      return res.status(400).json({ message: "Invalid counseling ID" });
-    }
+  res.status(200).json({
+    status: "success",
+    results: mentees.length,
+    data: { mentees },
+  });
+});
 
-    const stats = await Counseling.getCounselingStats({
-      counseling: counselorId,
-    });
+// ========== Get Counseling Stats for Counselor ==========
+export const getCounselingStatsForCounselor = catchAsync(async (req, res, next) => {
+  const { counselorId } = req.params;
 
-    res.status(200).json({
-      status: "success",
+  if (!counselorId || !mongoose.Types.ObjectId.isValid(counselorId)) {
+    return next(new AppError("Valid counselor ID is required", 400));
+  }
+
+  // Assuming you have a static method on Counseling model
+  const stats = await Counseling.getCounselingStats({ counselorUser: counselorId });
+
+  if (!stats) {
+    return next(new AppError("No stats found for this counselor", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
       stats: {
-        menteeCount: stats?.menteeCount || {},
-        menteeDepartmentCounts: stats?.menteeDepartmentCounts || {},
-        menteeYearCounts: stats?.menteeYearCounts || {},
-        activeInactiveCounts: stats?.activeInactiveCounts || {},
+        menteeCount: stats.menteeCount || 0,
+        menteeDepartmentCounts: stats.menteeDepartmentCounts || {},
+        menteeYearCounts: stats.menteeYearCounts || {},
+        activeInactiveCounts: stats.activeInactiveCounts || { active: 0, inactive: 0 },
       },
-    });
-  } catch (err) {
-    console.error("Error fetching mentee stats:", err);
-    next(err);
+    },
+  });
+});
+
+// ========== Get Ranked Mentees for Matching (Admin) ==========
+export const matchMentee = catchAsync(async (req, res, next) => {
+  const { counselorId } = req.params;
+
+  if (!counselorId || !mongoose.Types.ObjectId.isValid(counselorId)) {
+    return next(new AppError("Valid counselor ID is required", 400));
   }
-};
 
+  const counselor = await CounselorModel.findById(counselorId);
+  if (!counselor) {
+    return next(new AppError("Counselor not found", 404));
+  }
 
+  // Get all mentees (or filter unassigned if needed)
+  const mentees = await Mentee.find({});
 
+  const rankedMentees = await matchMenteesToCounselor(counselor, mentees);
 
-
-
-// GET ranked mentees for admin
-
-export const matchMentee = async (req, res, next) => {
-  try {
-    const counselor = await CounselorModel.findById(req.params.counselorId);
-    if (!counselor) {
-      return res.status(404).json({ message: "Counselor not found" });
-    }
-
-    // Only get unassigned mentees (optional, still filtered in ranking function)
-    const mentees = await menteeModel.find({});
-
-    const rankedMentees = await matchMenteesToCounselor(counselor, mentees);
-
-    res.status(200).json({
-      status: "success",
+  res.status(200).json({
+    status: "success",
+    data: {
       counselorId: counselor._id,
-      totalMentees: rankedMentees.length,
+      totalRankedMentees: rankedMentees.length,
       rankedMentees,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
+    },
+  });
+});

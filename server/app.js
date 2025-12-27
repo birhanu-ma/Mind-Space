@@ -19,6 +19,7 @@ import professionRoute from "./route/professionRoute.js";
 import contactRoute from "./route/contactRoute.js"
 import moodEntryRoute from "./route/moodEntryRoute.js"
 import profileRoute from "./route/profileRoute.js"
+import conversationRoute from "./route/conversationRoute.js"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -53,6 +54,7 @@ app.use("/api/v1/professions", professionRoute);
 app.use("/api/v1/contact", contactRoute);
 app.use("/api/v1/mood-entry", moodEntryRoute);
 app.use("/api/v1/profile", profileRoute)
+app.use("/api/v1/conversation", conversationRoute);
 
 
 export default app;

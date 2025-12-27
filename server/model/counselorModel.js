@@ -5,8 +5,8 @@ const applicationSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: true, // link to the User who is a professional
-      unique: true,   // one professional record per user
+      required: [true, "Application must belong to a user"],
+      unique: true,
     },
     degreeLevel: { type: String, default: "" },
     certifications: [{ type: String }],
@@ -18,9 +18,17 @@ const applicationSchema = new mongoose.Schema(
     timezone: { type: String, default: "" },
     preferredMenteeGoals: { type: [String], default: [] },
     menteeAgePreference: { type: String, default: "Any" },
-    maxMentees: { type: String, default: "2" },
+    maxMentees: {
+      type: Number,
+      default: 2,
+      min: [1, "Must accept at least 1 mentee"],
+    },
     avoidTopics: { type: [String], default: [] },
-    canHandleCrisis: { type: String, enum: ["yes", "no"], default: "no" },
+    canHandleCrisis: {
+      type: String,
+      enum: ["yes", "no"],
+      default: "no",
+    },
     comfortLevels: { type: Map, of: Number, default: {} },
     priorityFactor: {
       type: String,
@@ -36,15 +44,14 @@ const applicationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Auto-populate User info
+// Auto-populate user details
 applicationSchema.pre(/^find/, function (next) {
   this.populate({
     path: "user",
-    select: "name email role",
+    select: "name email role photo",
   });
   next();
 });
 
 const Application = mongoose.model("Application", applicationSchema);
 export default Application;
-

@@ -167,6 +167,7 @@ export const counselorAPI = {
   },
   getMentees: async (params = {}) => {
     const { counselorId, ...rest } = params;
+    console.log("this is counselor data to fetch mentee", params)
     const query = new URLSearchParams(rest).toString();
     try {
       const res = await api(
@@ -479,31 +480,41 @@ export const chatBotAPI = {
       },
     });
   },
-};
-export const adminAssignmentAPI = {
+};export const adminAssignmentAPI = {
   getCounselors: async () => {
     return api(`/counselor`);
   },
+
   getCounselor: async (counselorId) => {
     if (!counselorId) throw new Error("Counselor ID is required");
     return api(`/counselor/${counselorId}`);
   },
+
   getRankedMentees: async (counselorId) => {
     if (!counselorId) throw new Error("Counselor ID is required");
-
     return api(`/counseling/match/${counselorId}`);
   },
+
   assignMentee: async ({ counselorId, menteeId }) => {
+    console.log("Assigning mentee:", { counselorId, menteeId });
     if (!counselorId || !menteeId) {
       throw new Error("Counselor ID and Mentee ID are required");
     }
     return api("/counseling", {
       method: "POST",
       data: {
-        counselor: counselorId,
-        mentee: menteeId,
+        counselor: counselorId,  // This is the Application ID (as per your backend)
+        mentee: menteeId,        // This is the User ID of the mentee
       },
     });
+  },
+
+  // ✅ NEW: Fetch detailed profile of a single mentee assigned to a counselor
+  getMenteeDetail: async (menteeId) => {
+    if (!menteeId) {
+      throw new Error("Mentee ID is required");
+    }
+    return api(`/counselor/my-mentee/${menteeId}`);
   },
 };
 
