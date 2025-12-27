@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const ForumCard = ({ title, description, content }) => {
+const ForumCard = ({ title, description, content, id }) => {
+  const forumId = id
   const [isHovered, setIsHovered] = useState(false);
   const scrollToTop = () => {
     window.scrollTo({
@@ -29,7 +30,7 @@ const ForumCard = ({ title, description, content }) => {
       )}
 
       <div className="flex justify-center md:justify-end">
-        <Link to={`1`} onClick={scrollToTop}>
+        <Link to={`/forum-chat/${id}`} onClick={scrollToTop}>
           <button className="bg-gray-50 text-black  rounded-lg py-3 px-8 font-semibold text-base cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg">
             Get Involved
           </button>

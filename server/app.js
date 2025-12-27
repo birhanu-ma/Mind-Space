@@ -21,6 +21,7 @@ import moodEntryRoute from "./route/moodEntryRoute.js"
 import profileRoute from "./route/profileRoute.js"
 import conversationRoute from "./route/conversationRoute.js"
 import petitionRoute from "./route/petitionRoute.js"
+import forumChatRoute from "./route/forumChatRoute.js"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -60,5 +61,6 @@ app.use("/api/v1/mood-entry", moodEntryRoute);
 app.use("/api/v1/profile", profileRoute)
 app.use("/api/v1/conversation", conversationRoute);
 app.use("/api/v1/petitions", petitionRoute);
+app.use("/api/v1/forum-chat", forumChatRoute);
 
 export default app;

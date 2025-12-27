@@ -7,8 +7,6 @@ import { forumAPI } from "../../service/client";
 import { useState } from "react";
 import Spinner from "../ui/Spinner";
 
-
-
 const ForumGrid = () => {
   const scrollToTop = () => {
     window.scrollTo({
@@ -16,41 +14,41 @@ const ForumGrid = () => {
       behavior: "instant",
     });
   };
-    const [forumType, setForumType] = useState("mental");
-    const [query, setQuery] = useState({
-      q: "",
-      sort: "header",
-      page: 1,
-      limit: 10,
-    });
-    const {
-      data: forum,
-      isLoading,
-      error,
-    } = useQuery({
-      queryKey: ["forum", forumType, query],
-      queryFn: async () => {
-        if (forumType === "All") {
-          return await forumAPI.getAllForums(query);
-        } else {
-          return await forumAPI.getForumsByType({ forumType, ...query });
-        }
-      },
-      keepPreviousData: true,
-      retry: false,
-    });
-  
-    if (isLoading) return <Spinner />;
-    if (error)
-      return (
-        <p className="text-red-500 text-center mt-10">Failed to load forums.</p>
-      );
-    const forums = forum?.data;
-  
-    console.log("forum list", forums);
-    if (forums.length == 0) return <p>no forum found</p>;
+  const [forumType, setForumType] = useState("mental");
+  const [query, setQuery] = useState({
+    q: "",
+    sort: "header",
+    page: 1,
+    limit: 10,
+  });
+  const {
+    data: forum,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["forum", forumType, query],
+    queryFn: async () => {
+      if (forumType === "All") {
+        return await forumAPI.getAllForums(query);
+      } else {
+        return await forumAPI.getForumsByType({ forumType, ...query });
+      }
+    },
+    keepPreviousData: true,
+    retry: false,
+  });
+
+  if (isLoading) return <Spinner />;
+  if (error)
+    return (
+      <p className="text-red-500 text-center mt-10">Failed to load forums.</p>
+    );
+  const forums = forum?.data;
+
+  console.log("forum list", forums);
+  if (forums.length == 0) return <p>no forum found</p>;
   // Sample forum data
- 
+
   return (
     <section className="bg-azure-50 py-16">
       <div className="container mx-auto px-4">
@@ -65,6 +63,7 @@ const ForumGrid = () => {
               title={forum.header}
               description={forum.subHeader}
               content={forum.list}
+              id={forum._id}
             />
           ))}
         </div>

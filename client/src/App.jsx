@@ -5,6 +5,7 @@ import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import { socket } from "./socket.js";
 import { useEffect } from "react";
+import ForumChatPage from "./components/community/forumChatPage.jsx";
 
 // Lazy load pages
 const Home = lazy(() => import("./pages/Home"));
@@ -130,6 +131,7 @@ function App() {
             <Route path="/apply-for-profession" element={<CounselorForm />} />
             <Route path="/apply-for-mentee" element={<MenteeForm />} />
             <Route path ="/mentee-detail/:id" element={<MenteeDetails/>}/>
+             <Route path ="/forum-chat/:id" element={<ForumChatPage/>}/>
           </Routes>
         </Suspense>
         <Footer />

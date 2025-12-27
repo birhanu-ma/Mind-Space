@@ -333,7 +333,8 @@ export const forumAPI = {
 
   getForum: async (id) => {
     console.log("this is user id ", id);
-    const res = api(`/forums/${id}`);
+    const res = await api(`/forums/${id}`);
+    console.log("this is a response", res)
     return res;
   },
   reviewForums: async ({ role, id, reviewedBy }) => {
@@ -465,13 +466,19 @@ export const profileAPI = {
   },
 };
 
+// service/conversationAPI.js or wherever you define it
 export const conversationAPI = {
+  // For mentor-mentee (keep if needed)
   getConversation: async (room) => {
-    console.log("room from api", room);
     return api(`/conversation/${room}/group-chats`);
   },
 };
-
+export const forumChatAPI = {
+  getForumChatHistory: async (id) => {
+    console.log("this is forum id", id)
+    return api.get(`/forum-chat/${id}/chat-history`);
+  },
+};
 export const chatBotAPI = {
   getChatResponse: (message) => {
     console.log("this is message to chatbot", message);

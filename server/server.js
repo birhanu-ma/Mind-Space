@@ -5,6 +5,7 @@ import app from "./app.js";
 import dotenv from "dotenv";
 import http from "http";
 import {Server} from "socket.io"
+import forumChatSocket from "./controller/chat/forumHandler.js";
 
 dotenv.config({ path: "./config.env" });
 
@@ -22,6 +23,7 @@ const io = new Server(server,{
   }
 })
 socketHandler(io)
+forumChatSocket(io)
 server.listen(PORT, () => {
   console.log(`server is running at ${PORT}`);
 });
