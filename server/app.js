@@ -20,14 +20,18 @@ import contactRoute from "./route/contactRoute.js"
 import moodEntryRoute from "./route/moodEntryRoute.js"
 import profileRoute from "./route/profileRoute.js"
 import conversationRoute from "./route/conversationRoute.js"
+import petitionRoute from "./route/petitionRoute.js"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
 
 
-
 app.use("/img/users", express.static(path.join(__dirname, "public/img/users")));
+app.use("/img/services", express.static(path.join(__dirname, "public/img/services")));
+
+// Optional: If you have more folders later (e.g. articles, etc.)
+// app.use("/img/articles", express.static(path.join(__dirname, "public/img/articles")));
 
 app.use(morgan("dev"));
 app.use(express.json({ limit: "10kb" }));
@@ -55,6 +59,6 @@ app.use("/api/v1/contact", contactRoute);
 app.use("/api/v1/mood-entry", moodEntryRoute);
 app.use("/api/v1/profile", profileRoute)
 app.use("/api/v1/conversation", conversationRoute);
-
+app.use("/api/v1/petitions", petitionRoute);
 
 export default app;

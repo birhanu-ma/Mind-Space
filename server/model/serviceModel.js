@@ -1,23 +1,29 @@
+// model/serviceModel.js
 import mongoose from "mongoose";
 
-const serviceSchema = mongoose.Schema({
+const serviceSchema = new mongoose.Schema({
   header: {
     type: String,
-    required: [true, "service header is required"],
+    required: [true, "Service header is required"],
+    trim: true,
   },
   serviceType: {
     type: String,
-    required: [true, "service type is required"],
+    required: [true, "Service type is required"],
     enum: ["internal", "external"],
     default: "internal",
   },
-  img: {
+  image: {  // ← Changed from 'img' to 'image' for consistency
     type: String,
+    default: null,
   },
   paragraph: {
     type: String,
-    required: [true, "paragraph is required"],
+    required: [true, "Description paragraph is required"],
+    trim: true,
   },
+}, {
+  timestamps: true,
 });
 
 const Service = mongoose.model("Service", serviceSchema);

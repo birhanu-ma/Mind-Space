@@ -8,7 +8,7 @@ import {
   getMenteesForCounselor,
   getCounselingStatsForCounselor,
   matchMentee,
-} from "..//controller/counselingController.js";
+} from "../controller/counselingController.js";
 const router = express.Router();
 
 router

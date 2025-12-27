@@ -1,27 +1,34 @@
 import express from "express";
 import { protect, restrictTo } from "../controller/authController.js";
 import {
-  createPetition,
-  deletePetition,
-  getAllPetitions,
-  updatePetition,
-  getPetitionDetails,
-  reviewPetitions
-} from "../controller/petitionController.js";
+  getPetition,
+  getAllPetition,
+  reviewPetition,
+} from "../controller/adminController.js";
+import { counselorCreatePetition } from "../controller/counselorController.js";
+import { menteeCreatePetition } from "../controller/menteeController.js";
+
 const router = express.Router();
 
+// Mentee submits petition
 router
-  .route("/")
-  .post(protect, restrictTo("mentee", "counselor"), createPetition)
-  .get(protect, restrictTo("mentee", "counselor", "admin"), getAllPetitions)
-  .patch(protect, restrictTo("admin"), updatePetition)
-  .delete(protect, restrictTo("admin"), deletePetition);
+  .route("/mentee")
+  .post(protect, restrictTo("mentee"), menteeCreatePetition);
 
-  router
-  .route("/:id")
-  .get(protect, restrictTo("admin"), getPetitionDetails)
-  .patch(protect, restrictTo("admin"), reviewPetitions);
+// Counselor submits petition
+router
+  .route("/counselor")
+  .post(protect, restrictTo("counselor"), counselorCreatePetition);
 
+// Admin: Get all petitions
+router.route("/").get(protect, restrictTo("admin"), getAllPetition);
 
+// Admin: Get ONE petition (for detail page)
+router
+  .route("/:id/review")
+  .patch(protect, restrictTo("admin"), reviewPetition);
+router.route("/:id").get(protect, restrictTo("admin"), getPetition);
+
+// Admin: Approve or Reject (PATCH)
 
 export default router;

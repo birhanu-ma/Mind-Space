@@ -107,6 +107,7 @@ export default function MentorForm() {
       certifications: [],
       mentoringStyle: "",
       menteePreference: "",
+      menteePreferenceAge: "Any",
       avoidTopics: "",
       communication: "",
       maxMentees: "2",
@@ -123,36 +124,31 @@ export default function MentorForm() {
       alert("Mentor profile saved successfully.");
       reset();
     },
-    onError: (err) => alert("Failed to submit: " + err?.message),
+    onError: (err) => alert("Failed to submit: " + (err?.message || "Unknown error")),
   });
 
-const onSubmit = (data) => {
+  const onSubmit = (data) => {
+    const payload = {
+      profession: data.profession?.trim(),
+      degreeLevel: data.degreeLevel || "",
+      experienceYears: Number(data.experienceYears) || 0,
+      supportAreas: data.supportAreas || [],
+      certifications: data.certifications || [],
+      personalityStyle: data.mentoringStyle ? [data.mentoringStyle] : [],
+      communicationStyles: data.communication ? [data.communication] : [],
+      preferredMenteeGoals: data.menteePreference ? [data.menteePreference] : [],
+      menteeAgePreference: data.menteePreferenceAge || "Any",
+      avoidTopics: data.avoidTopics ? [data.avoidTopics] : [],
+      availability: data.availability || "",
+      timezone: data.timezone || "",
+      maxMentees: Number(data.maxMentees) || 2,
+      canHandleCrisis: data.canHandleCrisis || "no",
+      comfortLevels: data.comfortLevels || {},
+    };
 
-
-
-  const payload = {
-    mentorAge: data.mentorAge || "",
-    profession: data.profession,
-    degreeLevel: data.degreeLevel,
-    experienceYears: Number(data.experienceYears),
-    supportAreas: data.supportAreas || [],
-    personalityStyle: data.mentoringStyle ? [data.mentoringStyle] : [],
-    communicationStyles: data.communication ? [data.communication] : [],
-    preferredMenteeGoals: data.menteePreference ? [data.menteePreference] : [],
-    menteeAgePreference: data.menteePreferenceAge || "Any",
-    avoidTopics: data.avoidTopics ? [data.avoidTopics] : [],
-    availability: data.availability || "",
-    timezone: data.timezone || "",
-    maxMentees: data.maxMentees || "2",
-    canHandleCrisis: data.canHandleCrisis || "no",
-    comfortLevels: data.comfortLevels || {},
-    certifications: data.certifications || [],
+    console.log("Final Mentor Payload:", payload);
+    mutation.mutate(payload);
   };
-
-  console.log("Final Mentor Payload:", payload);
-  mutation.mutate(payload);
-};
-
 
   const CheckboxGrid = ({ options, name }) => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
@@ -207,12 +203,15 @@ const onSubmit = (data) => {
             <label className="text-sm font-semibold">Profession / Role</label>
             <input
               type="text"
-              {...register("profession", { required: "Profession is required" })}
+              {...register("profession", {
+                required: "Profession is required",
+                minLength: { value: 3, message: "Too short" },
+              })}
               className={cx(
                 "mt-1 w-full rounded border px-3 py-2",
                 errors.profession && "border-red-500"
               )}
-              placeholder="e.g., Peer Counselor / Psych Student"
+              placeholder="e.g., Therapist, Psychologist, Peer Counselor"
             />
             {errors.profession && (
               <p className="text-red-500 text-xs mt-1">{errors.profession.message}</p>
@@ -356,7 +355,12 @@ const onSubmit = (data) => {
 
           <div>
             <label className="text-sm font-semibold">Timezone</label>
-            <input type="text" placeholder="e.g., GMT+1" {...register("timezone")} className="mt-1 w-full rounded border px-3 py-2" />
+            <input
+              type="text"
+              placeholder="e.g., GMT+1"
+              {...register("timezone")}
+              className="mt-1 w-full rounded border px-3 py-2"
+            />
           </div>
         </div>
 

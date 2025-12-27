@@ -6,13 +6,7 @@ import catchAsync from "../utils/catchAsync.js";
 import Counseling from "../model/counselingModel.js";
 import AppError from "../utils/AppError.js";
 import mongoose from "mongoose";
-export const createPetition = factory.createOne(Petition);
-export const getAllPetitions = factory.getAll(Petition);
-export const getPetition = factory.getOne(Petition, {
-  path: "user reviewedBy",
-  select: "name role",
-});
-
+export const counselorCreatePetition = factory.createOne(Petition);
 // Standard CRUD using factory
 export const createApplication = factory.createOne(Application);
 export const getApplication = factory.getOne(Application);

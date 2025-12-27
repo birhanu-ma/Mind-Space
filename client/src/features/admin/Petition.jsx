@@ -1,111 +1,118 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { menteeAPI } from "../../service/client.jsx";
+import { adminAssignmentAPI } from "../../service/client.jsx"; // Adjust if your API is named differently
 import { toast } from "sonner";
 import PetitionItem from "./PetitionItem.jsx";
 import Spinner from "../../components/ui/Spinner.jsx";
 
 function PetitionList() {
   const [query, setQuery] = useState({
-    q: "",
-    status: "all",
-    sort: "mentee",
+    q: "",              // Search by petitioner name or subject
+    status: "all",      // all, pending, approved, rejected
+    sort: "newest",     // newest, oldest, mentee
     page: 1,
     limit: 10,
   });
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["petitions", query],
-    queryFn: () => menteeAPI.getAllPetitions(query),
+    queryKey: ["adminPetitions", query],
+    queryFn: () => adminAssignmentAPI.getAllPetitions(query), // Ensure this endpoint exists
     keepPreviousData: true,
     onError: () => toast.error("Failed to load petitions"),
   });
 
+  // Response shape: { data: { data: [...], results: number } }
   const petitionsData = data?.data || { data: [], results: 0 };
   const petitions = petitionsData.data || [];
   const results = petitionsData.results || 0;
   const totalPages = Math.ceil(results / query.limit);
 
-  const handlePrevPage = () => {
-    if (query.page > 1) setQuery((prev) => ({ ...prev, page: prev.page - 1 }));
-  };
-
-  const handleNextPage = () => {
-    if (query.page < totalPages) setQuery((prev) => ({ ...prev, page: prev.page + 1 }));
-  };
-
   const countByStatus = (status) =>
     petitions.filter((p) => p.status === status).length;
 
-  if (isLoading)
+  // Loading
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <Spinner />
-        <span className="ml-2">Loading petitions...</span>
+        <span className="ml-3 text-lg">Loading petitions...</span>
       </div>
     );
+  }
 
-  if (isError)
+  // Error
+  if (isError) {
     return (
-      <div className="flex items-center justify-center h-64 text-red-500">
-        <p>Failed to load petitions</p>
+      <div className="flex flex-col items-center justify-center h-64 text-red-500">
+        <p className="text-lg mb-4">Failed to load petitions</p>
         <button
           onClick={refetch}
-          className="ml-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
         >
           Retry
         </button>
       </div>
     );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto p-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground mb-2">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           Petition Management
         </h1>
         <p className="text-gray-600">
-          Review and manage mentee petitions for mentor changes
+          Review and manage all petitions from mentees and counselors
         </p>
       </div>
 
-      {/* Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-background text-foreground p-4 rounded-lg border border-border">
-          <div className="text-2xl font-bold text-yellow-600">
+      {/* Status Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-background border border-border rounded-xl p-6 shadow-sm">
+          <div className="text-3xl font-bold text-foreground">
+            {results}
+          </div>
+          <p className="text-sm text-gray-600 mt-1">Total Petitions</p>
+        </div>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-sm">
+          <div className="text-3xl font-bold text-yellow-700">
             {countByStatus("pending")}
           </div>
-          <div className="text-sm text-gray-600">Pending Petitions</div>
+          <p className="text-sm text-gray-600 mt-1">Pending Review</p>
         </div>
-        <div className="bg-background text-foreground p-4 rounded-lg border border-border">
-          <div className="text-2xl font-bold text-green-600">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 shadow-sm">
+          <div className="text-3xl font-bold text-green-700">
             {countByStatus("approved")}
           </div>
-          <div className="text-sm text-gray-600">Approved Petitions</div>
+          <p className="text-sm text-gray-600 mt-1">Approved</p>
         </div>
-        <div className="bg-background text-foreground p-4 rounded-lg border border-border">
-          <div className="text-2xl font-bold text-red-600">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 shadow-sm">
+          <div className="text-3xl font-bold text-red-700">
             {countByStatus("rejected")}
           </div>
-          <div className="text-sm text-gray-600">Rejected Petitions</div>
+          <p className="text-sm text-gray-600 mt-1">Rejected</p>
         </div>
       </div>
 
-      {/* Search, Filter, Sort */}
-      <div className="flex flex-wrap gap-2 justify-between mb-4">
+      {/* Filters & Search */}
+      <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-6">
         <input
           type="text"
-          placeholder="Search by mentee name"
+          placeholder="Search by name, email, or subject..."
           value={query.q}
-          onChange={(e) => setQuery((prev) => ({ ...prev, q: e.target.value, page: 1 }))}
-          className="w-[200px] p-2 border rounded"
+          onChange={(e) =>
+            setQuery((prev) => ({ ...prev, q: e.target.value, page: 1 }))
+          }
+          className="flex-1 min-w-[200px] px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
 
         <select
           value={query.status}
-          onChange={(e) => setQuery((prev) => ({ ...prev, status: e.target.value, page: 1 }))}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setQuery((prev) => ({ ...prev, status: e.target.value, page: 1 }))
+          }
+          className="px-4 py-2 border border-border rounded-lg bg-background focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Statuses</option>
           <option value="pending">Pending</option>
@@ -115,53 +122,66 @@ function PetitionList() {
 
         <select
           value={query.sort}
-          onChange={(e) => setQuery((prev) => ({ ...prev, sort: e.target.value, page: 1 }))}
-          className="p-2 border rounded"
+          onChange={(e) =>
+            setQuery((prev) => ({ ...prev, sort: e.target.value, page: 1 }))
+          }
+          className="px-4 py-2 border border-border rounded-lg bg-background focus:ring-2 focus:ring-blue-500"
         >
-          <option value="mentee">Sort by Mentee</option>
-          <option value="title">Sort by Title</option>
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="mentee">By Petitioner Name</option>
         </select>
       </div>
 
       {/* Petition List */}
-      <div className="bg-background text-foreground rounded-lg border border-border">
-        <div className="px-6 py-4 border-border">
-          <h2 className="text-lg font-semibold text-foreground">All Petitions</h2>
-        </div>
-
-        <div className="divide-y divide-foreground">
-          <div className="hidden sm:flex px-6 py-3 bg-background text-xs font-medium text-foreground uppercase tracking-wider">
-            <div className="w-1/6">Mentee</div>
-            <div className="w-1/6">Current Mentor</div>
-            <div className="w-1/4">Title</div>
-            <div className="w-1/4">Reason</div>
-            <div className="w-1/6 text-right">Status</div>
-            <div className="w-1/6 text-right">Actions</div>
+      <div className="bg-background rounded-xl border border-border overflow-hidden shadow-sm">
+        {petitions.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            <p className="text-lg">No petitions found</p>
+            {query.q || query.status !== "all" ? (
+              <p className="text-sm mt-2">Try adjusting your filters</p>
+            ) : null}
           </div>
+        ) : (
+          <>
+            {/* Table Header - Desktop */}
+            <div className="hidden md:grid md:grid-cols-12 px-6 py-4 bg-muted/30 text-sm font-medium text-foreground/70 uppercase tracking-wider border-b border-border">
+              <div className="col-span-3">Petitioner</div>
+              <div className="col-span-3">Subject</div>
+              <div className="col-span-2">Submitted</div>
+              <div className="col-span-2 text-center">Status</div>
+              <div className="col-span-2 text-right">Actions</div>
+            </div>
 
-          {petitions.map((petition) => (
-            <PetitionItem key={petition._id} item={petition} />
-          ))}
-        </div>
+            {/* Petition Items */}
+            <div className="divide-y divide-border">
+              {petitions.map((petition) => (
+                <PetitionItem key={petition._id} petition={petition} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Pagination */}
-      {results > 0 && (
-        <div className="flex justify-end items-center gap-4 mt-4">
+      {results > query.limit && (
+        <div className="flex justify-center items-center gap-4 mt-8">
           <button
-            disabled={query.page <= 1}
             onClick={() => setQuery((prev) => ({ ...prev, page: prev.page - 1 }))}
-            className="p-2 border rounded disabled:opacity-50"
+            disabled={query.page <= 1}
+            className="px-5 py-2 border border-border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted transition"
           >
             Previous
           </button>
-          <span>
-            Page {query.page} of {totalPages}
+
+          <span className="text-sm font-medium">
+            Page {query.page} of {totalPages} ({results} total)
           </span>
+
           <button
-            disabled={query.page >= totalPages}
             onClick={() => setQuery((prev) => ({ ...prev, page: prev.page + 1 }))}
-            className="p-2 border rounded disabled:opacity-50"
+            disabled={query.page >= totalPages}
+            className="px-5 py-2 border border-border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted transition"
           >
             Next
           </button>

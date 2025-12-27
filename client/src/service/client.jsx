@@ -147,6 +147,11 @@ export const counselorAPI = {
       data: data, // send the payload
     });
   },
+    submitPetition: (data) =>
+    api(`/petitions/counselor/petitions`, {
+      method: "POST",
+      data,
+    }),
   getAllApplications: () => api("/counselor"),
   getApplication: async (id) => {
     console.log("this is application id ", id);
@@ -167,7 +172,7 @@ export const counselorAPI = {
   },
   getMentees: async (params = {}) => {
     const { counselorId, ...rest } = params;
-    console.log("this is counselor data to fetch mentee", params)
+    console.log("this is counselor data to fetch mentee", params);
     const query = new URLSearchParams(rest).toString();
     try {
       const res = await api(
@@ -213,7 +218,7 @@ export const menteeAPI = {
     });
   },
   submitPetition: (data) =>
-    api(`/petitions`, {
+    api(`/petitions/mentee/petitions`, {
       method: "POST",
       data,
     }),
@@ -348,46 +353,44 @@ export const forumAPI = {
 // service api
 
 export const serviceAPI = {
-  getAllServices: async (params) => {
+  getAllServices: async (params = {}) => {
     const query = new URLSearchParams(params).toString();
-    console.log("forum query", query);
-    const response = await api(`/services?${query}`);
-    console.log("this is a data from all ", response?.data?.data);
-
-    return response?.data?.data;
+    const res = await api(`/services?${query}`);
+    return res?.data ?? res;
   },
+
   getServicesByType: async (params) => {
-    try {
-      const query = new URLSearchParams(params).toString();
-      const response = await api(`/services/by-type?${query}`);
-      console.log("service filetred by type", response);
-      return response;
-    } catch (err) {
-      console.error("API request failed:", err);
-      throw err;
-    }
+    const query = new URLSearchParams(params).toString();
+    return api(`/services/by-type?${query}`);
   },
 
-  createService: async (data) => {
-    const res = await apiClient.post("/services", data);
+  createService: async (formData) => {
+    const res = await apiClient.post("/services", formData);
     return res.data;
   },
 
   getService: async (id) => {
-    console.log("this is user id ", id);
-    const res = api(`/services/${id}`);
-    return res;
+    return api(`/services/${id}`);
   },
-  reviewServices: async ({ role, id, reviewedBy }) => {
-    console.log(role, id, reviewedBy);
 
+  updateService: async (id, data) => {
     return api(`/services/${id}`, {
       method: "PATCH",
+      data,
+    });
+  },
 
-      data: {
-        role,
-        reviewedBy,
-      },
+  updateServiceImage: async (id, formData) => {
+    return api(`/services/${id}/image`, {
+      method: "PATCH",
+      data: formData,
+    });
+  },
+
+  reviewServices: async ({ id, role, reviewedBy }) => {
+    return api(`/services/${id}/review`, {
+      method: "PATCH",
+      data: { role, reviewedBy },
     });
   },
 };
@@ -462,7 +465,6 @@ export const profileAPI = {
   },
 };
 
-
 export const conversationAPI = {
   getConversation: async (room) => {
     console.log("room from api", room);
@@ -480,44 +482,80 @@ export const chatBotAPI = {
       },
     });
   },
-};export const adminAssignmentAPI = {
-  getCounselors: async () => {
-    return api(`/counselor`);
-  },
+};
+export const adminAssignmentAPI = {
+  // Fetch all available counselors
+  getCounselors: () => api("/counselor"),
 
+  // Fetch one counselor by ID
   getCounselor: async (counselorId) => {
     if (!counselorId) throw new Error("Counselor ID is required");
     return api(`/counselor/${counselorId}`);
   },
 
+  // Get ranked/recommended mentees for a counselor
   getRankedMentees: async (counselorId) => {
     if (!counselorId) throw new Error("Counselor ID is required");
     return api(`/counseling/match/${counselorId}`);
   },
 
-  assignMentee: async ({ counselorId, menteeId }) => {
-    console.log("Assigning mentee:", { counselorId, menteeId });
+  // Assign a mentee to a counselor
+  assignMentee: ({ counselorId, menteeId }) => {
     if (!counselorId || !menteeId) {
       throw new Error("Counselor ID and Mentee ID are required");
     }
     return api("/counseling", {
       method: "POST",
       data: {
-        counselor: counselorId,  // This is the Application ID (as per your backend)
-        mentee: menteeId,        // This is the User ID of the mentee
+        counselor: counselorId,
+        mentee: menteeId,
       },
     });
   },
 
-  // ✅ NEW: Fetch detailed profile of a single mentee assigned to a counselor
+  // Get detailed profile of an assigned mentee
   getMenteeDetail: async (menteeId) => {
-    if (!menteeId) {
-      throw new Error("Mentee ID is required");
-    }
+    if (!menteeId) throw new Error("Mentee ID is required");
     return api(`/counselor/my-mentee/${menteeId}`);
   },
-};
 
+  // Fetch all petitions (admin view)
+  getAllPetitions: (query = {}) => {
+    const params = new URLSearchParams();
+    if (query.q) params.append("q", query.q);
+    if (query.status && query.status !== "all")
+      params.append("status", query.status);
+    if (query.sort) params.append("sort", query.sort);
+    if (query.page) params.append("page", query.page);
+    if (query.limit) params.append("limit", query.limit);
+
+    const queryString = params.toString();
+    const url = queryString
+      ? `/petitions?${queryString}`
+      : "/petitions";
+
+    return api(url);
+  },
+
+  // Fetch one petition by ID
+  getPetition: async (petitionId) => {
+    if (!petitionId) throw new Error("Petition ID is required");
+    const response =  api(`/petitions/${petitionId}`);
+    console.log("this is petition respose", response)
+    return response
+  },
+
+  // Admin reviews a petition (approve/reject)
+  reviewPetition: async ({ petitionId, status, note }) => {
+    if (!petitionId || !status) {
+      throw new Error("Petition ID and status are required");
+    }
+    return api(`/petitions/${petitionId}/review`, {
+      method: "PATCH",
+      data: { status, note },
+    });
+  },
+};
 export const contactAPI = {
   submitMessage: (data) => {
     return api("/contact", {

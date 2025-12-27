@@ -8,6 +8,11 @@ const applicationSchema = new mongoose.Schema(
       required: [true, "Application must belong to a user"],
       unique: true,
     },
+    profession: {
+      type: String,
+      required: [true, "Profession is required"],
+      trim: true,
+    },
     degreeLevel: { type: String, default: "" },
     certifications: [{ type: String }],
     supportAreas: { type: [String], default: [] },

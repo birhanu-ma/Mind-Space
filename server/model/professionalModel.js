@@ -28,7 +28,7 @@ const professionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Auto-populate everything useful
+// Auto-populate user, application (with its profession and other details), and approvedBy
 professionSchema.pre(/^find/, function (next) {
   this.populate([
     {
@@ -37,15 +37,33 @@ professionSchema.pre(/^find/, function (next) {
     },
     {
       path: "application",
-      select: "degreeLevel certifications supportAreas mentalHealthSpecialties personalityStyle communicationStyles availability timezone maxMentees canHandleCrisis priorityFactor",
+      select: [
+        "profession",                    // <-- Key addition: include profession
+        "degreeLevel",
+        "certifications",
+        "supportAreas",
+        "mentalHealthSpecialties",
+        "personalityStyle",
+        "communicationStyles",
+        "availability",
+        "timezone",
+        "preferredMenteeGoals",
+        "menteeAgePreference",
+        "maxMentees",
+        "avoidTopics",
+        "canHandleCrisis",
+        "comfortLevels",
+        "priorityFactor",
+      ].join(" "),
+      // Also populate the user inside application for convenience (e.g., name/photo)
       populate: {
         path: "user",
-        select: "name photo", // redundant but safe if needed elsewhere
+        select: "name photo role",
       },
     },
     {
       path: "approvedBy",
-      select: "name email photo",
+      select: "name email photo role",
     },
   ]);
 

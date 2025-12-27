@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import MyMentee from "../features/counselor/myMenteeTable.jsx"
 import MentorChat from "../features/chat/MentorChat.jsx";
+import Petition from "../features/counselor/petitionForm.jsx"
 import { useLocation } from "react-router-dom";
 
 function MentorPage() {
@@ -9,7 +10,7 @@ function MentorPage() {
 
   const location = useLocation();
   console.log(location);
-  const navItems = ["My Mentee", "Message"];
+  const navItems = ["My Mentee", "Message", "Petition"];
   useEffect(() => {
     if (location.state?.currentPage) {
       setActivePage(location.state.currentPage);
@@ -22,6 +23,8 @@ function MentorPage() {
         return <MyMentee />;
       case "Message":
         return <MentorChat />;
+      case "Petition":
+        return <Petition/>
       default:
         return <MyMentee />;
     }

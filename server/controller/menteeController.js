@@ -2,16 +2,7 @@ import Mentee from "../model/menteeModel.js";
 import * as factory from "./handlerFactory.js";
 import Petition from "../model/petitionModel.js"
 
-export const createPetition = factory.createOne(Petition);
-export const getAllPetitions = factory.getAll(Petition);
-export const getPetition = factory.getOne(Petition, {
-  path: "user reviewedBy",
-  select: "name role",
-});
-export const updatePetition = factory.updateOne(Petition);
-export const deletePetition = factory.deleteOne(Petition);
-export const getPetitionDetails = factory.getOne(Petition);
-export const reviewPetitions = factory.updateOne(Petition);
+export const menteeCreatePetition = factory.createOne(Petition);
 
 // Standard CRUD using factory
 export const createMenteeApplication = factory.createOne(Mentee);
