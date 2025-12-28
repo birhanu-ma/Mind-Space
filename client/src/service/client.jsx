@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_BASE_URL = "https://mind-space-atfn.onrender.com";
+const API_BASE_URL = "https://mind-space-atfn.onrender.com/api/v1";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
