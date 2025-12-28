@@ -60,7 +60,7 @@ export default function Navbar() {
     <>
       <div className="fixed z-30 top-0 left-0 w-full bg-gray-800 shadow-md flex items-center justify-between h-16 px-4 sm:px-10">
         {/* Logo */}
-        <Link to="/home" onClick={scrollToTop}>
+        <Link to="/" onClick={scrollToTop}>
           <h1 className="text-white font-bold text-xl cursor-pointer">MindSpace</h1>
         </Link>
 
