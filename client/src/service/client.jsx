@@ -147,7 +147,7 @@ export const counselorAPI = {
       data: data, // send the payload
     });
   },
-    submitPetition: (data) =>
+  submitPetition: (data) =>
     api(`/petitions/counselor/petitions`, {
       method: "POST",
       data,
@@ -334,7 +334,7 @@ export const forumAPI = {
   getForum: async (id) => {
     console.log("this is user id ", id);
     const res = await api(`/forums/${id}`);
-    console.log("this is a response", res)
+    console.log("this is a response", res);
     return res;
   },
   reviewForums: async ({ role, id, reviewedBy }) => {
@@ -348,6 +348,11 @@ export const forumAPI = {
         reviewedBy,
       },
     });
+  },
+  getForumChatHistory: async (id) => {
+    console.log("this is forum id", id);
+    const res = await api(`/forum-chat/${id}/chat-history`);
+    return res;
   },
 };
 
@@ -473,12 +478,7 @@ export const conversationAPI = {
     return api(`/conversation/${room}/group-chats`);
   },
 };
-export const forumChatAPI = {
-  getForumChatHistory: async (id) => {
-    console.log("this is forum id", id)
-    return api.get(`/forum-chat/${id}/chat-history`);
-  },
-};
+
 export const chatBotAPI = {
   getChatResponse: (message) => {
     console.log("this is message to chatbot", message);
@@ -537,9 +537,7 @@ export const adminAssignmentAPI = {
     if (query.limit) params.append("limit", query.limit);
 
     const queryString = params.toString();
-    const url = queryString
-      ? `/petitions?${queryString}`
-      : "/petitions";
+    const url = queryString ? `/petitions?${queryString}` : "/petitions";
 
     return api(url);
   },
@@ -547,9 +545,9 @@ export const adminAssignmentAPI = {
   // Fetch one petition by ID
   getPetition: async (petitionId) => {
     if (!petitionId) throw new Error("Petition ID is required");
-    const response =  api(`/petitions/${petitionId}`);
-    console.log("this is petition respose", response)
-    return response
+    const response = api(`/petitions/${petitionId}`);
+    console.log("this is petition respose", response);
+    return response;
   },
 
   // Admin reviews a petition (approve/reject)

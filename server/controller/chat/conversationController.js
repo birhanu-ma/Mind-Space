@@ -19,37 +19,31 @@ export const getConversation = async (req, res, next) => {
     next(err);
   }
 };
-
-
 export const getForumChat = async (req, res, next) => {
-  
-    console.log(`Fetching chat history for forum: ${req.params}`);
   try {
-    const { forumId } = req.params;
+    const { id } = req.params;
 
+    console.log("Fetching chat history for forum:", id);
 
-    // Validate forumId format (basic MongoDB ObjectId check)
-    if (!forumId || forumId.length !== 24) {
+    // Validate id
+    if (!id || id.length !== 24) {
       return res.status(400).json({
         status: "fail",
         message: "Invalid forum ID",
       });
     }
 
-    // Fetch messages for this forum, sorted oldest → newest
-    const messages = await ForumChat.find({ forum: forumId })
-      .sort({ createdAt: 1 }) // Chronological order
-      .select("-__v") // Exclude version key
-      .lean(); // Return plain JS objects (faster)
+    const messages = await ForumChat.find({ forum: id })
+      .sort({ createdAt: 1 })
+      .select("-__v")
+      .lean();
 
-    // Transform for frontend: ensure anonymity
     const anonymizedMessages = messages.map((msg) => ({
       _id: msg._id,
       message: msg.message,
       createdAt: msg.createdAt,
       updatedAt: msg.updatedAt,
-      displayName: "Anonymous", // Always anonymous in community chat
-      // Do NOT send sender ID or any user info to client
+      displayName: "Anonymous",
     }));
 
     res.status(200).json({

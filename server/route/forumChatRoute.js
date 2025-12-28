@@ -8,7 +8,7 @@ const router = express.Router();
 
 // Protect all forum chat routes — only logged-in users can view/send
 router
-  .route("/:forumId/chat-history")
+  .route("/:id/chat-history")
   .get(protect, restrictTo("admin", "counselor", "mentee"), getForumChat);
 
 export default router;

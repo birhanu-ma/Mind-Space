@@ -4,8 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, MessageCircle, Users, Loader2 } from "lucide-react";
 import { forumAPI } from "../../service/client";
-import { forumChatAPI } from "../../service/client"; // updated API
-import { socket } from "../../socket"; // your global or forum-specific socket instance
+import { socket } from "../../socket";
 
 const FORUM_ROOM_PREFIX = "forum_";
 
@@ -28,49 +27,49 @@ export default function ForumChatPage() {
 
   // Fetch forum details
   const {
-    data: forumData,
+    data: forumResponse,
     isLoading: forumLoading,
     error: forumError,
   } = useQuery({
     queryKey: ["forum", id],
     queryFn: () => forumAPI.getForum(id),
     enabled: !!id && !!userId,
-    select: (res) => res.data?.data || res.data,
+    select: (res) => res?.data?.data || res?.data,
   });
-  console.log("this is forum detail ", forumData);
 
-  // Fetch chat history with React Query
-  const {
-    data: chatData,
-    isLoading: chatLoading,
-    error: chatError,
-    refetch: refetchChat,
-  } = useQuery({
+  const forum = forumResponse;
+
+  // Fetch chat history — CORRECT & RELIABLE
+  const { data: chatResponse, isLoading: chatLoading } = useQuery({
     queryKey: ["forumChat", id],
-    queryFn: () => forumChatAPI.getForumChatHistory(id),
-    enabled: !!id && !!userId && !!forumData, // Only run after forum is confirmed to exist
-    select: (res) => res.data?.messages || [],
-    staleTime: 1000 * 30, // 30 seconds
-    cacheTime: 1000 * 60 * 5, // 5 minutes
+    queryFn: () => forumAPI.getForumChatHistory(id),
+    enabled: !!id && !!userId && !!forum,
+    select: (res) => res?.data?.messages || [], // ← Correct path
   });
 
   const [messages, setMessages] = useState([]);
 
-  // Sync React Query data → local state
+  // Sync fetched messages ONCE (prevents duplicates)
   useEffect(() => {
-    if (chatData) {
-      setMessages(chatData);
+    if (chatResponse && Array.isArray(chatResponse)) {
+      setMessages(chatResponse);
     }
-  }, [chatData]);
+  }, [chatResponse]);
 
-  // Socket.IO: Join room & listen for new messages
+  // Socket.IO: Only append NEW real-time messages (prevents duplicates)
   useEffect(() => {
     if (!userId || !id) return;
 
     socket.emit("join_room", roomName);
 
     const handleNewMessage = (newMessage) => {
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages((prev) => {
+        // Prevent duplicate by checking _id
+        if (prev.some((msg) => msg._id === newMessage._id)) {
+          return prev;
+        }
+        return [...prev, newMessage];
+      });
     };
 
     socket.on("receive_message", handleNewMessage);
@@ -81,12 +80,12 @@ export default function ForumChatPage() {
     };
   }, [roomName, userId]);
 
-  // Auto-scroll to bottom on new message
+  // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Loading state
+  // Loading
   if (forumLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-50">
@@ -98,8 +97,8 @@ export default function ForumChatPage() {
     );
   }
 
-  // Forum not found (404)
-  if (forumError || !forumData) {
+  // Forum not found
+  if (forumError || !forum) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-50">
         <div className="text-center max-w-md px-4">
@@ -121,8 +120,6 @@ export default function ForumChatPage() {
       </div>
     );
   }
-
-  const forum = forumData;
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -193,8 +190,10 @@ export default function ForumChatPage() {
         </div>
       </div>
 
-      {/* Chat Area */}
+      {/* Chat Area — WITH BACKGROUND COLOR */}
       <div className="flex-1 flex flex-col bg-white">
+        {" "}
+        {/* ← Added background */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {chatLoading ? (
             <div className="flex justify-center py-10">
@@ -216,10 +215,13 @@ export default function ForumChatPage() {
             </div>
           ) : (
             messages.map((msg) => (
-              <div key={msg._id} className="flex flex-col">
-                <div className="flex items-baseline gap-3">
+              <div
+                key={msg._id}
+                className="flex flex-col bg-blue-400 p-4 rounded-lg shadow-sm border border-gray-200"
+              >
+                <div className="flex items-baseline gap-3 mb-1">
                   <span className="font-medium text-gray-900">
-                    {msg.displayName}
+                    {msg.displayName || "Anonymous"}
                   </span>
                   <span className="text-xs text-gray-500">
                     {new Date(msg.createdAt).toLocaleTimeString([], {
@@ -228,13 +230,14 @@ export default function ForumChatPage() {
                     })}
                   </span>
                 </div>
-                <p className="text-gray-800 mt-1">{msg.message}</p>
+               
+                  <p className="text-gray-800 text-start">{msg.message}</p>
+             
               </div>
             ))
           )}
           <div ref={messagesEndRef} />
         </div>
-
         {/* Message Input */}
         <form
           onSubmit={(e) => {
@@ -251,7 +254,7 @@ export default function ForumChatPage() {
 
             input.value = "";
           }}
-          className="p-4 border-t border-gray-200"
+          className="p-4 border-t border-gray-200 bg-white"
         >
           <input
             name="message"
@@ -259,6 +262,7 @@ export default function ForumChatPage() {
             placeholder="Type your message..."
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             autoComplete="off"
+            autoFocus
           />
         </form>
       </div>
