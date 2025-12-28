@@ -6,7 +6,7 @@ import UsersTable from "../admin/usersTable.jsx";
 import { NavLink } from "react-router-dom";
 
 export default function User() {
-  const [role, setRole] = useState("All");
+  const [role, setRole] = useState("admin");
   const [query, setQuery] = useState({
     q: "",
     sort: "name",
@@ -35,7 +35,7 @@ export default function User() {
       </p>
     );
 
-  const users =  data?.data?.data || data?.data || [];
+  const users = data?.data || [];
   const results = data?.results || 0;
   const totalPages = Math.ceil(results / query.limit);
 
