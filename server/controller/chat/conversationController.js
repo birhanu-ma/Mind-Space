@@ -1,4 +1,4 @@
-import Chat from "../../model/ChatModel.js";
+import Chat from "../../model/chatModel.js";
 
 import ForumChat from "../../model/forumChat.js"; // ← New model we created
 
