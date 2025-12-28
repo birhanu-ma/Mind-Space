@@ -35,7 +35,7 @@ export default function User() {
       </p>
     );
 
-  const users = data?.data || data?.data?.data || [];
+  const users =  data?.data?.data || data?.data || [];
   const results = data?.results || 0;
   const totalPages = Math.ceil(results / query.limit);
 
