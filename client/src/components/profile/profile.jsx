@@ -69,7 +69,7 @@ const Profile = () => {
         {/* Profile Photo */}
         <div className="relative">
           <img
-            src={`http://localhost:5000/img/users/${
+            src={`https://mind-space-atfn.onrender.com/img/users/${
               profile.photo || "default.jpeg"
             }`}
             alt="Profile"
