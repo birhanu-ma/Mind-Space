@@ -5,7 +5,7 @@ import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import { socket } from "./socket.js";
 import { useEffect } from "react";
-import ForumChatPage from "./components/community/forumChatPage.jsx";
+const ForumChatPage = lazy(() => import("./components/community/forumChatPage"));
 
 // Lazy load pages
 const Home = lazy(() => import("./pages/Home"));
