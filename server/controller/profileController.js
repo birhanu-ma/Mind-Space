@@ -1,6 +1,6 @@
 import User from "../model/userModel.js";
 import catchAsync from "../utils/catchAsync.js";
-import AppError from "../utils/appError.js";
+import AppError from "../utils/AppError.js";
 
 // ✅ Get current user
 export const getMe = catchAsync(async (req, res, next) => {
