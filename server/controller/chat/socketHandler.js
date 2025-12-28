@@ -1,4 +1,4 @@
-import Chat from "../../model/ChatModel.js";
+import Chat from "../../model/chatModel.js";
 function socketHandler(io) {
   console.log("✅ Socket.IO || initialized");
 
