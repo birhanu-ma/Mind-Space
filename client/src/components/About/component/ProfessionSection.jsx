@@ -10,6 +10,7 @@ function ProfessionSection() {
   const headerTitle = "Our Mental Health Professionals";
   const headerDescription =
     "Dedicated experts in mental health and psychology, our professionals provide skilled support and guidance. Grounded in these disciplines, they deliver comprehensive and evidence-based care. Specializing in fostering well-being, our team offers insightful and effective support to those seeking to prioritize their mental health.";
+
   const [profession, setProfession] = useState("therapist");
   const [query, setQuery] = useState({
     q: "",
@@ -17,8 +18,9 @@ function ProfessionSection() {
     page: 1,
     limit: 10,
   });
+
   const {
-    data: professional,
+    data: response,
     isLoading,
     error,
   } = useQuery({
@@ -41,26 +43,33 @@ function ProfessionSection() {
   if (error)
     return (
       <p className="text-red-500 text-center mt-10">
-        Failed to load professions.
+        Failed to load professionals.
       </p>
     );
-  const professionData = professional?.data;
 
-  console.log("profession list", professionData);
-  if (professionData.length == 0) return <p>no profession found</p>;
+  // Adjust this based on your actual API response structure
+  // Common patterns: response?.data?.data or response?.data
+  const professionals = response?.data?.data || response?.data || [];
+
+  console.log("professionals list", professionals);
+
+  if (professionals.length === 0) {
+    return <p className="text-center py-10">No professionals found</p>;
+  }
 
   return (
-    <section className="py-16 px-4 md:px-8 ">
+    <section className="py-16 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
         <ProfessionHeader title={headerTitle} description={headerDescription} />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {professionData.map((professions) => (
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+          {professionals.map((prof) => (
             <ProfessionCard
-              profileImage={professions.profileImage}
-              key={professions._id}
-              name={professions.user}
-              profession={professions.profession}
-              description={professions.aboutYou}
+              key={prof._id}
+              profileImage={prof.user?.photo || prof.profileImage || "default.jpg"} // fallback
+              name={prof.user?.name || "Unknown Professional"} // ← FIX: use name string
+              profession={prof.profession || "Mental Health Professional"}
+              description={prof.aboutYou || "No description available."}
             />
           ))}
         </div>

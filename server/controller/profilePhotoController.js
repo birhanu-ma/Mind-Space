@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Upload directory
-const UPLOAD_DIR = path.join(__dirname, "../..", "public", "img", "users");
+const UPLOAD_DIR = path.join(__dirname, "../", "public", "img", "users");
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 // Multer setup

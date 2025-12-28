@@ -7,7 +7,8 @@ import {
   updateApplication,
   deleteApplication,
   reviewApplications,
-  getApplicationsByType
+  getApplicationsByType,
+  getMenteeDetailForCounselor
 } from "../controller/counselorController.js";
 
 const router = express.Router();
@@ -23,10 +24,16 @@ router
 // Get by type
 router.route("/by-type").get(protect, getApplicationsByType);
 
+  router
+  .route("/my-mentee/:menteeId")
+  .get(protect, restrictTo("counselor"), getMenteeDetailForCounselor)
+
 // Get & review individual application
 router
   .route("/:id")
   .get(protect, restrictTo("admin"), getApplication)
   .patch(protect, restrictTo("admin"), reviewApplications);
+
+
 
 export default router;

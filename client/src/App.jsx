@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
+import { socket } from "./socket.js";
+import { useEffect } from "react";
+const ForumChatPage = lazy(() => import("./components/community/forumChatPage"));
 
 // Lazy load pages
 const Home = lazy(() => import("./pages/Home"));
@@ -19,26 +22,59 @@ const LoginForm = lazy(() => import("./components/auth/Login/LoginForm"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const MenteePage = lazy(() => import("./pages/MenteePage"));
 const CounselorPage = lazy(() => import("./pages/CounselorPage"));
-const ArticleCreateForm = lazy(() => import("./features/Article/createArticle"));
+const ArticleCreateForm = lazy(() =>
+  import("./features/Article/createArticle")
+);
 const ForumCreateForm = lazy(() => import("./features/Forum/createForum"));
-const ServiceCreateForm = lazy(() => import("./features/service/createService"));
-const CreateProfessionForm = lazy(() => import("./features/profession/createProfession"));
+const ServiceCreateForm = lazy(() =>
+  import("./features/service/createService")
+);
+const CreateProfessionForm = lazy(() =>
+  import("./features/profession/createProfession")
+);
 const UserDetail = lazy(() => import("./features/user/userDetails"));
 const ArticleDetail = lazy(() => import("./features/Article/articleDetails"));
 const ForumDetail = lazy(() => import("./features/Forum/forumDetails"));
 const ServiceDetail = lazy(() => import("./features/service/serviceDetails"));
-const ProfessionDetail = lazy(() => import("./features/profession/professionDetals"));
+const ProfessionDetail = lazy(() =>
+  import("./features/profession/professionDetals")
+);
 const PetitionDetail = lazy(() => import("./features/admin/petitionDetail"));
-const ApplicationDetail = lazy(() => import("./features/admin/counselor/ApplicationDetail"));
+const ApplicationDetail = lazy(() =>
+  import("./features/admin/counselor/ApplicationDetail")
+);
 const MenteeForm = lazy(() => import("./features/admin/mentee/menteeForm"));
 const CounselorForm = lazy(() => import("./features/counselor/counselorForms"));
-const CounselorDetail = lazy(() => import("./features/counselor/counselorDetail"));
-const MenteeDetail = lazy(() => import("./features/admin/mentee/rankedMenteeDetail"));
-const MenteeApplicationDetail = lazy(() => import("./features/admin/mentee/menteeApplicationDetail"));
+const CounselorDetail = lazy(() =>
+  import("./features/counselor/counselorDetail")
+);
+const MenteeDetail = lazy(() =>
+  import("./features/admin/mentee/rankedMenteeDetail")
+);
+const MenteeApplicationDetail = lazy(() =>
+  import("./features/admin/mentee/menteeApplicationDetail")
+);
 const Profile = lazy(() => import("./components/profile/profile"));
 const Settings = lazy(() => import("./pages/SettingsPage"));
-
+const MenteeDetails = lazy(() => import("../../client/src/features/counselor/menteeDetail.jsx"));
 function App() {
+  // Initialize socket connection when user logs in
+  const user = localStorage.getItem("role");
+  useEffect(() => {
+    if (!user) return;
+
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("🌐 Global socket connected:", socket.id);
+      socket.emit("join_room", "global");
+    });
+
+    return () => {
+      socket.disconnect();
+      console.log("🌐 Global socket disconnected");
+      socket.off("connect"); // cleanup listener
+    };
+  }, [user]);
   return (
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">
@@ -47,7 +83,7 @@ function App() {
           <Routes>
             <Route path="/Register" element={<Register />} />
             <Route path="/loginform" element={<LoginForm />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/learn" element={<Learn />} />
             <Route path="/tool" element={<Tool />} />
             <Route path="/community" element={<Community />} />
@@ -64,21 +100,38 @@ function App() {
             <Route path="/admin/services/new" element={<ServiceCreateForm />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/admin/professions/new" element={<CreateProfessionForm />} />
+            <Route
+              path="/admin/professions/new"
+              element={<CreateProfessionForm />}
+            />
             <Route path="/user-detail/:id" element={<UserDetail />} />
             <Route path="/article-detail/:id" element={<ArticleDetail />} />
             <Route path="/forum-detail/:id" element={<ForumDetail />} />
             <Route path="/service-detail/:id" element={<ServiceDetail />} />
-            <Route path="/profession-detail/:id" element={<ProfessionDetail />} />
+            <Route
+              path="/profession-detail/:id"
+              element={<ProfessionDetail />}
+            />
             <Route path="/petition-detail/:id" element={<PetitionDetail />} />
-            <Route path="/application-detail/:id" element={<ApplicationDetail />} />
-            <Route path="/mentee-app-detail/:id" element={<MenteeApplicationDetail />} />
+            <Route
+              path="/application-detail/:id"
+              element={<ApplicationDetail />}
+            />
+            <Route
+              path="/mentee-app-detail/:id"
+              element={<MenteeApplicationDetail />}
+            />
             <Route path="/register-as-mentee" element={<MenteeForm />} />
             <Route path="/register-as-counselor" element={<CounselorForm />} />
-            <Route path="/counselors/:counselorId" element={<CounselorDetail />} />
+            <Route
+              path="/counselors/:counselorId"
+              element={<CounselorDetail />}
+            />
             <Route path="/mentees/:menteeId" element={<MenteeDetail />} />
             <Route path="/apply-for-profession" element={<CounselorForm />} />
             <Route path="/apply-for-mentee" element={<MenteeForm />} />
+            <Route path ="/mentee-detail/:id" element={<MenteeDetails/>}/>
+             <Route path ="/forum-chat/:id" element={<ForumChatPage/>}/>
           </Routes>
         </Suspense>
         <Footer />

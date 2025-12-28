@@ -8,8 +8,8 @@ export default function RankedMenteeList({ counselorId }) {
     queryKey: ["rankedMentees", counselorId],
     queryFn: () => adminAssignmentAPI.getRankedMentees(counselorId),
   });
-
-  const mentees = data?.rankedMentees || [];
+console.log("this is ranked mentee", data?.data.rankedMentees )
+  const mentees = data?.data?.rankedMentees || [];
 
   if (isLoading) return <Spinner />;
   if (error) return <p className="text-red-500">Failed to load mentees.</p>;

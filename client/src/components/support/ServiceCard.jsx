@@ -11,11 +11,15 @@ const ServiceCard = ({ service }) => {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden transition-colors duration-300 hover:bg-gray-50">
-      
+      {console.log(`this is service image url http://localhost:5000/img/services/${service.image}`)}
       {/* Image Section */}
       <div className="h-48 overflow-hidden relative">
         <img
-          src={service.img}
+          src={
+                service?.image
+                  ? `http://localhost:5000/img/services/${service.image}`
+                  : "https://i.pravatar.cc/40"
+              }
           alt={service.header}
           className="w-full h-full object-cover"
         />

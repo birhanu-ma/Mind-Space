@@ -1,15 +1,21 @@
+// models/Counseling.js
 import mongoose from "mongoose";
 
 const counselingSchema = new mongoose.Schema({
-  counselor: {
+  counselorUser: {
     type: mongoose.Schema.ObjectId,
-    ref: "Professional",
-    required: [true, "Counselor is required"], // reference Professional
+    ref: "User",
+    required: [true, "Counselor user is required"],
+  },
+  counselorApplication: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Application",
+    required: [true, "Counselor application is required"],
   },
   mentee: {
     type: mongoose.Schema.ObjectId,
-    ref: "Mentee",
-    required: [true, "Mentee is required"], // reference Mentee
+    ref: "User",  // Direct reference to the User's document (mentee is a user with role: "mentee")
+    required: [true, "Mentee user is required"],
   },
   reviewedBy: {
     type: mongoose.Schema.ObjectId,
@@ -36,20 +42,43 @@ const counselingSchema = new mongoose.Schema({
   },
 });
 
-// Ensure one mentee can have only one active counseling session
-counselingSchema.index({ mentee: 1 }, { unique: true });
+// Ensure only one active counseling session per mentee
+counselingSchema.index(
+  { mentee: 1, active: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { active: true },
+  }
+);
 
-// Auto-populate Professional (all fields + nested User) and Mentee
+// Auto-populate relevant fields on all find queries
 counselingSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: "counselor",
-    populate: { path: "user", select: "name email role" }, // nested User inside Professional
-  }).populate({
-    path: "mentee",
-    populate: { path: "user", select: "name email role createdAt" }, // nested User inside Mentee
-  });
+  this.populate([
+    {
+      path: "counselorUser",
+      select: "name email photo role",
+    },
+    {
+      path: "counselorApplication",
+      select:
+        "degreeLevel certifications supportAreas timezone maxMentees personalityStyle communicationStyles",
+      populate: {
+        path: "user",
+        select: "name photo", // Redundant but safe if needed elsewhere
+      },
+    },
+    {
+      path: "mentee",
+      select: "name email photo role createdAt", // ← Direct User fields — NO nested .user!
+    },
+    {
+      path: "reviewedBy",
+      select: "name email photo",
+    },
+  ]);
   next();
 });
 
 const Counseling = mongoose.model("Counseling", counselingSchema);
+
 export default Counseling;

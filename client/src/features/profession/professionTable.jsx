@@ -88,11 +88,24 @@ export default function ProfessionTable({
                       key={prof._id}
                       className="border-b border-border hover:bg-muted/30 transition"
                     >
-                      <td className="py-4 px-4 text-sm font-medium text-left">{prof.user}</td>
-                      <td className="py-4 px-4 text-sm text-left">{prof.email}</td>
-                      <td className="py-4 px-4 text-right text-sm">
-                        <Badge className="capitalize bg-gray-100 text-gray-600">{prof.profession}</Badge>
+                      {/* Name */}
+                      <td className="py-4 px-4 text-sm font-medium text-left">
+                        {prof.user?.name || "No Name"}
                       </td>
+
+                      {/* Email */}
+                      <td className="py-4 px-4 text-sm text-left">
+                        {prof.user?.email || "-"}
+                      </td>
+
+                      {/* Profession */}
+                      <td className="py-4 px-4 text-right text-sm">
+                        <Badge className="capitalize bg-gray-100 text-gray-600">
+                          {prof.profession || "Not specified"}
+                        </Badge>
+                      </td>
+
+                      {/* Action */}
                       <td className="py-4 px-4 text-right">
                         <NavLink
                           to={`/profession-detail/${prof._id}`}

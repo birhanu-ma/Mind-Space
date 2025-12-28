@@ -35,7 +35,7 @@ function Login() {
           navigate("/admin");
           break;
         default:
-          navigate("/");
+          navigate("/home");
       }
     },
     onError: (err) => {

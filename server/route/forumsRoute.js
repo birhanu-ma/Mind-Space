@@ -15,6 +15,6 @@ router
 router.route("/by-type").get(protect, getForumsByType);
 router
   .route("/:id")
-  .get(protect, restrictTo("admin"), getForumDetails)
-  .patch(protect, restrictTo("admin"), reviewForums);
+  .get(protect, restrictTo("admin","counselor","mentee"), getForumDetails)
+  .patch(protect, restrictTo("admin","counselor","mentee"), reviewForums);
 export default router;
