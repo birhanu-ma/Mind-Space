@@ -83,6 +83,7 @@ function App() {
           <Routes>
             <Route path="/Register" element={<Register />} />
             <Route path="/loginform" element={<LoginForm />} />
+             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/learn" element={<Learn />} />
             <Route path="/tool" element={<Tool />} />
