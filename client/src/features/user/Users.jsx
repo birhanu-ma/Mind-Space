@@ -66,7 +66,7 @@ export default function User() {
               }}
               className="border rounded-md p-2 text-sm bg-background"
             >
-              <option value="All">All</option>
+              <option value="user">user</option>
               <option value="admin">Admin</option>
               <option value="mentee">Mentee</option>
               <option value="counselor">Counselor</option>
