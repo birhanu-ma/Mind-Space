@@ -125,7 +125,7 @@ export default function Navbar() {
             <img
               src={
                 user?.photo
-                  ? `http://localhost:5000/img/users/${user.photo}`
+                  ? `https://mind-space-atfn.onrender.com/img/users/${user.photo}`
                   : "https://i.pravatar.cc/40"
               }
               alt="Profile"
