@@ -6,7 +6,7 @@ import UsersTable from "../admin/usersTable.jsx";
 import { NavLink } from "react-router-dom";
 
 export default function User() {
-  const [role, setRole] = useState("admin");
+  const [role, setRole] = useState("All");
   const [query, setQuery] = useState({
     q: "",
     sort: "name",
