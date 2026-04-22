@@ -42,6 +42,7 @@ app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:5173",
   "https://mind-space-mu.vercel.app",
+  
 ];
 
 app.use(
