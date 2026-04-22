@@ -21,7 +21,7 @@ const Settings = () => {
   return (
     <div className="min-h-screen pt-20 bg-background text-foreground">
       <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="bg-background border border-border rounded-lg p-8">
+        <div className="bg-background border border-border rounded-lg sm:p-8">
           <div className="flex items-start justify-start mb-4">
             <button
               onClick={() => navigate(-1)}
@@ -34,7 +34,7 @@ const Settings = () => {
           <h1 className="text-3xl font-bold mb-8">Settings</h1>
 
           {/* Tabs */}
-          <div className="flex space-x-1 mb-8 border-b border-border">
+          <div className="flex flex-col sm:flex-row space-x-1 sm:mb-8 border-b border-border">
             {[
               { id: "notifications", label: "Notifications" },
               { id: "privacy", label: "Privacy" },
@@ -43,7 +43,7 @@ const Settings = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                className={`sm:px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === tab.id
                     ? "border-primary text-primary"
                     : "border-transparent text-foreground/60 hover:text-foreground"

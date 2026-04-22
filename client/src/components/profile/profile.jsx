@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdModeEdit } from "react-icons/md";
 import { profileAPI } from "../../service/client";
@@ -6,13 +6,11 @@ import { profileAPI } from "../../service/client";
 const Profile = () => {
   const queryClient = useQueryClient();
 
-  // Fetch profile
   const { data, isLoading, isError } = useQuery({
     queryKey: ["profile"],
     queryFn: profileAPI.getProfile,
   });
 
-  // Mutations
   const updateNameMutation = useMutation({
     mutationFn: profileAPI.updateProfile,
     onSuccess: () => queryClient.invalidateQueries(["profile"]),
@@ -23,26 +21,18 @@ const Profile = () => {
     onSuccess: () => queryClient.invalidateQueries(["profile"]),
   });
 
-  // Profile data
   const profile = data?.data?.user;
-
-  // Local state for editing name
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("");
 
-  // Sync name when profile loads
   useEffect(() => {
     if (profile?.name) setName(profile.name);
   }, [profile?.name]);
 
   if (isLoading) return <p className="py-20 text-center">Loading...</p>;
-  if (isError)
-    return (
-      <p className="py-20 text-center text-red-500">Failed to load profile</p>
-    );
+  if (isError) return <p className="py-20 text-center text-red-500">Failed to load profile</p>;
   if (!profile) return <p className="py-20 text-center">No profile found</p>;
 
-  // Save name
   const handleNameSave = () => {
     if (!name.trim() || name === profile.name) {
       setEditing(false);
@@ -52,93 +42,83 @@ const Profile = () => {
     setEditing(false);
   };
 
-  // Handle photo upload
   const handlePhotoChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const formData = new FormData();
     formData.append("photo", file);
-
     updatePhotoMutation.mutate(formData);
   };
 
   return (
-    <div className="py-20 min-h-screen flex justify-center bg-gray-50">
-      <section className="w-full max-w-3xl flex gap-6 border rounded-lg p-6 shadow-sm bg-white">
+    /* 1. overflow-x-hidden on wrapper is mandatory */
+    <div className="min-h-screen py-24 px-4 flex justify-center bg-gray-50 overflow-x-hidden box-border">
+      
+      {/* 2. Added max-w-[calc(100vw-32px)] to ensure the box NEVER exceeds screen width */}
+      <section className="flex flex-col items-center gap-6 border rounded-lg p-6 shadow-sm bg-white w-full max-w-[calc(100vw-32px)] sm:max-w-md h-fit">
+        
         {/* Profile Photo */}
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <img
-            src={`https://mind-space-atfn.onrender.com/img/users/${
-              profile.photo || "default.jpeg"
-            }`}
+            src={`https://mind-space-atfn.onrender.com/img/users/${profile.photo || "default.jpeg"}`}
             alt="Profile"
             className="h-24 w-24 rounded-full object-cover border"
           />
-
-          {/* Edit Photo Button */}
-          <label className="absolute bottom-0 right-0 bg-blue-600 p-1.5 rounded-full cursor-pointer hover:bg-blue-700">
+          <label className="absolute bottom-0 right-0 bg-blue-600 p-2 rounded-full cursor-pointer hover:bg-blue-700 shadow-md">
             <MdModeEdit className="text-white text-sm" />
-            <input
-              type="file"
-              hidden
-              accept="image/*"
-              onChange={handlePhotoChange}
-            />
+            <input type="file" hidden accept="image/*" onChange={handlePhotoChange} />
           </label>
-
-          {updatePhotoMutation.isLoading && (
-            <p className="text-sm text-gray-500 mt-1 text-center">
-              Uploading...
-            </p>
-          )}
         </div>
 
-        {/* Profile Info */}
-        <div className="flex flex-col flex-1">
-          <div className="flex items-center gap-2">
+        {/* Profile Info - Fixed horizontal expansion */}
+        <div className="flex flex-col w-full text-center overflow-hidden">
+          <div className="flex flex-col items-center gap-2 w-full">
             {editing ? (
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="border rounded px-3 py-1 text-lg w-full"
-              />
+              <div className="flex flex-col gap-2 w-full">
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="border rounded px-3 py-2 text-base w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                  autoFocus
+                />
+                <button
+                  onClick={handleNameSave}
+                  disabled={updateNameMutation.isLoading}
+                  className="bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {updateNameMutation.isLoading ? "Saving..." : "Save Name"}
+                </button>
+              </div>
             ) : (
-              <h1 className="text-2xl font-semibold">{profile.name}</h1>
-            )}
-
-            {/* Edit Icon */}
-            {!editing && (
-              <button
-                onClick={() => setEditing(true)}
-                className="text-gray-600 hover:text-blue-600"
-              >
-                <MdModeEdit />
-              </button>
-            )}
-            {/* Save Button */}
-            {editing && (
-              <button
-                onClick={handleNameSave}
-                disabled={updateNameMutation.isLoading}
-                className=" bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-              >
-                {updateNameMutation.isLoading ? "Saving..." : "Save"}
-              </button>
+              <div className="flex items-center justify-center gap-2 w-full">
+                {/* 3. Added truncate to the H1 to prevent long names from pushing the border out */}
+                <h1 className="text-xl font-bold text-gray-900 truncate max-w-[200px]">
+                  {profile.name}
+                </h1>
+                <button
+                  onClick={() => setEditing(true)}
+                  className="text-gray-400 hover:text-blue-600"
+                >
+                  <MdModeEdit size={18} />
+                </button>
+              </div>
             )}
           </div>
 
-          <p className="text-gray-600 mt-1">{profile.email}</p>
+          {/* 4. break-all on email is critical for mobile */}
+          <p className="text-gray-500 text-sm mt-1 break-all px-2">
+            {profile.email}
+          </p>
 
-          <span className="inline-block mt-2 w-fit text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-700">
-            {profile.role}
-          </span>
+          <div className="mt-4">
+            <span className="inline-block text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-600 font-bold uppercase tracking-wider">
+              {profile.role}
+            </span>
+          </div>
 
-          {/* Updating indicator */}
-          {(updateNameMutation.isLoading || updatePhotoMutation.isLoading) &&
-            !editing && (
-              <p className="text-sm text-gray-400 mt-2">Updating...</p>
-            )}
+          {updatePhotoMutation.isLoading && (
+            <p className="text-xs text-blue-600 mt-3 animate-pulse">Uploading photo...</p>
+          )}
         </div>
       </section>
     </div>
