@@ -6,8 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { forumAPI } from "../../service/client";
 import { useState } from "react";
 import Spinner from "../ui/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const ForumGrid = () => {
+  const navigate = useNavigate();
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -39,10 +41,12 @@ const ForumGrid = () => {
   });
 
   if (isLoading) return <Spinner />;
-  if (error)
-    return (
-      <p className="text-red-500 text-center mt-10">Failed to load forums.</p>
-    );
+  if (error) {
+    if (error.response?.status === 401) {
+      navigate("/Register", { state: { from: window.location.pathname } });
+      return null;
+    }
+  }
   const forums = forum?.data;
 
   console.log("forum list", forums);

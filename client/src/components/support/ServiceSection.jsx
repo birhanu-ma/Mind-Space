@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import ServiceCard from './ServiceCard';
-import { serviceAPI } from '../../service/client';
-import Spinner from '../ui/Spinner';
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import ServiceCard from "./ServiceCard";
+import { serviceAPI } from "../../service/client";
+import Spinner from "../ui/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const ServiceSection = () => {
+  const navigate = useNavigate();
   const [serviceType, setServiceType] = useState("internal");
   const [query, setQuery] = useState({
     q: "",
@@ -31,15 +33,16 @@ const ServiceSection = () => {
   });
 
   if (isLoading) return <Spinner />;
-  if (error)
-    return (
-      <p className="text-red-500 text-center mt-10">
-        Failed to load Services.
-      </p>
-    );
+  if (error) {
+    if (error.response?.status === 401) {
+      navigate("/Register", { state: { from: window.location.pathname } });
+      return null;
+    }
+  }
 
   const Services = service?.data || [];
-  if (Services.length === 0) return <p className="text-center mt-10">No services found.</p>;
+  if (Services.length === 0)
+    return <p className="text-center mt-10">No services found.</p>;
 
   return (
     <>

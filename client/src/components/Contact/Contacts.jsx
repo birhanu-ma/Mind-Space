@@ -4,8 +4,10 @@ import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { IoLocation } from "react-icons/io5";
 import { MdArrowForwardIos } from "react-icons/md";
 import { contactAPI } from "../../service/client"; // adjust path if needed
+import { useNavigate } from "react-router-dom";
 
 function Contacts() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,6 +27,12 @@ function Contacts() {
       });
     },
   });
+  if (error) {
+    if (error.response?.status === 401) {
+      navigate("/Register", { state: { from: window.location.pathname } });
+      return null;
+    }
+  }
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -92,9 +100,7 @@ function Contacts() {
 
           {/* Feedback */}
           {isSuccess && (
-            <p className="text-green-600 text-sm">
-              Message sent successfully!
-            </p>
+            <p className="text-green-600 text-sm">Message sent successfully!</p>
           )}
           {isError && (
             <p className="text-red-600 text-sm">

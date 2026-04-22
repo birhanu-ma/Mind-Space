@@ -5,8 +5,10 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { forumAPI } from "../../service/client"; // ← make sure this exists and points to your article endpoint
+import { useNavigate } from "react-router-dom";
 
 function ForumCreateForm() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -25,20 +27,27 @@ function ForumCreateForm() {
     },
   });
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isLoading, error } = useMutation({
     mutationFn: forumAPI.createForums, // POST /api/v1/forums
     onSuccess: () => {
       toast.success("✅ forum created successfully!");
       reset();
     },
+
     onError: (error) => {
       toast.error(
         `Failed to create forum: ${
           error.response?.data?.message || error.message
-        }`
+        }`,
       );
     },
   });
+  if (error) {
+    if (error.response?.status === 401) {
+      navigate("/Register", { state: { from: window.location.pathname } });
+      return null;
+    }
+  }
 
   const onSubmit = (data) => {
     // convert comma-separated tags to array
