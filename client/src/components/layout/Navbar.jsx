@@ -5,22 +5,30 @@ import { useMutation } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { MdOutlineCancelPresentation } from "react-icons/md";
-import { PiMagnifyingGlassBold } from "react-icons/pi";
 import { logout } from "../../store/userSlice";
 import { authAPI } from "../../service/client";
 
-const NAV_ITEMS = ["Home", "Learn", "Tool", "Community", "Support", "About Us", "Contact"];
+const NAV_ITEMS = [
+  "Home",
+  "Learn",
+  "Tool",
+  "Community",
+  "Support",
+  "About Us",
+  "Contact",
+];
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { isLoggedIn, user } = useSelector((state) => state.user || {});
-  const unreadByRoom = useSelector((state) => state.notifications?.unreadByRoom || {});
+  const unreadByRoom = useSelector(
+    (state) => state.notifications?.unreadByRoom || {},
+  );
   const totalUnread = Object.values(unreadByRoom).reduce((a, b) => a + b, 0);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchClicked, setSearchClicked] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -54,14 +62,17 @@ export default function Navbar() {
   const handleLogout = () => logoutMutate();
 
   // Determine if Dashboard should be shown: logged in AND role !== "user"
-  const showDashboard = isLoggedIn && user?.role && user.role.toLowerCase() !== "user";
+  const showDashboard =
+    isLoggedIn && user?.role && user.role.toLowerCase() !== "user";
 
   return (
     <>
       <div className="fixed z-30 top-0 left-0 w-full bg-gray-800 shadow-md flex items-center justify-between h-16 px-4 sm:px-10">
         {/* Logo */}
         <Link to="/" onClick={scrollToTop}>
-          <h1 className="text-white font-bold text-xl cursor-pointer">MindSpace</h1>
+          <h1 className="text-white font-bold text-xl cursor-pointer">
+            MindSpace
+          </h1>
         </Link>
 
         {/* Desktop Nav Items */}
@@ -91,26 +102,11 @@ export default function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center space-x-4">
-          {/* Search */}
-          {searchClicked ? (
-            <input
-              type="text"
-              placeholder="Search..."
-              autoFocus
-              className="w-60 h-8 rounded-full bg-white text-black placeholder-gray-500 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          ) : (
-            <PiMagnifyingGlassBold
-              onClick={() => setSearchClicked(true)}
-              className="text-white hover:text-red-200 cursor-pointer text-xl"
-            />
-          )}
-
           {/* Notification Bell */}
           {isLoggedIn && (
             <div className="relative">
               <Link to="/messages" onClick={scrollToTop}>
-                <Bell className="h-6 w-6 text-white hover:text-indigo-300" />
+                <Bell className="sm:h-6 sm:w-6 h-4 w-4 text-white hover:text-indigo-300" />
                 {totalUnread > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5">
                     {totalUnread > 99 ? "99+" : totalUnread}
@@ -129,7 +125,7 @@ export default function Navbar() {
                   : "https://i.pravatar.cc/40"
               }
               alt="Profile"
-              className="w-10 h-10 rounded-full cursor-pointer border-2 border-white object-cover"
+              className="w-4 sm:w-8 h-4 sm:h-8 rounded-full cursor-pointer border-2 border-white object-cover"
               onClick={() => setProfileMenuOpen((prev) => !prev)}
             />
 
@@ -138,8 +134,12 @@ export default function Navbar() {
                 {isLoggedIn && user ? (
                   <>
                     <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-800 truncate">{user.name}</p>
-                      <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+                      <p className="text-sm font-medium text-gray-800 truncate">
+                        {user.name}
+                      </p>
+                      <p className="text-xs text-gray-500 capitalize">
+                        {user.role}
+                      </p>
                     </div>
                     <ul>
                       <li>

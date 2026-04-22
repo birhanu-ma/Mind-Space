@@ -2,7 +2,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <section className="relative h-screen w-full">
+    <section className="relative h-screen  mt-14 w-full">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img 

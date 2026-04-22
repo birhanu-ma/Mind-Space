@@ -14,7 +14,7 @@ function Hero() {
         <h1 className="text-4xl flex justify-center md:text-5xl text-white font-bold leading-tight mb-6 p-2 cursor-pointer">
           About us
         </h1>
-        <div className="flex flex-row justify-center items-center">
+        {/* <div className="flex flex-row justify-center items-center">
           <Link to="/">
             <h1 className="text-4xl md:text-5xl text-white font-bold leading-tight mb-6 p-2 cursor-pointer">
               Home
@@ -25,7 +25,7 @@ function Hero() {
               About us
             </h1>
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );

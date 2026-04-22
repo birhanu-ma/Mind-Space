@@ -32,7 +32,7 @@ const InfoSection = () => {
   ];
 
   return (
-    <section className="bg-white pt-16 px-4 sm:px-8 max-w-7xl mx-auto">
+    <section className="bg-white  h-screen pt-16 px-4 sm:px-8 max-w-7xl mx-auto">
       <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12">
         Whatever's on your mind, we're here.
       </h2>

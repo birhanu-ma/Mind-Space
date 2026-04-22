@@ -141,142 +141,122 @@ function Tool() {
           </div>
         </div>
       </div>
-
-      {/* Introduction Section */}
-      <section className="bg-white h-screen rounded-t-3xl mt-14 px-6 sm:px-12 py-16 mx-auto -mt-12">
-        <h1 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
-          Self-Help Tools
-        </h1>
-        <div className="flex justify-center my-14">
-          <p className="text-gray-700 text-lg md:text-xl max-w-3xl mb-10">
-            Access practical tools designed to help you monitor and improve your
-            mental wellbeing. These evidence-based resources can be used on your
-            own or alongside professional support.
-          </p>
-        </div>
-
-        {/* Features Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          <div className="bg-white rounded-xl p-8 text-center border border-gray-200">
-            <SmilePlus size={48} className="mx-auto mb-4 text-blue-400" />
-            <h3 className="text-xl font-semibold mb-2">Track Progress</h3>
-            <p className="text-gray-600">
-              Monitor your emotional wellbeing over time to identify patterns
-              and triggers.
+     <div className="min-h-screen"> {/* Changed from h-screen to min-h-screen to prevent clipping */}
+        {/* Introduction Section - Set to take up half the viewport height */}
+        <section className="bg-white min-h-[50vh] flex flex-col justify-center rounded-t-3xl mt-14 px-6 sm:px-12 py-16 mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold  text-gray-900">
+            Self-Help Tools
+          </h1>
+          <div className="flex justify-center my-6 md:my-10"> {/* Reduced margin slightly for better fit */}
+            <p className="text-gray-700 text-lg md:text-xl max-w-3xl">
+              Access practical tools designed to help you monitor and improve
+              your mental wellbeing. These evidence-based resources can be used
+              on your own or alongside professional support.
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-8 text-center border border-gray-200">
-            <Headphones size={48} className="mx-auto mb-4 text-green-400" />
-            <h3 className="text-xl font-semibold mb-2">Guided Practices</h3>
-            <p className="text-gray-600">
-              Follow step-by-step exercises designed to reduce stress and
-              improve wellbeing.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl p-8 text-center border border-gray-200">
-            <FileDown size={48} className="mx-auto mb-4 text-red-400" />
-            <h3 className="text-xl font-semibold mb-2">Resources</h3>
-            <p className="text-gray-600">
-              Download worksheets, guides, and audio files to support your
-              mental health journey.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Tabs Section */}
-      <section className="py-12 px-4 sm:px-8 md:px-12">
-        <Tabs defaultValue="mood" className="w-full">
-          {/* Tabs Header */}
-          <TabsList className="grid grid-cols-4 gap-4 mb-8 bg-gray-100 rounded-xl p-2">
-            {[
-              { value: "mood", label: "Mood Tracker", icon: SmilePlus },
-              { value: "journal", label: "Journaling", icon: BookText },
-              {
-                value: "exercises",
-                label: "Guided Exercises",
-                icon: Headphones,
-              },
-              { value: "resources", label: "Resources", icon: FileDown },
-            ].map((tab) => (
-              <TabsTrigger
-                key={tab.value}
-                value={tab.value}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-200 
-                   data-[state=active]:bg-black data-[state=active]:text-white transition-colors duration-200"
-              >
-                <tab.icon size={16} /> {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {/* Tabs Content */}
-          <TabsContent value="mood">
-            <MoodTracker />
-          </TabsContent>
-
-          <TabsContent value="journal">
-            <div className="text-center py-12">
-              <img
-                src="https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3"
-                alt="Journaling"
-                className="w-48 h-48 object-cover rounded-full mx-auto mb-6"
-              />
-              <h3 className="text-2xl font-semibold mb-4">
-                Journaling Feature Coming Soon
-              </h3>
-              <p className="text-gray-600 max-w-xl mx-auto">
-                Express and process your thoughts and feelings. Journaling can
-                reduce stress and manage anxiety.
+          {/* Features Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 w-full max-w-full px-4 md:px-0">
+            <div className="bg-white rounded-xl p-8 text-center border border-gray-200 flex flex-col items-center">
+              <SmilePlus size={48} className="mb-4 text-blue-400" />
+              <h3 className="text-xl font-semibold mb-2">Track Progress</h3>
+              <p className="text-gray-600">
+                Monitor your emotional wellbeing over time to identify patterns and triggers.
               </p>
-              <div className="mt-6 p-4 bg-yellow-50 rounded-lg max-w-md mx-auto">
-                <h4 className="font-medium mb-2">Sample Prompts:</h4>
-                <ul className="text-left space-y-1">
-                  <li>• What are three things that went well today?</li>
-                  <li>
-                    • What's something that challenged me today and how did I
-                    handle it?
-                  </li>
-                  <li>• What am I looking forward to tomorrow?</li>
-                </ul>
-              </div>
             </div>
-          </TabsContent>
 
-          <TabsContent value="exercises">
-            <ScrollArea className="h-[600px] md:h-[800px] pr-4">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <GuidedExercise {...breathingExercise} />
-                <GuidedExercise {...progressiveMuscleRelaxation} />
-                <GuidedExercise {...mindfulnessExercise} />
-                <GuidedExercise {...gratitudeExercise} />
-              </div>
-            </ScrollArea>
-          </TabsContent>
+            <div className="bg-white rounded-xl p-8 text-center border border-gray-200 flex flex-col items-center">
+              <Headphones size={48} className="mb-4 text-green-400" />
+              <h3 className="text-xl font-semibold mb-2">Guided Practices</h3>
+              <p className="text-gray-600">
+                Follow step-by-step exercises designed to reduce stress and improve wellbeing.
+              </p>
+            </div>
 
-          <TabsContent value="resources">
-            <div className="space-y-8">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-semibold mb-2">
-                  Downloadable Resources
+            <div className="bg-white rounded-xl p-8 text-center border border-gray-200 flex flex-col items-center">
+              <FileDown size={48} className="mb-4 text-red-400" />
+              <h3 className="text-xl font-semibold mb-2">Resources</h3>
+              <p className="text-gray-600">
+                Download worksheets, guides, and audio files to support your mental health journey.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Tabs Section - Set to take up the other half of the viewport height */}
+        <section className="min-h-[50vh] py-12 px-4 sm:px-8 md:px-12">
+          <Tabs defaultValue="mood" className="w-full">
+            <TabsList className="grid grid-cols-4 gap-4 mb-8 bg-gray-100 rounded-xl p-2">
+              {[
+                { value: "mood", label: "Mood Tracker", icon: SmilePlus },
+                { value: "journal", label: "Journaling", icon: BookText },
+                { value: "exercises", label: "Guided Exercises", icon: Headphones },
+                { value: "resources", label: "Resources", icon: FileDown },
+              ].map((tab) => (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-200 
+                   data-[state=active]:bg-black data-[state=active]:text-white transition-colors duration-200"
+                >
+                  <tab.icon size={16} /> <span className="hidden sm:inline">{tab.label}</span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <TabsContent value="mood">
+              <MoodTracker />
+            </TabsContent>
+
+            <TabsContent value="journal">
+              <div className="text-center py-12">
+                <img
+                  src="https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3"
+                  alt="Journaling"
+                  className="w-48 h-48 object-cover rounded-full mx-auto mb-6"
+                />
+                <h3 className="text-2xl font-semibold mb-4">
+                  Journaling Feature Coming Soon
                 </h3>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  Access worksheets, guides, and audio files developed by mental
-                  health professionals.
+                <p className="text-gray-600 max-w-xl mx-auto">
+                  Express and process your thoughts and feelings. Journaling can
+                  reduce stress and manage anxiety.
                 </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {downloadableResources.map((resource, idx) => (
-                  <ResourceDownload key={idx} {...resource} />
-                ))}
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </section>
+            </TabsContent>
 
+            <TabsContent value="exercises">
+              <ScrollArea className="h-[500px] md:h-[600px] pr-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <GuidedExercise {...breathingExercise} />
+                  <GuidedExercise {...progressiveMuscleRelaxation} />
+                  <GuidedExercise {...mindfulnessExercise} />
+                  <GuidedExercise {...gratitudeExercise} />
+                </div>
+              </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="resources">
+              <div className="space-y-8">
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-semibold mb-2">
+                    Downloadable Resources
+                  </h3>
+                  <p className="text-gray-600 max-w-2xl mx-auto">
+                    Access worksheets, guides, and audio files developed by
+                    mental health professionals.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {downloadableResources.map((resource, idx) => (
+                    <ResourceDownload key={idx} {...resource} />
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </section>
+      </div>
       {/* Daily Tips Section */}
       <section className="py-12 px-4 sm:px-8 h-screen mt-24 md:px-12 bg-gray-50">
         <div className="text-center mb-8">
