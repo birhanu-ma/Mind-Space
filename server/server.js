@@ -10,7 +10,7 @@ import { Server } from "socket.io";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
-const DB = process.env.LOCAL_DATABASE;
+const DB = process.env.MONGO_URI;
 
 mongoose
   .connect(DB)
