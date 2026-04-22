@@ -4,7 +4,7 @@ const Image =   "https://images.unsplash.com/photo-1742844019094-cefa1969b331?q=
 
 function Hero() {
   return (
-    <section className="h-screen w-full">
+    <section className="h-screen  w-full">
       <div className="absolute inset-0">
         <img
           src={Image}
@@ -17,7 +17,7 @@ function Hero() {
               Contact us
             </h1>
 
-        <div className="flex flex-row justify-center items-center">
+        {/* <div className="flex flex-row justify-center items-center">
           <Link to="/home">
             <h1 className="text-4xl md:text-5xl text-white font-bold leading-tight mb-6 p-2 cursor-pointer">
               Home
@@ -28,7 +28,7 @@ function Hero() {
               Contact
             </h1>
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );

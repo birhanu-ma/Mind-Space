@@ -2,8 +2,8 @@ import React from 'react';
 
 const OurServices = () => {
   return (
-    <section className="py-16 px-4 h-screen mt-24 md:px-8 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-16 px-4 sm:h-screen mt-24 md:px-8 bg-gray-50">
+      <div className="">
         <h2 className="text-3xl font-semibold mb-12 text-center text-gray-900">
           Our Comprehensive Services
         </h2>
@@ -14,14 +14,14 @@ const OurServices = () => {
             <img
               src="https://images.pexels.com/photos/3768917/pexels-photo-3768917.jpeg"
               alt="Mental health counseling office"
-              className="w-full h-80 object-cover"
+              className="w-full sm:h-80 object-cover"
             />
             {/* Optional subtle overlay */}
             <div className="absolute inset-0 bg-black/10 rounded-lg"></div>
           </div>
 
           {/* Content Section */}
-          <div className="flex-1 bg-white p-8 rounded-lg border border-gray-200">
+          <div className="flex-1 bg-white sm:p-8 rounded-lg border border-gray-200">
             <h3 className="text-2xl font-semibold mb-6 text-gray-900">
               Comprehensive Support for Youth Well-being
             </h3>
