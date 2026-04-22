@@ -47,7 +47,7 @@ function Contacts() {
   };
 
   return (
-    <div className="my-10 flex flex-col lg:flex-row gap-6">
+    <div className="my-10 flex flex-col h-screen ms:pt-24 lg:flex-row gap-6">
       {/* Contact Form */}
       <div className="bg-white rounded-xl border border-gray-200 p-8 flex flex-col h-full transition-transform duration-300 ease-in-out transform hover:scale-[1.02] lg:w-7/10 w-full">
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">

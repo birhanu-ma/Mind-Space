@@ -121,9 +121,9 @@ const downloadableResources = [
 
 function Tool() {
   return (
-    <div className="flex flex-col min-h-screen w-full bg-gray-50 text-gray-800">
+    <div className="flex flex-col  w-full bg-gray-50 text-gray-800">
       {/* Hero Section */}
-      <div className="relative w-full h-64 md:h-80 overflow-hidden">
+      <div className="relative w-full h-screen  h-md:h-80 overflow-hidden">
         <img
           src={toolhead}
           alt="Self-care"
@@ -143,15 +143,17 @@ function Tool() {
       </div>
 
       {/* Introduction Section */}
-      <section className="bg-white rounded-t-3xl px-6 sm:px-12 py-16 mx-auto -mt-12">
+      <section className="bg-white h-screen rounded-t-3xl mt-14 px-6 sm:px-12 py-16 mx-auto -mt-12">
         <h1 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
           Self-Help Tools
         </h1>
-        <p className="text-gray-700 text-lg md:text-xl max-w-3xl mb-10">
-          Access practical tools designed to help you monitor and improve your
-          mental wellbeing. These evidence-based resources can be used on your
-          own or alongside professional support.
-        </p>
+        <div className="flex justify-center my-14">
+          <p className="text-gray-700 text-lg md:text-xl max-w-3xl mb-10">
+            Access practical tools designed to help you monitor and improve your
+            mental wellbeing. These evidence-based resources can be used on your
+            own or alongside professional support.
+          </p>
+        </div>
 
         {/* Features Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
@@ -276,7 +278,7 @@ function Tool() {
       </section>
 
       {/* Daily Tips Section */}
-      <section className="py-12 px-4 sm:px-8 md:px-12 bg-gray-50">
+      <section className="py-12 px-4 sm:px-8 h-screen mt-24 md:px-12 bg-gray-50">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">
             Daily Mental Health Tips

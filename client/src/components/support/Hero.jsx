@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hero = () => {
   return (
-    <div className="relative w-full h-[550px]">
+    <div className="relative w-full h-screen">
       <div 
         className="absolute inset-0 bg-gradient-to-b from-gray-900/70 to-gray-900/30"
         style={{
