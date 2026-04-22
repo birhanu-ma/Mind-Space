@@ -1,8 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import CustomButton from "../../ui/CustomButton";
+import { useNavigate } from "react-router-dom";
 
 const FinalSection = () => {
+  const navigate = useNavigate();
+
+  const handleApplyClick = () => {
+    // Check if the user is logged in by looking for the ID 
+    // that your apiClient sets/removes
+    const isAuthenticated = !!localStorage.getItem("id");
+
+    if (isAuthenticated) {
+      navigate("/apply-for-profession");
+    } else {
+      // Redirect to register and save the intended destination
+      navigate("/Register", { state: { from: "/apply-for-profession" } });
+    }
+  };
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -21,13 +35,13 @@ const FinalSection = () => {
           of their mental wellbeing anytime, anywhere.
         </p>
 
-        <Link to="/apply-for-profession">
-          <button
-            className="bg-black p-2 rounded-md text-white"
-          >
-            Apply for Profession
-          </button>
-        </Link>
+        {/* Replaced Link with a button and maintained your exact styles */}
+        <button
+          onClick={handleApplyClick}
+          className="bg-black p-2 rounded-md text-white cursor-pointer"
+        >
+          Apply for Profession
+        </button>
       </div>
     </section>
   );

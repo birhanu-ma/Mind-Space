@@ -3,8 +3,10 @@ import TopicCard from "./TopicCard";
 import { useQuery } from "@tanstack/react-query";
 import { articleAPI } from "../../service/client";
 import Spinner from "../ui/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const TopicsSection = () => {
+  const navigate = useNavigate();
   const [articleType, setArticleType] = React.useState("main");
   const [query, setQuery] = React.useState({
     q: "",
@@ -13,7 +15,11 @@ const TopicsSection = () => {
     limit: 10,
   });
 
-  const { data: article, isLoading, error } = useQuery({
+  const {
+    data: article,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["article", articleType, query],
     queryFn: async () => {
       if (articleType === "All") {
@@ -27,14 +33,23 @@ const TopicsSection = () => {
   });
 
   if (isLoading) return <Spinner />;
-  if (error)
-    return (
-      <p className="text-red-500 text-center mt-10">Failed to load articles.</p>
-    );
+  if (error) {
+    if (error.response?.status === 401) {
+      navigate("/Register", { state: { from: window.location.pathname } });
+      return null;
+    }
 
+    return (
+      <p className="text-red-500 text-center mt-10">
+        Something went wrong. Please try again later.
+      </p>
+    );
+  }
   const articles = article?.data;
   if (!articles || articles.length === 0)
-    return <p className="text-center mt-10 text-gray-500">No articles found.</p>;
+    return (
+      <p className="text-center mt-10 text-gray-500">No articles found.</p>
+    );
 
   return (
     <section className="bg-gray-50 py-20">

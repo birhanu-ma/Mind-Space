@@ -14,6 +14,10 @@ import { Button } from "../ui/button";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { moodEntryAPI } from "../../service/client";
+import { useNavigate } from "react-router-dom";
+import { profileAPI } from "../../service/client";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const moodOptions = [
   {
@@ -49,6 +53,7 @@ const moodOptions = [
 ];
 
 const MoodTracker = ({ className }) => {
+  const navigate = useNavigate();
   const [date, setDate] = useState(new Date());
   const { toast } = useToast();
 
@@ -60,10 +65,25 @@ const MoodTracker = ({ className }) => {
       sleepHours: "",
     },
   });
+  // Add this inside your MoodTracker component
+  const { error: authError } = useQuery({
+    queryKey: ["checkAuth"],
+    queryFn: () => profileAPI.getProfile(), // Any 'protected' route works here
+    retry: false,
+  });
 
+  useEffect(() => {
+    if (authError?.response?.status === 401) {
+      navigate("/Register", { state: { from: window.location.pathname } });
+    }
+  }, [authError, navigate]);
   const selectedMood = watch("mood");
 
-  const { mutate: submitMood, isLoading } = useMutation({
+  const {
+    mutate: submitMood,
+    isLoading,
+    error,
+  } = useMutation({
     mutationFn: (data) => moodEntryAPI.submitMoodEntry(data),
     onSuccess: () => {
       toast({
@@ -80,6 +100,12 @@ const MoodTracker = ({ className }) => {
       });
     },
   });
+  if (error) {
+    if (error.response?.status === 401) {
+      navigate("/Register", { state: { from: window.location.pathname } });
+      return null;
+    }
+  }
 
   const onSubmit = (data) => {
     if (

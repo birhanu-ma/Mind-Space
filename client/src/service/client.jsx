@@ -1,6 +1,5 @@
 import axios from "axios";
-const API_BASE_URL = "https://mind-space-atfn.onrender.com/api/v1";
-
+const API_BASE_URL = "http://localhost:5000/api/v1";
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -21,7 +20,7 @@ apiClient.interceptors.request.use(
   (error) => {
     console.error("❌ Request Error:", error);
     return Promise.reject(error);
-  }
+  },
 );
 
 apiClient.interceptors.response.use(
@@ -38,17 +37,13 @@ apiClient.interceptors.response.use(
       window.dispatchEvent(new Event("authStateChange"));
     }
     return Promise.reject(error);
-  }
+  },
 );
+// service/client.js
+
 const api = async (endpoint, options = {}) => {
-  try {
-    const response = await apiClient(endpoint, options);
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || error.message || "API request failed"
-    );
-  }
+  const response = await apiClient(endpoint, options);
+  return response.data;
 };
 
 //  AUTH API
@@ -176,7 +171,7 @@ export const counselorAPI = {
     const query = new URLSearchParams(rest).toString();
     try {
       const res = await api(
-        `/counseling/counselors/${counselorId}/mentees?${query}`
+        `/counseling/counselors/${counselorId}/mentees?${query}`,
       );
       return res ? res : { data: [] };
     } catch (err) {
@@ -187,7 +182,7 @@ export const counselorAPI = {
   getMenteeStats: async (counselorId) => {
     try {
       const res = await api(
-        `/counseling/counselors/${counselorId}/mentees/stats`
+        `/counseling/counselors/${counselorId}/mentees/stats`,
       );
       return res?.stats ? res : { stats: {} };
     } catch (err) {
