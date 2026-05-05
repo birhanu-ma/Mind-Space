@@ -54,7 +54,6 @@ const Profile = () => {
     /* 1. overflow-x-hidden on wrapper is mandatory */
     <div className="min-h-screen py-24 px-4 flex justify-center bg-gray-50 overflow-x-hidden box-border">
       
-      {/* 2. Added max-w-[calc(100vw-32px)] to ensure the box NEVER exceeds screen width */}
       <section className="flex flex-col items-center gap-6 border rounded-lg p-6 shadow-sm bg-white w-full max-w-[calc(100vw-32px)] sm:max-w-md h-fit">
         
         {/* Profile Photo */}
@@ -105,7 +104,6 @@ const Profile = () => {
             )}
           </div>
 
-          {/* 4. break-all on email is critical for mobile */}
           <p className="text-gray-500 text-sm mt-1 break-all px-2">
             {profile.email}
           </p>
