@@ -10,15 +10,16 @@ const Hero = () => {
   };
 
   return (
-    <section className="overflow-x-hidden bg-gray-50 px-4 sm:px-8 py-20 md:py-32 flex flex-col lg:flex-row items-center justify-between max-w-full">
-      
+    <section className="overflow-x-hidden min-h-screen bg-gray-50 px-4 sm:px-8 py-20 md:py-32 flex flex-col lg:flex-row items-center justify-between max-w-full">
       {/* Text Content */}
       <div className="w-full lg:w-1/2 text-center lg:text-left space-y-4 md:space-y-6 px-4 lg:px-10">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-          Your Safe Space for <br className="hidden sm:block" /> Mental Well-Being
+          Your Safe Space for <br className="hidden sm:block" /> Mental
+          Well-Being
         </h1>
         <p className="text-gray-700 text-base sm:text-lg max-w-md mx-auto lg:mx-0">
-          MindSpace helps you manage stress, connect with peers, and access professional support safely and anonymously.
+          MindSpace helps you manage stress, connect with peers, and access
+          professional support safely and anonymously.
         </p>
 
         <Link to="/support">
@@ -30,8 +31,6 @@ const Hero = () => {
             Find Support
           </CustomButton>
         </Link>
-      
-     
       </div>
 
       {/* Images */}

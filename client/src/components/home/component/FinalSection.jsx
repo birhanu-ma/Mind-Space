@@ -5,7 +5,7 @@ const FinalSection = () => {
   const navigate = useNavigate();
 
   const handleApplyClick = () => {
-    // Check if the user is logged in by looking for the ID 
+    // Check if the user is logged in by looking for the ID
     // that your apiClient sets/removes
     const isAuthenticated = !!localStorage.getItem("id");
 
@@ -25,7 +25,7 @@ const FinalSection = () => {
   };
 
   return (
-    <section className="bg-blue-50 py-20 px-4 sm:px-8 text-center">
+    <section className="bg-blue-50 py-20 min-h-screen flex items-center px-4 sm:px-8 text-center">
       <div className="max-w-3xl mx-auto">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-snug">
           Because Mental Health Should Be Accessible to Everyone

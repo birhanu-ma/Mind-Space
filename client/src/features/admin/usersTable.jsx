@@ -1,75 +1,81 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Card, CardContent } from "../../components/ui/card.jsx";
 import { Badge } from "../../components/ui/badge.jsx";
 
 export default function UsersTable({ users = [] }) {
   return (
-    <div className="flex flex-col w-full bg-background px-0">
-      <Card className="bg-background text-foreground border border-border rounded-xl">
-        <CardContent className="overflow-x-auto">
-          <div className="max-h-[500px] overflow-y-auto">
-            {users.length === 0 ? (
-              <div className="py-10 text-center text-muted-foreground">
-                No users found.
-              </div>
-            ) : (
-              <table className="w-full min-w-[800px] border-collapse">
-                <thead>
-                  <tr className="border-b border-foreground/20">
-                    <th className="text-left py-3 px-4 text-sm font-medium text-foreground/60">
-                      Name
-                    </th>
-                    <th className="text-center py-3 px-4 text-sm font-medium text-foreground/60">
-                      Email
-                    </th>
-                    <th className="text-center py-3 px-4 text-sm font-medium text-foreground/60">
-                      Role
-                    </th>
-                    <th className="text-right py-3 px-4 text-sm font-medium text-foreground/60">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user) => (
-                    <tr
-                      key={user._id || user.sims_id}
-                      className="border-b border-border hover:bg-muted/30 transition"
-                    >
-                      <td className="py-4 px-4 text-sm text-left font-medium">{user.name}</td>
-                      <td className="py-4 px-4 text-sm">{user.email || "—"}</td>
-                      <td className="py-4 px-4 text-sm">
-                        <Badge
-                          className={`capitalize ${
-                            user.role === "mentor"
-                              ? "bg-blue-100 text-blue-600"
-                              : user.role === "mentee"
-                              ? "bg-green-100 text-green-600"
-                              : user.role === "user-union"
-                              ? "bg-purple-100 text-purple-600"
-                              : "bg-gray-100 text-gray-600"
-                          }`}
-                        >
-                          {user.role}
-                        </Badge>
-                      </td>
-                      <td className="py-4 text-right">
-                        <NavLink
-                          to={`/user-detail/${user._id}`}
-                          className="text-xs font-semibold px-3 py-1 rounded-md bg-blue-500 hover:bg-blue-600 text-white"
-                        >
-                          View Details
-                        </NavLink>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+    /* The outermost div now has 'overflow-x-auto' which is the secret.
+       This acts as the "empty wrapper" that allows the table to be 
+       wider than the screen without breaking the rest of the layout.
+    */
+    <div className="w-full overflow-x-auto bg-background">
+      {users.length === 0 ? (
+        <div className="py-10 text-center text-muted-foreground border border-border rounded-lg">
+          No users found.
+        </div>
+      ) : (
+        /* Crucial Change: 
+           1. min-w-[800px] -> Forces the list to stay wide and readable.
+           2. table-fixed -> Prevents columns from shrinking based on text length.
+        */
+        <table className="min-w-[800px] w-full border-collapse text-left table-fixed">
+          <thead>
+            <tr className="border-b border-border bg-muted/10">
+              {/* Added w-[30%] etc to give each column enough room to breathe */}
+              <th className="w-[25%] py-3 px-4 text-xs font-semibold text-foreground/70 uppercase">
+                Name
+              </th>
+              <th className="w-[35%] py-3 px-4 text-xs font-semibold text-foreground/70 uppercase">
+                Email
+              </th>
+              <th className="w-[20%] py-3 px-4 text-center text-xs font-semibold text-foreground/70 uppercase">
+                Role
+              </th>
+              <th className="w-[20%] py-3 px-4 text-right text-xs font-semibold text-foreground/70 uppercase">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr
+                key={user._id || user.sims_id}
+                className="border-b border-border hover:bg-muted/30 transition-colors"
+              >
+                <td className="py-4 px-4 text-sm font-medium">
+                  <div className="truncate">{user.name}</div>
+                </td>
+                <td className="py-4 px-4 text-sm text-muted-foreground">
+                  <div className="truncate">{user.email || "—"}</div>
+                </td>
+                <td className="py-4 px-4 text-center">
+                  <Badge
+                    className={`capitalize text-xs shadow-none border-none ${
+                      user.role === "mentor"
+                        ? "bg-blue-100 text-blue-600"
+                        : user.role === "mentee"
+                        ? "bg-green-100 text-green-600"
+                        : user.role === "user-union"
+                        ? "bg-purple-100 text-purple-600"
+                        : "bg-gray-100 text-gray-600"
+                    }`}
+                  >
+                    {user.role}
+                  </Badge>
+                </td>
+                <td className="py-4 px-4 text-right">
+                  <NavLink
+                    to={`/user-detail/${user._id}`}
+                    className="inline-block text-xs font-bold px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white transition-colors whitespace-nowrap"
+                  >
+                    View Details
+                  </NavLink>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

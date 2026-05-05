@@ -32,36 +32,26 @@ const InfoSection = () => {
   ];
 
   return (
-    <section className="bg-white  h-screen pt-16 px-4 sm:px-8 max-w-7xl mx-auto">
-      <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12">
-        Whatever's on your mind, we're here.
-      </h2>
+    <section className="bg-white flex items-center  min-h-screen pt-16 px-4 sm:px-8 max-w-7xl mx-auto">
+      <div>
+        <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12">
+          Whatever's on your mind, we're here.
+        </h2>
 
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="space-y-4 flex flex-col items-center text-center"
-          >
-            <div className="mb-4">{feature.icon}</div>
-            <h3 className="text-xl font-semibold text-gray-900">
-              {feature.title}
-            </h3>
-            <p className="text-gray-700 text-base">{feature.description}</p>
-
-            {/* {feature.link && (
-              <Link to="/register-as-mentee">
-                <CustomButton
-                  color="#1F2937"
-                  borderRadius="12px"
-                  onClick={scrollToTop}
-                >
-                  Explore More
-                </CustomButton>
-              </Link>
-            )} */}
-          </div>
-        ))}
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="space-y-4 flex flex-col items-center text-center"
+            >
+              <div className="mb-4">{feature.icon}</div>
+              <h3 className="text-xl font-semibold text-gray-900">
+                {feature.title}
+              </h3>
+              <p className="text-gray-700 text-base">{feature.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
