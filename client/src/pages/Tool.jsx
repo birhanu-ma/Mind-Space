@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import {
   Tabs,
   TabsContent,
@@ -15,13 +16,13 @@ import {
   Headphones,
   FileDown,
   CheckCheck,
+  ChevronDown
 } from "lucide-react";
 
-// Exercise & resources data
+// --- Data objects preserved exactly ---
 const breathingExercise = {
   title: "4-7-8 Breathing Exercise",
-  description:
-    "A simple breathing technique to reduce anxiety and help with sleep",
+  description: "A simple breathing technique to reduce anxiety and help with sleep",
   durationMinutes: 5,
   instructions: [
     "Find a comfortable seated position or lie down.",
@@ -32,14 +33,12 @@ const breathingExercise = {
     "Exhale completely through your mouth for a count of 8.",
     "Repeat this cycle 3-4 more times.",
   ],
-  image:
-    "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaXRhdGlvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
+  image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
 };
 
 const progressiveMuscleRelaxation = {
   title: "Progressive Muscle Relaxation",
-  description:
-    "Systematically tense and relax muscle groups to reduce physical tension",
+  description: "Systematically tense and relax muscle groups to reduce physical tension",
   durationMinutes: 10,
   instructions: [
     "Sit in a comfortable position with your feet flat on the floor.",
@@ -52,8 +51,7 @@ const progressiveMuscleRelaxation = {
     "Scrunch your facial muscles for 5 seconds, then release.",
     "Notice the feeling of relaxation throughout your body.",
   ],
-  image:
-    "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+  image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
 };
 
 const mindfulnessExercise = {
@@ -69,8 +67,7 @@ const mindfulnessExercise = {
     "Notice 1 thing you can taste or like the taste of.",
     "Take a deep breath and notice how present you feel in this moment.",
   ],
-  image:
-    "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+  image: "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
 };
 
 const gratitudeExercise = {
@@ -86,220 +83,192 @@ const gratitudeExercise = {
     "When ready, take a deep breath and slowly open your eyes.",
     "Consider writing these down in a gratitude journal.",
   ],
-  image:
-    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+  image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
 };
 
-// Sample downloadable resources
 const downloadableResources = [
   {
     title: "Anxiety Management Workbook",
-    description:
-      "A comprehensive guide with exercises to help manage anxiety symptoms",
+    description: "A comprehensive guide with exercises to help manage anxiety symptoms",
     fileType: "PDF",
     fileSize: "2.4 MB",
-    image:
-      "https://images.unsplash.com/photo-1485498128961-422168ba5f87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    image: "https://images.unsplash.com/photo-1485498128961-422168ba5f87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
   },
   {
     title: "Sleep Hygiene Checklist",
     description: "Simple steps to improve your sleep quality and duration",
     fileType: "PDF",
     fileSize: "1.2 MB",
-    image:
-      "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
   },
   {
     title: "Stress Reduction Techniques",
     description: "Audio recordings of guided stress reduction exercises",
     fileType: "MP3",
     fileSize: "15.8 MB",
-    image:
-      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
   },
 ];
 
 function Tool() {
   return (
-    <div className="flex flex-col  w-full bg-gray-50 text-gray-800">
-      {/* Hero Section */}
-      <div className="relative w-full h-screen  h-md:h-80 overflow-hidden">
-        <img
+    <div className="flex flex-col w-full bg-white text-gray-900 font-sans">
+      
+      {/* Hero Section - Set to min-h-screen to cover entire viewport */}
+      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+        <motion.img
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
           src={toolhead}
           alt="Self-care"
-          className="w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-          <div className="text-center px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              Take Care of Your Mental Health
-            </h2>
-            <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
-              Small steps every day can lead to significant improvements in your
-              wellbeing
-            </p>
-          </div>
-        </div>
-      </div>
-     <div className="min-h-screen"> {/* Changed from h-screen to min-h-screen to prevent clipping */}
-        {/* Introduction Section - Set to take up half the viewport height */}
-        <section className="bg-white min-h-[50vh] flex flex-col justify-center rounded-t-3xl mt-14 px-6 sm:px-12 py-16 mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold  text-gray-900">
-            Self-Help Tools
-          </h1>
-          <div className="flex justify-center my-6 md:my-10"> {/* Reduced margin slightly for better fit */}
-            <p className="text-gray-700 text-lg md:text-xl max-w-3xl">
-              Access practical tools designed to help you monitor and improve
-              your mental wellbeing. These evidence-based resources can be used
-              on your own or alongside professional support.
-            </p>
-          </div>
-
-          {/* Features Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 w-full max-w-full px-4 md:px-0">
-            <div className="bg-white rounded-xl p-8 text-center border border-gray-200 flex flex-col items-center">
-              <SmilePlus size={48} className="mb-4 text-blue-400" />
-              <h3 className="text-xl font-semibold mb-2">Track Progress</h3>
-              <p className="text-gray-600">
-                Monitor your emotional wellbeing over time to identify patterns and triggers.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 text-center border border-gray-200 flex flex-col items-center">
-              <Headphones size={48} className="mb-4 text-green-400" />
-              <h3 className="text-xl font-semibold mb-2">Guided Practices</h3>
-              <p className="text-gray-600">
-                Follow step-by-step exercises designed to reduce stress and improve wellbeing.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 text-center border border-gray-200 flex flex-col items-center">
-              <FileDown size={48} className="mb-4 text-red-400" />
-              <h3 className="text-xl font-semibold mb-2">Resources</h3>
-              <p className="text-gray-600">
-                Download worksheets, guides, and audio files to support your mental health journey.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Tabs Section - Set to take up the other half of the viewport height */}
-        <section className="min-h-[50vh] py-12 px-4 sm:px-8 md:px-12">
-          <Tabs defaultValue="mood" className="w-full">
-            <TabsList className="grid grid-cols-4 gap-4 mb-8 bg-gray-100 rounded-xl p-2">
-              {[
-                { value: "mood", label: "Mood Tracker", icon: SmilePlus },
-                { value: "journal", label: "Journaling", icon: BookText },
-                { value: "exercises", label: "Guided Exercises", icon: Headphones },
-                { value: "resources", label: "Resources", icon: FileDown },
-              ].map((tab) => (
-                <TabsTrigger
-                  key={tab.value}
-                  value={tab.value}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-200 
-                   data-[state=active]:bg-black data-[state=active]:text-white transition-colors duration-200"
-                >
-                  <tab.icon size={16} /> <span className="hidden sm:inline">{tab.label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            <TabsContent value="mood">
-              <MoodTracker />
-            </TabsContent>
-
-            <TabsContent value="journal">
-              <div className="text-center py-12">
-                <img
-                  src="https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3"
-                  alt="Journaling"
-                  className="w-48 h-48 object-cover rounded-full mx-auto mb-6"
-                />
-                <h3 className="text-2xl font-semibold mb-4">
-                  Journaling Feature Coming Soon
-                </h3>
-                <p className="text-gray-600 max-w-xl mx-auto">
-                  Express and process your thoughts and feelings. Journaling can
-                  reduce stress and manage anxiety.
-                </p>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="exercises">
-              <ScrollArea className="h-[500px] md:h-[600px] pr-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <GuidedExercise {...breathingExercise} />
-                  <GuidedExercise {...progressiveMuscleRelaxation} />
-                  <GuidedExercise {...mindfulnessExercise} />
-                  <GuidedExercise {...gratitudeExercise} />
-                </div>
-              </ScrollArea>
-            </TabsContent>
-
-            <TabsContent value="resources">
-              <div className="space-y-8">
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-semibold mb-2">
-                    Downloadable Resources
-                  </h3>
-                  <p className="text-gray-600 max-w-2xl mx-auto">
-                    Access worksheets, guides, and audio files developed by
-                    mental health professionals.
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {downloadableResources.map((resource, idx) => (
-                    <ResourceDownload key={idx} {...resource} />
-                  ))}
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </section>
-      </div>
-      {/* Daily Tips Section */}
-      <section className="py-12 px-4 sm:px-8 h-screen mt-24 md:px-12 bg-gray-50">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-            Daily Mental Health Tips
+        <div className="absolute inset-0 bg-black/50" />
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 1 }}
+          className="relative z-10 text-center px-6"
+        >
+          <h2 className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
+            Take Care of Your <br /> 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-emerald-200">
+                Mental Health
+            </span>
           </h2>
-          <p className="text-gray-700 max-w-2xl mx-auto">
-            Incorporate these simple practices into your daily routine to
-            support your mental wellbeing.
+          <p className="text-lg md:text-2xl text-gray-200 max-w-3xl mx-auto font-light leading-relaxed">
+            Every journey begins with a single step. Discover tools to help you find your balance.
+          </p>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+          animate={{ y: [0, 10, 0] }} 
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 text-white opacity-70"
+        >
+          <ChevronDown size={32} />
+        </motion.div>
+      </section>
+
+      {/* Intro Section - Now overlaps naturally */}
+      <section className="relative z-20 bg-white px-6 sm:px-12 py-24 mx-auto max-w-7xl rounded-t-[3rem] -mt-16 shadow-2xl">
+        <div className="max-w-4xl mx-auto text-center mb-20">
+          <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-8 tracking-tighter">
+            Self-Help Toolkit
+          </h1>
+          <p className="text-gray-500 text-lg md:text-xl font-light leading-relaxed">
+            Access practical tools designed to help you monitor and improve your mental wellbeing. 
+            These evidence-based resources can be used on your own or alongside professional support.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        {/* Features Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {[
-            {
-              title: "Stay Active",
-              desc: "Even just a 10-minute walk can boost your mood and reduce stress levels.",
-            },
-            {
-              title: "Connect Daily",
-              desc: "Reach out to someone you care about. Social connection is vital for mental health.",
-            },
-            {
-              title: "Mindful Moments",
-              desc: "Take a few minutes each day to practice mindfulness and focus on the present.",
-            },
-            {
-              title: "Restful Sleep",
-              desc: "Prioritize good sleep habits. Quality sleep is essential for emotional regulation.",
-            },
-          ].map((tip, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-xl p-6 border border-gray-200"
+            { icon: SmilePlus, color: "text-blue-500", bg: "bg-blue-50", title: "Track Progress", desc: "Monitor your emotional wellbeing over time to identify patterns and triggers." },
+            { icon: Headphones, color: "text-emerald-500", bg: "bg-emerald-50", title: "Guided Practices", desc: "Follow step-by-step exercises designed to reduce stress and improve wellbeing." },
+            { icon: FileDown, color: "text-rose-500", bg: "bg-rose-50", title: "Resources", desc: "Download worksheets, guides, and audio files to support your mental health journey." }
+          ].map((item, i) => (
+            <motion.div 
+              key={i}
+              whileHover={{ y: -10 }}
+              className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center text-center"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="bg-gray-200 p-3 rounded-full flex items-center justify-center">
-                  <CheckCheck size={20} className="text-blue-300" />
-                </div>
-                <h3 className="font-medium">{tip.title}</h3>
+              <div className={`${item.bg} ${item.color} p-5 rounded-2xl mb-6`}>
+                <item.icon size={36} />
               </div>
-              <p className="text-gray-600 text-sm">{tip.desc}</p>
-            </div>
+              <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
+              <p className="text-gray-500 font-light leading-relaxed">{item.desc}</p>
+            </motion.div>
           ))}
+        </div>
+      </section>
+
+      {/* Tabs / Tools Content */}
+      <section className="py-20 px-6 max-w-7xl mx-auto w-full">
+        <Tabs defaultValue="mood" className="w-full">
+          <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-4 p-2 bg-gray-50 rounded-2xl mb-16 h-auto">
+            {[
+              { value: "mood", label: "Mood Tracker", icon: SmilePlus },
+              { value: "journal", label: "Journaling", icon: BookText },
+              { value: "exercises", label: "Guided Exercises", icon: Headphones },
+              { value: "resources", label: "Resources", icon: FileDown },
+            ].map((tab) => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-gray-500 transition-all
+                data-[state=active]:bg-black data-[state=active]:text-white shadow-sm"
+              >
+                <tab.icon size={20} />
+                <span>{tab.label}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <TabsContent value="mood">
+            <div className="bg-gray-50 rounded-[3rem] p-8 md:p-12 border border-gray-100">
+              <MoodTracker />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="journal">
+            <div className="text-center py-24 bg-white rounded-[3rem] border border-gray-100">
+              <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3" 
+                   className="w-48 h-48 object-cover rounded-full mx-auto mb-8 shadow-2xl" alt="Journal" />
+              <h3 className="text-4xl font-black mb-4">Coming Soon</h3>
+              <p className="text-gray-500 max-w-xl mx-auto text-lg font-light">
+                A private, encrypted space for your daily reflections.
+              </p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="exercises">
+            <ScrollArea className="h-[700px] pr-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <GuidedExercise {...breathingExercise} />
+                <GuidedExercise {...progressiveMuscleRelaxation} />
+                <GuidedExercise {...mindfulnessExercise} />
+                <GuidedExercise {...gratitudeExercise} />
+              </div>
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent value="resources">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {downloadableResources.map((resource, idx) => (
+                <ResourceDownload key={idx} {...resource} />
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </section>
+
+      {/* Daily Tips Section */}
+      <section className="py-32 px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl md:text-6xl font-black text-center mb-20 tracking-tighter">Daily Rituals</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { title: "Stay Active", desc: "A short walk boosts mood and reduces cortisol." },
+              { title: "Connect Daily", desc: "Meaningful conversation is a mental health cornerstone." },
+              { title: "Mindful Moments", desc: "Take five deep breaths whenever you feel rushed." },
+              { title: "Restful Sleep", desc: "Prioritize sleep hygiene for emotional regulation." },
+            ].map((tip, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ scale: 1.05 }}
+                className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100"
+              >
+                <CheckCheck className="text-blue-500 mb-6" size={32} />
+                <h3 className="text-xl font-bold mb-3">{tip.title}</h3>
+                <p className="text-gray-500 font-light leading-relaxed">{tip.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

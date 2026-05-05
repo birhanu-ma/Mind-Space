@@ -5,7 +5,7 @@ import ServiceSection from '../components/support/ServiceSection';
 
 function Support() {
   return (
-    <div className="mt-15 text-center">
+    <div className="">
       <Hero />
       <OurServices />
       <ServiceSection />

@@ -51,7 +51,6 @@ const ForumGrid = () => {
 
   console.log("forum list", forums);
   if (forums.length == 0) return <p>no forum found</p>;
-  // Sample forum data
 
   return (
     <section className="bg-azure-50 py-16">
@@ -73,7 +72,7 @@ const ForumGrid = () => {
         </div>
 
         <div className="flex mt-10 px-15">
-          <Link to="/#">
+          <Link to="/community">
             <CustomButton
               color="#132440"
               borderRadius="10px"

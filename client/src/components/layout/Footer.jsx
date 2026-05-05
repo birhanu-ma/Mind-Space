@@ -11,35 +11,8 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-gray-200">
-      {/* Newsletter Section */}
-      {/* <div
-        className="bg-cover bg-center py-16 px-4 flex flex-col items-center justify-center text-center"
-        style={{
-          backgroundImage: `url(${newsletterImage})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-          Subscribe to Get Updates
-        </h2>
-        <p className="mb-6 max-w-md text-gray-200">
-          Don’t miss out! Subscribe now for special promotions and monthly
-          updates.
-        </p>
-        <div className="flex w-full max-w-md">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="flex-1 px-4 py-2 rounded-l-md border border-gray-300 focus:outline-none text-gray-900"
-          />
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-r-md font-semibold transition">
-            Subscribe
-          </button>
-        </div>
-      </div> */}
-
-      {/* Main Footer Section */}
+    
+  
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 border-b border-gray-700">
         {/* Logo / Branding */}
         <div>

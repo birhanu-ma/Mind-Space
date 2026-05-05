@@ -24,7 +24,7 @@ const CreateForum = () => {
             </p>
           </div>
 
-          <div className="flex justify-center">
+          {/* <div className="flex justify-center">
             <Link to="/newform" onClick={scrollToTop}>
               <CustomButton
                 color="#000000"
@@ -35,7 +35,7 @@ const CreateForum = () => {
                 Create Forum
               </CustomButton>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

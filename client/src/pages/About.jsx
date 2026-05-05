@@ -8,7 +8,7 @@ import AboutUs from '../components/About/component/Aboutus'
 
 function About() {
   return (
-    <div className='mt-15 flex flex-col'>
+    <div >
       <Hero/>
       <AboutUs/>
       <ProfessionSection/>

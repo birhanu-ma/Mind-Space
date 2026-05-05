@@ -3,7 +3,7 @@ import Hero from '../components/Contact/Hero'
 import Contacts from '../components/Contact/Contacts'
 function Contact() {
   return (
-    <div className='mt-15  flex-col'>
+    <div>
       <Hero/>
       <Contacts/>
 
